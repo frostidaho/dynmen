@@ -1,4 +1,4 @@
-import os as _os
+# import os as _os
 from subprocess import Popen as _Popen, PIPE as _PIPE
 from collections import namedtuple as _namedtuple, OrderedDict as _OrderedDict
 
@@ -40,19 +40,28 @@ class Menu:
 
     @staticmethod
     def _launch_menu_proc(cmd, data, entry_sep='\n'):
-        def _run_process(cmd, iter_entries, entry_sep):
-            entries = entry_sep.join(iter_entries)
-            entries = entries.encode()
-            read, write = _os.pipe()
-            _os.write(write, entries)
-            _os.close(write)
-            # For some reason when using fzf stderr=sp.PIPE will not work
-            # Fzf probably rebinds stderr to stdout
-            p = _Popen(cmd, stdout=_PIPE, stdin=read)
-            stdout, stderr = p.communicate()
-            p.terminate()
-            return stdout.decode().rstrip()
-        return _run_process(cmd, data, entry_sep)
+        entries = entry_sep.join(data)
+        p = _Popen(cmd, stdout=_PIPE, stdin=_PIPE)
+        stdout, stderr = p.communicate(entries.encode())
+        p.terminate()
+        return stdout.decode().rstrip()
+
+    # @staticmethod
+    # def _launch_menu_proc(cmd, data, entry_sep='\n'):
+    #     def _run_process(cmd, iter_entries, entry_sep):
+    #         entries = entry_sep.join(iter_entries)
+    #         # read, write = _os.pipe()
+    #         # _os.write(write, entries.encode())
+    #         # _os.close(write)
+    #         # p = _Popen(cmd, stdout=_PIPE, stdin=read)
+    #         # stdout, stderr = p.communicate()
+    #         # For some reason when using fzf stderr=sp.PIPE will not work
+    #         # Fzf probably rebinds stderr to stdout
+    #         p = _Popen(cmd, stdout=_PIPE, stdin=_PIPE)
+    #         stdout, stderr = p.communicate(entries.encode())
+    #         p.terminate()
+    #         return stdout.decode().rstrip()
+    #     return _run_process(cmd, data, entry_sep)
 
     def __repr__(self):
         clsname = self.__class__.__name__
