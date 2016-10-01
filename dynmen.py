@@ -3,7 +3,7 @@ from subprocess import Popen as _Popen, PIPE as _PIPE
 from collections import namedtuple as _namedtuple, OrderedDict as _OrderedDict
 
 
-MenuResult = _namedtuple('MenuResult', 'selected value')
+MenuResult = _namedtuple('MenuResult', 'selected value returncode')
 class Menu:
     def __init__(self, command):
         "Create a python wrapper for command"
@@ -31,12 +31,12 @@ class Menu:
         return self(data)
 
     def _run(self, data):
-        res = self._launch_menu_proc(self.command, data)
+        res, returncode = self._launch_menu_proc(self.command, data)
         try:
             val = data.get(res)
         except AttributeError:
             val = None
-        return MenuResult(res, val)
+        return MenuResult(res, val, returncode)
 
     @staticmethod
     def _launch_menu_proc(cmd, data, entry_sep='\n'):
@@ -44,7 +44,7 @@ class Menu:
         p = _Popen(cmd, stdout=_PIPE, stdin=_PIPE)
         stdout, stderr = p.communicate(entries.encode())
         p.terminate()
-        return stdout.decode().rstrip()
+        return stdout.decode().rstrip(), p.returncode
 
     # @staticmethod
     # def _launch_menu_proc(cmd, data, entry_sep='\n'):
