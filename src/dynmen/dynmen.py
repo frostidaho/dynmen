@@ -1,59 +1,60 @@
 # -*- coding: utf-8 -*-
-from collections import namedtuple as _namedtuple, OrderedDict as _OrderedDict
+from dynmen import Menu
+# from collections import namedtuple as _namedtuple, OrderedDict as _OrderedDict
 
 
-MenuResult = _namedtuple('MenuResult', 'selected value returncode')
-class Menu(object):
-    def __init__(self, command):
-        "Create a python wrapper for command"
-        self.command = command
+# MenuResult = _namedtuple('MenuResult', 'selected value returncode')
+# class Menu(object):
+#     def __init__(self, command):
+#         "Create a python wrapper for command"
+#         self.command = command
 
-    def __call__(self, entries):
-        """Send entries to menu, return selected entry
+#     def __call__(self, entries):
+#         """Send entries to menu, return selected entry
 
-        entries is an iterable where each element is a string that corresponds
-        to an entry in the menu.
-        """
-        return self._run(self.command, entries)
+#         entries is an iterable where each element is a string that corresponds
+#         to an entry in the menu.
+#         """
+#         return self._run(self.command, entries)
 
-    @classmethod
-    def _run(cls, cmd, entries, entry_sep='\n'):
-        res, returncode = cls._launch_menu_proc(cmd, entries)
-        try:
-            val = entries.get(res)
-        except AttributeError:
-            val = None
-        return MenuResult(res, val, returncode)
+#     @classmethod
+#     def _run(cls, cmd, entries, entry_sep='\n'):
+#         res, returncode = cls._launch_menu_proc(cmd, entries)
+#         try:
+#             val = entries.get(res)
+#         except AttributeError:
+#             val = None
+#         return MenuResult(res, val, returncode)
 
-    def sort(self, entries, key=None, reverse=False):
-        """Sort and send entries to menu, return selected entry
+#     def sort(self, entries, key=None, reverse=False):
+#         """Sort and send entries to menu, return selected entry
 
-        entries is an iterable where each element is a string that corresponds
-        to an entry in the menu.
-        """
-        try:
-            data = sorted(entries.items(), key=key, reverse=reverse)
-            data = _OrderedDict(data)
-        except AttributeError:
-            data = sorted(entries, key=key, reverse=reverse)
-        return self(data)
+#         entries is an iterable where each element is a string that corresponds
+#         to an entry in the menu.
+#         """
+#         try:
+#             data = sorted(entries.items(), key=key, reverse=reverse)
+#             data = _OrderedDict(data)
+#         except AttributeError:
+#             data = sorted(entries, key=key, reverse=reverse)
+#         return self(data)
 
-    @staticmethod
-    def _launch_menu_proc(cmd, data, entry_sep='\n'):
-        entries = entry_sep.join(data)
-        from subprocess import Popen as _Popen, PIPE as _PIPE
-        p = _Popen(cmd, stdout=_PIPE, stdin=_PIPE)
-        stdout, stderr = p.communicate(entries.encode())
-        try:
-            p.terminate()
-        except OSError:
-            pass                # python2 compatibility
-        return stdout.decode().rstrip(), p.returncode
+#     @staticmethod
+#     def _launch_menu_proc(cmd, data, entry_sep='\n'):
+#         entries = entry_sep.join(data)
+#         from subprocess import Popen as _Popen, PIPE as _PIPE
+#         p = _Popen(cmd, stdout=_PIPE, stdin=_PIPE)
+#         stdout, stderr = p.communicate(entries.encode())
+#         try:
+#             p.terminate()
+#         except OSError:
+#             pass                # python2 compatibility
+#         return stdout.decode().rstrip(), p.returncode
 
-    def __repr__(self):
-        clsname = self.__class__.__name__
-        toret = [clsname, '(command=', repr(self.command), ')']
-        return ''.join(toret)
+#     def __repr__(self):
+#         clsname = self.__class__.__name__
+#         toret = [clsname, '(command=', repr(self.command), ')']
+#         return ''.join(toret)
 
 
 class _Descriptor(object):
