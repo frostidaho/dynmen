@@ -1,5 +1,4 @@
 # import os as _os
-from subprocess import Popen as _Popen, PIPE as _PIPE
 from collections import namedtuple as _namedtuple, OrderedDict as _OrderedDict
 
 
@@ -41,6 +40,7 @@ class Menu:
     @staticmethod
     def _launch_menu_proc(cmd, data, entry_sep='\n'):
         entries = entry_sep.join(data)
+        from subprocess import Popen as _Popen, PIPE as _PIPE
         p = _Popen(cmd, stdout=_PIPE, stdin=_PIPE)
         stdout, stderr = p.communicate(entries.encode())
         p.terminate()
