@@ -101,7 +101,7 @@ class _Option(_Descriptor):
     def __get__(self, inst, cls):
         val = super(_Option, self).__get__(inst, cls)
         if val:
-            return [self.opt, val]
+            return [self.opt, str(val)]
         else:
             return []
 
@@ -111,6 +111,7 @@ class _DescrMenu(Menu):
         cmd = list(self.command)
         opts = self._make_opts()
         cmd.extend(opts)
+        print('Running cmd: ', cmd)
         return self._run(cmd, entries)
 
     def _make_opts(self):
@@ -139,7 +140,10 @@ class _DescrMenu(Menu):
 class Rofi(_DescrMenu):
     fullscreen = _Flag('fullscreen', flag='-fullscreen')
     case_insensitive = _Flag('case_insensitive', flag='-i')
+    # prompt = _Option('prompt', default='', opt='-p')
     prompt = _Option('prompt', default='Input: ', opt='-p')
+    lines = _Option('lines', default=15, opt='-l')
+    hide_scrollbar = _Flag('hide_scrollbar', flag='-hide-scrollbar')
 
     def __init__(self, *rofi_args, **kwargs):
         super(Rofi, self).__init__(['rofi', '-dmenu'])
