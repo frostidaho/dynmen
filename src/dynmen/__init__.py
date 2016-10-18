@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from collections import namedtuple as _namedtuple, OrderedDict as _OrderedDict
+import logging as _logging
+_logr = _logging.getLogger(__name__)
+_logr.addHandler(_logging.NullHandler())
 
 
 MenuResult = _namedtuple('MenuResult', 'selected value returncode')
@@ -23,7 +26,9 @@ class Menu(object):
             val = entries.get(res)
         except AttributeError:
             val = None
-        return MenuResult(res, val, returncode)
+        totres = MenuResult(res, val, returncode)
+        _logr.debug('{} returned: {}'.format(cmd[0], totres))
+        return totres
 
     def sort(self, entries, key=None, reverse=False):
         """Sort and send entries to menu, return selected entry
