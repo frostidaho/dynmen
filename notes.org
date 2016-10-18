@@ -1,6 +1,30 @@
 
+* Common functionality
+| Function                 | dmenu     | rofi                      | fzf             |
+|--------------------------+-----------+---------------------------+-----------------|
+| prompt                   | -p PROMPT | -p PROMPT (in dmenu-mode) | --prompt=PROMPT |
+| match - exact            |           |                           | -e, --exact     |
+| match - case insensitive | -i        | -i (in dmenu-mode)        | -i, +i          |
+|                          |           |                           |                 |
+|                          |           |                           |                 |
+| version info             | -v        | -version                  | --version       |
 
-| Function | dmenu     | rofi                      | fzf             |
-|----------+-----------+---------------------------+-----------------|
-| prompt   | -p PROMPT | -p PROMPT (in dmenu-mode) | --prompt=PROMPT |
-|          |           |                           |                 |
+
+
+* Interesting features
+
+** Rofi -format option
+Allows the output of dmenu to be customized (N is total number of input entries):
+ - 's' selected string.
+ - 'i' index (0 - (N-1)).
+ - 'd' index (1 - N).
+ - 'q' quote string.
+ - 'f' filter string (user input).
+ - 'F' quoted filter string (user input).
+
+** Rofi -sep option
+Separate entries on this character.
+Note that this separator can actually only be one ascii character.
+
+It might be useful to take an actual entry separator and replace it with some
+seldomly used ascii character like =\x02=.
