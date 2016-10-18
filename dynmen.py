@@ -1,4 +1,3 @@
-# import os as _os
 from collections import namedtuple as _namedtuple, OrderedDict as _OrderedDict
 
 
@@ -46,23 +45,6 @@ class Menu:
         p.terminate()
         return stdout.decode().rstrip(), p.returncode
 
-    # @staticmethod
-    # def _launch_menu_proc(cmd, data, entry_sep='\n'):
-    #     def _run_process(cmd, iter_entries, entry_sep):
-    #         entries = entry_sep.join(iter_entries)
-    #         # read, write = _os.pipe()
-    #         # _os.write(write, entries.encode())
-    #         # _os.close(write)
-    #         # p = _Popen(cmd, stdout=_PIPE, stdin=read)
-    #         # stdout, stderr = p.communicate()
-    #         # For some reason when using fzf stderr=sp.PIPE will not work
-    #         # Fzf probably rebinds stderr to stdout
-    #         p = _Popen(cmd, stdout=_PIPE, stdin=_PIPE)
-    #         stdout, stderr = p.communicate(entries.encode())
-    #         p.terminate()
-    #         return stdout.decode().rstrip()
-    #     return _run_process(cmd, data, entry_sep)
-
     def __repr__(self):
         clsname = self.__class__.__name__
         toret = [clsname, '(command=', repr(self.command), ')']
@@ -75,27 +57,21 @@ fzf = Menu(command = ('fzf',))
 
 
 
-if __name__ == '__main__':
-    from string import ascii_letters
-    d = _OrderedDict((x[1]*5, x[0]) for x in enumerate(ascii_letters))
 
-    z = rofi(d)
-    print(z)
-
-    l2 = list(ascii_letters)
-    z = dmenu(l2)
-    print(z)
-
-
-    z = dmenu(str(x) for x in range(10))
-    print(z)
-
-
-    z = dmenu.sort((str(x)*10 for x in range(10)), reverse=True)
-    print(z)
-
-
-    d = dict.fromkeys('ajdsfhadfjozuy3892zzlzlzkq')
-    z = dmenu.sort(d, reverse=True)
-    print(z)
+# @staticmethod
+# def _launch_menu_proc(cmd, data, entry_sep='\n'):
+#     def _run_process(cmd, iter_entries, entry_sep):
+#         entries = entry_sep.join(iter_entries)
+#         # read, write = _os.pipe()
+#         # _os.write(write, entries.encode())
+#         # _os.close(write)
+#         # p = _Popen(cmd, stdout=_PIPE, stdin=read)
+#         # stdout, stderr = p.communicate()
+#         # For some reason when using fzf stderr=sp.PIPE will not work
+#         # Fzf probably rebinds stderr to stdout
+#         p = _Popen(cmd, stdout=_PIPE, stdin=_PIPE)
+#         stdout, stderr = p.communicate(entries.encode())
+#         p.terminate()
+#         return stdout.decode().rstrip()
+#     return _run_process(cmd, data, entry_sep)
 
