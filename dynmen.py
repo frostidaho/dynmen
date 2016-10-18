@@ -63,19 +63,19 @@ fzf = Menu(command = ('fzf',))
 
 
 # @staticmethod
-def _launch_menu_proc(cmd, data, entry_sep='\n'):
-    def _run_process(cmd, iter_entries, entry_sep):
-        entries = entry_sep.join(iter_entries)
-        # read, write = _os.pipe()
-        # _os.write(write, entries.encode())
-        # _os.close(write)
-        # p = _Popen(cmd, stdout=_PIPE, stdin=read)
-        # stdout, stderr = p.communicate()
-        # For some reason when using fzf stderr=sp.PIPE will not work
-        # Fzf probably rebinds stderr to stdout
-        p = _Popen(cmd, stdout=_PIPE, stdin=_PIPE)
-        stdout, stderr = p.communicate(entries.encode())
-        p.terminate()
-        return stdout.decode().rstrip()
-    return _run_process(cmd, data, entry_sep)
+# def _launch_menu_proc(cmd, data, entry_sep='\n'):
+#     def _run_process(cmd, iter_entries, entry_sep):
+#         entries = entry_sep.join(iter_entries)
+#         # read, write = _os.pipe()
+#         # _os.write(write, entries.encode())
+#         # _os.close(write)
+#         # p = _Popen(cmd, stdout=_PIPE, stdin=read)
+#         # stdout, stderr = p.communicate()
+#         # For some reason when using fzf stderr=sp.PIPE will not work
+#         # Fzf probably rebinds stderr to stdout
+#         p = _Popen(cmd, stdout=_PIPE, stdin=_PIPE)
+#         stdout, stderr = p.communicate(entries.encode())
+#         p.terminate()
+#         return stdout.decode().rstrip()
+#     return _run_process(cmd, data, entry_sep)
 
