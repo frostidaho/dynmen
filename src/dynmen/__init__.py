@@ -54,3 +54,8 @@ class Menu(object):
         clsname = self.__class__.__name__
         toret = [clsname, '(command=', repr(self.command), ')']
         return ''.join(toret)
+
+
+rofi = Menu(command = ('rofi', '-fullscreen', '-dmenu', '-i'))
+dmenu = Menu(command = ('dmenu', '-l', '10', '-i'))
+fzf = Menu(command = ('fzf',))
