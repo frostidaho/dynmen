@@ -56,6 +56,6 @@ class Menu(object):
         return ''.join(toret)
 
 
-rofi = Menu(command = ('rofi', '-fullscreen', '-dmenu', '-i'))
-dmenu = Menu(command = ('dmenu', '-l', '10', '-i'))
-fzf = Menu(command = ('fzf',))
+# rofi = Menu(command = ('rofi', '-fullscreen', '-dmenu', '-i'))
+# dmenu = Menu(command = ('dmenu', '-l', '10', '-i'))
+# fzf = Menu(command = ('fzf',))
