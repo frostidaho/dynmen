@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
+import logging as _logging
 from dynmen import Menu
+
+
+_logr = _logging.getLogger(__name__)
+_logr.addHandler(_logging.NullHandler())
+
 
 class Descriptor(object):
     def __init__(self, name, default=None):
@@ -55,7 +61,7 @@ class TraitMenu(Menu):
         cmd = list(self.command)
         opts = self._make_opts()
         cmd.extend(opts)
-        print('Running cmd: ', cmd)
+        _logr.debug('Built cmd: {!r}'.format(cmd))
         return self._run(cmd, entries)
 
     def _make_opts(self):
