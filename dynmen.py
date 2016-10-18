@@ -14,7 +14,12 @@ class Menu(object):
         entries is an iterable where each element is a string that corresponds
         to an entry in the menu.
         """
-        return self._run(entries)
+        res, returncode = self._launch_menu_proc(self.command, entries)
+        try:
+            val = entries.get(res)
+        except AttributeError:
+            val = None
+        return MenuResult(res, val, returncode)
 
     def sort(self, entries, key=None, reverse=False):
         """Sort and send entries to menu, return selected entry
@@ -28,14 +33,6 @@ class Menu(object):
         except AttributeError:
             data = sorted(entries, key=key, reverse=reverse)
         return self(data)
-
-    def _run(self, data):
-        res, returncode = self._launch_menu_proc(self.command, data)
-        try:
-            val = data.get(res)
-        except AttributeError:
-            val = None
-        return MenuResult(res, val, returncode)
 
     @staticmethod
     def _launch_menu_proc(cmd, data, entry_sep='\n'):
