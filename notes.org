@@ -1,0 +1,6 @@
+
+
+| Function | dmenu     | rofi                      | fzf             |
+|----------+-----------+---------------------------+-----------------|
+| prompt   | -p PROMPT | -p PROMPT (in dmenu-mode) | --prompt=PROMPT |
+|          |           |                           |                 |
