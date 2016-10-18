@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from dynmen import Menu, MenuResult
 from functools import partial
 import unittest
