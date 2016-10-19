@@ -8,6 +8,8 @@
 - [[https://github.com/DaveDavenport/rofi][rofi]] :: Has a number of different modes & a dmenu emulation mode
   - Like dmenu + swiss army knife
   - When run with the -dmenu flag, it operates similarly to dmenu
+  - [[https://github.com/okraits/rofi-tools][rofi-tools]]
+  - [[https://github.com/carnager/rofi-scripts][rofi-scripts]]
 
 ** Terminal filters
 - [[https://github.com/junegunn/fzf][fzf]] :: a command-line fuzzy finder written in go
