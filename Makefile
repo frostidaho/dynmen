@@ -36,7 +36,7 @@ uninstall:
 .PHONY: tests
 tests:
 	@echo "----------------------------------------"
-	@echo "Running tests for python3"
+	@echo "Running tests for python3 & python2"
 	@echo "----------------------------------------"
 # | Version | Fedora    | Arch Linux |
 # |---------+-----------+------------|
