@@ -1,58 +1,75 @@
 # -*- coding: utf-8 -*-
 import logging as _logging
 from dynmen import Menu
+from collections import namedtuple as _ntupl
 
 
 _logr = _logging.getLogger(__name__)
 _logr.addHandler(_logging.NullHandler())
 
 
+Record = _ntupl('Record', 'name value transformed info')
 class Descriptor(object):
-    def __init__(self, name, default=None):
-        self.name = '_' + name
+    def __init__(self, name, default=None, info=''):
+        self.under_name = '_' + name
+        self.name = name
         self.default = default
+        self.info = info
 
     def __get__(self, inst, cls):
-        if inst is None:
-            return self
-        try:
-            return inst.__dict__[self.name]
-        except KeyError:
-            return self.default
+        return self.get_record(inst, cls)
+
+    def transform(self, value):
+        msg = '{} must implement the transform method'
+        raise NotImplementedError(msg.format(self.__class__.__name__))
+
+    def get_record(self, inst, cls):
+        gattr = lambda x: getattr(self, x)
+        rdict = dict(
+            name=gattr('name'),
+            value=gattr('default'),
+            info=gattr('info'),
+        )
+        if inst:
+            try:
+                rdict['value'] = inst.__dict__[self.under_name]
+            except KeyError:
+                pass
+        rdict['transformed'] = self.transform(rdict['value'])
+        return Record(**rdict)
 
     def __set__(self, inst, value):
-        inst.__dict__[self.name] = value
+        inst.__dict__[self.under_name] = value
 
     def __delete__(self, inst):
-        del inst.__dict__[self.name]
+        del inst.__dict__[self.under_name]
+
 
 class Flag(Descriptor):
-    def __init__(self, name, default=False, flag=''):
-        super(Flag, self).__init__(name, default)
+    def __init__(self, name, default=False, info='', flag=''):
+        super(Flag, self).__init__(name, default=default, info=info)
         self.flag = flag
 
     def __set__(self, inst, value):
         if isinstance(value, bool):
             super(Flag, self).__set__(inst, value)
         else:
-            raise TypeError('{} expects a bool, not {}'.format(self.name, value))
+            raise TypeError('{} expects a bool, not {}'.format(self.under_name, value))
 
-    def __get__(self, inst, cls):
-        val = super(Flag, self).__get__(inst, cls)
-        return self.flag if val else ''
+    def transform(self, value):
+        return self.flag if value else ''
 
 class Option(Descriptor):
-    def __init__(self, name, default='', opt=''):
-        super(Option, self).__init__(name, default)
+    def __init__(self, name, default='', info='', opt=''):
+        super(Option, self).__init__(name, default=default, info=info)
         self.opt = opt
 
     def __set__(self, inst, value):
-        super(Option, self).__set__(inst, str(value))
+        super(Option, self).__set__(inst, value)
 
-    def __get__(self, inst, cls):
-        val = super(Option, self).__get__(inst, cls)
-        if val:
-            return [self.opt, str(val)]
+    def transform(self, value):
+        if value:
+            return [self.opt, str(value)]
         else:
             return []
 
@@ -85,4 +102,16 @@ class TraitMenu(Menu):
             self._list_opts_names = [x for x in attribs if
                                      isinstance(cls.__dict__.get(x), (Option, Flag))]
         return self._list_opts_names
+
+    @property
+    def menu_options(self):
+        cls = self.__class__
+        mopts = self._list_opts()
+        return [x for x in mopts if isinstance(cls.__dict__.get(x), Option)]
+
+    @property
+    def menu_flags(self):
+        cls = self.__class__
+        mflags = self._list_opts()
+        return [x for x in mflags if isinstance(cls.__dict__.get(x), Flag)]
 
