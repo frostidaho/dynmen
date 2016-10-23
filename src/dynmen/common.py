@@ -8,7 +8,7 @@ _logr = _logging.getLogger(__name__)
 _logr.addHandler(_logging.NullHandler())
 
 
-Record = _ntupl('Record', 'name value transformed info')
+Record = _ntupl('Record', 'name value transformed info type')
 class Descriptor(object):
     def __init__(self, name, default=None, info=''):
         self.under_name = '_' + name
@@ -29,6 +29,7 @@ class Descriptor(object):
             name=gattr('name'),
             value=gattr('default'),
             info=gattr('info'),
+            type=self.__class__.__name__,
         )
         if inst:
             try:
@@ -57,7 +58,7 @@ class Flag(Descriptor):
             raise TypeError('{} expects a bool, not {}'.format(self.under_name, value))
 
     def transform(self, value):
-        return self.flag if value else ''
+        return [self.flag] if value else []
 
 class Option(Descriptor):
     def __init__(self, name, default='', info='', opt=''):
