@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from dynmen import common
+from dynmen import common, ValidationError
 from operator import attrgetter
 import unittest
 
@@ -67,7 +67,7 @@ class TestFlag(unittest.TestCase):
         )
 
     def test_validation(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValidationError):
             self.tflag.dflt_t = 42
 
 # def assertRecordEqual(self, rec):

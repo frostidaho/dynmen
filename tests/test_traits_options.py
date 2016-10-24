@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from dynmen import common
+from dynmen import common, ValidationError
 from dynmen.common import Option
 from operator import attrgetter
 import unittest
@@ -44,6 +44,10 @@ class TestOpts(unittest.TestCase):
         x = 30.1
         self.to.lines = x
         self.assertRecordKeysEql(self.to.lines, value=x, transformed=['-l', '30'])
+
+    def test_lines_fail(self):
+        with self.assertRaises(ValidationError):
+            self.to.lines = 'asdfadfasdf'
 
     # def test_lines_fail(self):
     #     self.to.lines = '37'

@@ -4,6 +4,8 @@ import logging as _logging
 _logr = _logging.getLogger(__name__)
 _logr.addHandler(_logging.NullHandler())
 
+class ValidationError(Exception):
+    pass
 
 MenuResult = _namedtuple('MenuResult', 'selected value returncode')
 class Menu(object):

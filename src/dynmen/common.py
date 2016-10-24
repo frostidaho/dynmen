@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging as _logging
-from dynmen import Menu
+from dynmen import Menu, ValidationError
 from collections import namedtuple as _ntupl
 
 
@@ -45,14 +45,26 @@ class Descriptor(object):
         return True
 
     def __set__(self, inst, value):
+        def err():
+            msgfail = '{}->{}: validation failed for {!r}'
+            cname = self.__class__.__name__
+            return ValidationError(msgfail.format(cname, self.name, value))
+
         if isinstance(value, Record):
             value = value.value
-        if self.validate(value) is True:
+        try:
+            validated = self.validate(value)
+        except Exception as e:
+            from six import raise_from
+            raise_from(err(), e)
+
+        if validated is True:
             inst.__dict__[self.under_name] = value
         else:
-            msg = '{}->{}: validation failed for {!r}'
-            cname = self.__class__.__name__
-            raise ValueError(msg.format(cname, self.name, value))
+            raise err()
+            # msg = '{}->{}: validation failed for {!r}'
+            # cname = self.__class__.__name__
+            # raise ValueError(msg.format(cname, self.name, value))
 
     def __delete__(self, inst):
         del inst.__dict__[self.under_name]
