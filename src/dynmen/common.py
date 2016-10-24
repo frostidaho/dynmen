@@ -39,8 +39,18 @@ class Descriptor(object):
         rdict['transformed'] = self.transform(rdict['value'])
         return Record(**rdict)
 
+    def validate(self, value):
+        return True
+
     def __set__(self, inst, value):
-        inst.__dict__[self.under_name] = value
+        if isinstance(value, Record):
+            value = value.value
+        if self.validate(value) is True:
+            inst.__dict__[self.under_name] = value
+        else:
+            msg = '{}->{}: validation failed for {!r}'
+            cname = self.__class__.__name__
+            raise ValueError(msg.format(cname, self.name, value))
 
     def __delete__(self, inst):
         del inst.__dict__[self.under_name]
@@ -51,11 +61,9 @@ class Flag(Descriptor):
         super(Flag, self).__init__(name, default=default, info=info)
         self.flag = flag
 
-    def __set__(self, inst, value):
+    def validate(self, value):
         if isinstance(value, bool):
-            super(Flag, self).__set__(inst, value)
-        else:
-            raise TypeError('{} expects a bool, not {}'.format(self.under_name, value))
+            return True
 
     def transform(self, value):
         return [self.flag] if value else []
@@ -64,9 +72,6 @@ class Option(Descriptor):
     def __init__(self, name, default='', info='', opt=''):
         super(Option, self).__init__(name, default=default, info=info)
         self.opt = opt
-
-    def __set__(self, inst, value):
-        super(Option, self).__set__(inst, value)
 
     def transform(self, value):
         if value:
