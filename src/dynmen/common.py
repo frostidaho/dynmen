@@ -62,9 +62,6 @@ class Descriptor(object):
             inst.__dict__[self.under_name] = value
         else:
             raise err()
-            # msg = '{}->{}: validation failed for {!r}'
-            # cname = self.__class__.__name__
-            # raise ValueError(msg.format(cname, self.name, value))
 
     def __delete__(self, inst):
         del inst.__dict__[self.under_name]
