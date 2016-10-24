@@ -42,7 +42,8 @@ class Descriptor(object):
         return Record(**rdict)
 
     def validate(self, value):
-        return True
+        msg = '{} must implement the validate method'
+        raise NotImplementedError(msg.format(self.__class__.__name__))
 
     def __set__(self, inst, value):
         def err():
@@ -58,8 +59,8 @@ class Descriptor(object):
             from six import raise_from
             raise_from(err(), e)
 
-        if validated is True:
-            inst.__dict__[self.under_name] = value
+        if validated is not None:
+            inst.__dict__[self.under_name] = validated
         else:
             raise err()
 
@@ -78,7 +79,7 @@ class Flag(Descriptor):
 
     def validate(self, value):
         if isinstance(value, bool):
-            return True
+            return value
 
     def transform(self, value):
         return [self.flag] if value else []
@@ -91,8 +92,9 @@ class Option(Descriptor):
 
     def validate(self, value):
         if self.type is not None:
-            self.type(value)
-        return True
+            return self.type(value)
+        else:
+            return value
 
     def transform(self, value):
         if value:

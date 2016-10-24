@@ -40,10 +40,10 @@ class TestOpts(unittest.TestCase):
         self.to.lines = 37
         self.assertRecordKeysEql(self.to.lines, value=37, transformed=['-l', '37'])
         self.to.lines = '42'
-        self.assertRecordKeysEql(self.to.lines, value='42', transformed=['-l', '42'])
+        self.assertRecordKeysEql(self.to.lines, value=42, transformed=['-l', '42'])
         x = 30.1
-        self.to.lines = x
-        self.assertRecordKeysEql(self.to.lines, value=x, transformed=['-l', '30'])
+        self.to.lines = 30.1
+        self.assertRecordKeysEql(self.to.lines, value=int(x), transformed=['-l', '30'])
 
     def test_lines_fail(self):
         with self.assertRaises(ValidationError):
