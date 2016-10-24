@@ -9,6 +9,8 @@ _logr.addHandler(_logging.NullHandler())
 
 
 Record = _ntupl('Record', 'name value transformed info type')
+DefaultRecord = _ntupl('DefaultRecord', 'name value transformed info type')
+
 class Descriptor(object):
     def __init__(self, name, default=None, info=''):
         self.under_name = '_' + name
@@ -69,13 +71,22 @@ class Flag(Descriptor):
         return [self.flag] if value else []
 
 class Option(Descriptor):
-    def __init__(self, name, default='', info='', opt=''):
+    def __init__(self, name, default='', info='', flag='', type=None):
         super(Option, self).__init__(name, default=default, info=info)
-        self.opt = opt
+        self.flag = flag
+        self.type = type
+
+    def validate(self, value):
+        if self.type is not None:
+            self.type(value)
+        return True
 
     def transform(self, value):
         if value:
-            return [self.opt, str(value)]
+            if self.type is not None:
+                return [self.flag, str(self.type(value))]
+            else:
+                return [self.flag, str(value)]
         else:
             return []
 
@@ -99,25 +110,27 @@ class TraitMenu(Menu):
                 opts2.append(opt)
         return opts2
 
-    def _list_opts(self):
+    @classmethod
+    def _default_opts(cls):
         try:
-            return self._list_opts_names
+            return cls._default_opts_list
         except AttributeError:
-            cls = self.__class__
             attribs = dir(cls)
-            self._list_opts_names = [x for x in attribs if
-                                     isinstance(cls.__dict__.get(x), (Option, Flag))]
-        return self._list_opts_names
+            names = (x for x in attribs if
+                     isinstance(cls.__dict__.get(x), Descriptor))
+            dflt = (getattr(cls, x) for x in names)
+            cls._default_opts_list = [DefaultRecord._make(x) for x in dflt]
+        return cls._default_opts_list
 
     @property
-    def menu_options(self):
-        cls = self.__class__
-        mopts = self._list_opts()
-        return [x for x in mopts if isinstance(cls.__dict__.get(x), Option)]
+    def default_settings(self):
+        return self._default_opts()
 
     @property
-    def menu_flags(self):
-        cls = self.__class__
-        mflags = self._list_opts()
-        return [x for x in mflags if isinstance(cls.__dict__.get(x), Flag)]
+    def default_options(self):
+        return [x for x in self._default_opts() if x.type == 'Option']
+
+    @property
+    def default_flags(self):
+        return [x for x in self._default_opts() if x.type == 'Flag']
 
