@@ -2,11 +2,21 @@
 from dynmen.common import TraitMenu, Flag, Option
 
 class DMenu(TraitMenu):
-    case_insensitive = Flag('case_insensitive', flag='-i')
-    # prompt = Option('prompt', default='', opt='-p')
-    prompt = Option('prompt', default='Input: ', opt='-p')
-    lines = Option('lines', default=15, opt='-l')
-    # hide_scrollbar = Flag('hide_scrollbar', flag='-hide-scrollbar')
+    case_insensitive = Flag('case_insensitive', flag='-i', info='Case insensitive matching')
+    # prompt = Option('prompt', default='', flag='-p')
+    prompt = Option(
+        'prompt',
+        default='Input: ',
+        flag='-p',
+        info='Display text to the left of the input',
+    )
+    lines = Option(
+        'lines',
+        default=15,
+        flag='-l',
+        info='Number of lines to display. (Does not work with fullscreen)',
+        type=int,
+    )
 
     def __init__(self, *dmenu_args, **kwargs):
         super(DMenu, self).__init__(['dmenu'])
