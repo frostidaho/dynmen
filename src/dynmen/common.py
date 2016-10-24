@@ -9,7 +9,7 @@ _logr.addHandler(_logging.NullHandler())
 
 
 Record = _ntupl('Record', 'name value transformed info descr_obj')
-DefaultRecord = _ntupl('DefaultRecord', 'name value transformed info descr_obj')
+DefaultRecord = _ntupl('DefaultRecord', Record._fields)
 
 class Descriptor(object):
     def __init__(self, name, default=None, info=''):
