@@ -49,7 +49,12 @@ print('Output from rofi:', out)
 
 from dynmen.dmenu import DMenu
 menu = DMenu()
-menu.lines = 5
+menu.font = 'Satisfy-20'
+menu.color_fg_norm = '#6FC3DF'
+menu.color_bg_norm = '#0C141F'
+menu.color_fg_sel = '#FFE64D'
+menu.color_bg_sel = '#0C141F'
+menu.lines = 20
 menu.prompt = "Name of person: "
 menu.case_insensitive = True
 out = menu(exdict)
