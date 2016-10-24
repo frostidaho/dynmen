@@ -3,7 +3,6 @@ from dynmen.common import TraitMenu, Flag, Option
 
 class DMenu(TraitMenu):
     case_insensitive = Flag('case_insensitive', flag='-i', info='Case insensitive matching')
-    # prompt = Option('prompt', default='', flag='-p')
     prompt = Option(
         'prompt',
         default='Input: ',

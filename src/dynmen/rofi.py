@@ -4,7 +4,6 @@ from dynmen.common import TraitMenu, Flag, Option
 class Rofi(TraitMenu):
     fullscreen = Flag('fullscreen', flag='-fullscreen', info='Display menu using entire screen')
     case_insensitive = Flag('case_insensitive', flag='-i', info='Case insensitive matching')
-    # prompt = Option('prompt', default='', flag='-p')
     prompt = Option(
         'prompt',
         default='Input: ',

@@ -10,7 +10,6 @@ class FZF(TraitMenu):
         info='Display text to the left of the input',
     )
 
-
     def __init__(self, *fzf_args, **kwargs):
         super(FZF, self).__init__(['fzf'])
         self.command.extend(fzf_args)
