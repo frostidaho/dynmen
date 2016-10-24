@@ -8,8 +8,8 @@ _logr = _logging.getLogger(__name__)
 _logr.addHandler(_logging.NullHandler())
 
 
-Record = _ntupl('Record', 'name value transformed info type')
-DefaultRecord = _ntupl('DefaultRecord', 'name value transformed info type')
+Record = _ntupl('Record', 'name value transformed info descr_obj')
+DefaultRecord = _ntupl('DefaultRecord', 'name value transformed info descr_obj')
 
 class Descriptor(object):
     def __init__(self, name, default=None, info=''):
@@ -31,7 +31,7 @@ class Descriptor(object):
             name=gattr('name'),
             value=gattr('default'),
             info=gattr('info'),
-            type=self.__class__.__name__,
+            descr_obj=self,
         )
         if inst:
             try:
@@ -133,11 +133,11 @@ class TraitMenu(Menu):
     def default_settings(self):
         return self._default_opts()
 
-    @property
-    def default_options(self):
-        return [x for x in self._default_opts() if x.type == 'Option']
+    # @property
+    # def default_options(self):
+    #     return [x for x in self._default_opts() if x.type == 'Option']
 
-    @property
-    def default_flags(self):
-        return [x for x in self._default_opts() if x.type == 'Flag']
+    # @property
+    # def default_flags(self):
+    #     return [x for x in self._default_opts() if x.type == 'Flag']
 

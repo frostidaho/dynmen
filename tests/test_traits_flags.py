@@ -27,7 +27,6 @@ class TestFlag(unittest.TestCase):
         self.assertRecordKeysEql(
             self.tflag.dflt_t,
             name='dflt_t',
-            type='Flag',
             info='default true',
             value=True,
         )
@@ -35,7 +34,6 @@ class TestFlag(unittest.TestCase):
         self.assertRecordKeysEql(
             self.tflag.dflt_t,
             name='dflt_t',
-            type='Flag',
             info='default true',
             value=False,
         )
