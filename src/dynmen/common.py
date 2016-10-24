@@ -66,6 +66,10 @@ class Descriptor(object):
     def __delete__(self, inst):
         del inst.__dict__[self.under_name]
 
+    def __repr__(self):
+        clsname = self.__class__.__name__
+        return '{}({!r}, ...)'.format(clsname, self.name)
+
 
 class Flag(Descriptor):
     def __init__(self, name, default=False, info='', flag=''):
