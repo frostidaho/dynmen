@@ -111,16 +111,11 @@ class TraitMenu(Menu):
         return self._run(cmd, entries)
 
     def _make_opts(self):
-        opts = (getattr(self, x) for x in self._list_opts())
-        opts2 = []
-        for opt in opts:
-            if not opt:
-                continue
-            if not isinstance(opt, str):
-                opts2.extend(opt)
-            else:
-                opts2.append(opt)
-        return opts2
+        names = (x.name for x in self._default_opts())
+        opts = []
+        for name in names:
+            opts.extend(getattr(self, name).transformed)
+        return opts
 
     @classmethod
     def _default_opts(cls):
