@@ -161,24 +161,12 @@ class TraitMenu(Menu):
             return cls._default_opts_list
         except AttributeError:
             attribs = dir(cls)
-            # names = (x for x in attribs if
-            #          isinstance(cls.__dict__.get(x), Descriptor))
             names = (x for x in attribs if
                      isinstance(getattr(cls, x), Descriptor))
-            # dflt = (getattr(cls, x) for x in names)
-            dflt = (getattr(cls, x).default_record for x in names)
-            cls._default_opts_list = [DefaultRecord._make(x) for x in dflt]
+            cls._default_opts_list = [getattr(cls, x).default_record for x in names]
         return cls._default_opts_list
 
     @property
     def default_settings(self):
         return self._default_opts()
-
-    # @property
-    # def default_options(self):
-    #     return [x for x in self._default_opts() if x.type == 'Option']
-
-    # @property
-    # def default_flags(self):
-    #     return [x for x in self._default_opts() if x.type == 'Flag']
 
