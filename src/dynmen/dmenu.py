@@ -3,6 +3,7 @@ from dynmen.common import TraitMenu, Flag, Option
 
 class DMenu(TraitMenu):
     case_insensitive = Flag('case_insensitive', flag='-i', info='Case insensitive matching')
+    bottom = Flag('bottom', flag='-b', info='dmenu appears at the bottom of the screen')
     lines = Option(
         'lines',
         default=15,
