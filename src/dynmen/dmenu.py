@@ -6,7 +6,7 @@ class DMenu(TraitMenu):
     bottom = Flag('bottom', flag='-b', info='dmenu appears at the bottom of the screen')
     lines = Option(
         'lines',
-        default=15,
+        default=None,
         flag='-l',
         info='Number of lines to display. (Does not work with fullscreen)',
         type=int,

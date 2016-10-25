@@ -85,7 +85,7 @@ class Flag(Descriptor):
         return [self.flag] if value else []
 
 class Option(Descriptor):
-    def __init__(self, name, default='', info='', flag='', type=None):
+    def __init__(self, name, default=None, info='', flag='', type=None):
         super(Option, self).__init__(name, default=default, info=info)
         self.flag = flag
         self.type = type
