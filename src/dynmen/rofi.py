@@ -15,9 +15,14 @@ class Rofi(TraitMenu):
                             info='Case insensitive matching')
     lines = Option(
         'lines',
-        default=None,
-        flag='-l',
+        flag='-lines',
         info='Number of lines to display. (Does not work with fullscreen)',
+        type=int,
+    )
+    columns = Option(
+        'columns',
+        flag='-columns',
+        info='Number of columns to display.',
         type=int,
     )
     fullscreen = Flag('fullscreen', flag='-fullscreen',
