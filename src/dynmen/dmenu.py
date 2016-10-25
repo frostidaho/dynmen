@@ -2,13 +2,20 @@
 from dynmen.common import TraitMenu, Flag, Option
 
 class DMenu(TraitMenu):
-    case_insensitive = Flag('case_insensitive', flag='-i', info='Case insensitive matching')
-    bottom = Flag('bottom', flag='-b', info='dmenu appears at the bottom of the screen')
+    case_insensitive = Flag('case_insensitive', flag='-i',
+                            info='Case insensitive matching')
+    bottom = Flag('bottom', flag='-b',
+                  info='dmenu appears at the bottom of the screen')
     lines = Option(
         'lines',
-        default=None,
         flag='-l',
-        info='Number of lines to display. (Does not work with fullscreen)',
+        info='dmenu lists items vertically, with the given number of lines.',
+        type=int,
+    )
+    monitor = Option(
+        'monitor',
+        flag='-m',
+        info='dmenu is displayed on the monitor number supplied. Monitor numbers are starting from 0.',
         type=int,
     )
     prompt = Option(
