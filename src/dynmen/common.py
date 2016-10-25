@@ -19,7 +19,10 @@ class Descriptor(object):
         self.info = info
 
     def __get__(self, inst, cls):
-        return self.get_record(inst, cls)
+        if inst is None:
+            return self
+        else:
+            return self.get_record(inst, cls)
 
     def transform(self, value):
         msg = '{} must implement the transform method'
@@ -33,13 +36,17 @@ class Descriptor(object):
             info=gattr('info'),
             descr_obj=self,
         )
-        if inst:
-            try:
-                rdict['value'] = inst.__dict__[self.under_name]
-            except KeyError:
-                pass
+        # if inst:
+        try:
+            rdict['value'] = inst.__dict__[self.under_name]
+        except (KeyError, AttributeError):
+            pass
         rdict['transformed'] = self.transform(rdict['value'])
         return Record(**rdict)
+
+    @property
+    def default_record(self):
+        return DefaultRecord._make(self.get_record(None, self.__class__))
 
     def validate(self, value):
         msg = '{} must implement the validate method'
@@ -71,6 +78,34 @@ class Descriptor(object):
         clsname = self.__class__.__name__
         return '{}({!r}, ...)'.format(clsname, self.name)
 
+    # @classmethod
+    # def _get_constructor_keys(cls):
+    #     try:
+    #         return cls._constructor_keys
+    #     except AttributeError:
+    #         from inspect import signature
+    #         sig = signature(self.__class__)
+    #         cls._constructor_keys = tuple(sig.parameters.keys())
+    #     return cls._constructor_keys
+
+    # @classmethod
+    # def _get_named_tuple(cls):
+    #     try:
+    #         return cls._named_tuple
+    #     except AttributeError:
+    #         keys = cls._get_constructor_keys()
+    #         cname = self.__class__.__name__
+    #         tuplname = 'Tupl{}'.format(cname)
+    #         cls._named_tuple = _ntupl(tuplname, keys)
+    #     return cls._named_tuple
+
+    # def as_tuple(self):
+    #     ntupl = self._get_named_tuple()
+    #     return ntupl._make((getattr(self, x) for x in ntupl._fields))
+    #     # return ntupl([])
+    #     # for key in ntupl._fields:
+            
+        
 
 class Flag(Descriptor):
     def __init__(self, name, default=False, info='', flag=''):
@@ -126,9 +161,12 @@ class TraitMenu(Menu):
             return cls._default_opts_list
         except AttributeError:
             attribs = dir(cls)
+            # names = (x for x in attribs if
+            #          isinstance(cls.__dict__.get(x), Descriptor))
             names = (x for x in attribs if
-                     isinstance(cls.__dict__.get(x), Descriptor))
-            dflt = (getattr(cls, x) for x in names)
+                     isinstance(getattr(cls, x), Descriptor))
+            # dflt = (getattr(cls, x) for x in names)
+            dflt = (getattr(cls, x).default_record for x in names)
             cls._default_opts_list = [DefaultRecord._make(x) for x in dflt]
         return cls._default_opts_list
 

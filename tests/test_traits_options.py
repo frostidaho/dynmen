@@ -28,7 +28,7 @@ class TestOpts(unittest.TestCase):
 
     def assertRecordKeysEql(self, rec, **kwargs):
         name = rec.name
-        d_rec = getattr(self.TOpt, name)._asdict()
+        d_rec = getattr(self.TOpt, name).default_record._asdict()
         d_rec.update(kwargs)
         for key in rec._fields:
             val = getattr(rec, key)
