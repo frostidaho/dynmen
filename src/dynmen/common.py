@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 import logging as _logging
-from dynmen import Menu, ValidationError
+from dynmen import Menu, ValidationError, Default
 from collections import (namedtuple as _ntupl,
                          OrderedDict as _OrderedDict)
-from enum import Enum
+
 
 _logr = _logging.getLogger(__name__)
 _logr.addHandler(_logging.NullHandler())
 
-class Default(Enum):
-    value = 1
-    type = 2
 
 Record = _ntupl('Record', 'name value transformed')
 DefaultRecord = _ntupl('DefaultRecord', Record._fields)

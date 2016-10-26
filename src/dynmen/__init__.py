@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
-from collections import namedtuple as _namedtuple, OrderedDict as _OrderedDict
 import logging as _logging
+from collections import (namedtuple as _namedtuple,
+                         OrderedDict as _OrderedDict)
+from enum import Enum as _Enum
+
 _logr = _logging.getLogger(__name__)
 _logr.addHandler(_logging.NullHandler())
 
 class ValidationError(Exception):
     pass
+
+class Default(_Enum):
+    value = 1
+    type = 2
+
 
 MenuResult = _namedtuple('MenuResult', 'selected value returncode')
 class Menu(object):
