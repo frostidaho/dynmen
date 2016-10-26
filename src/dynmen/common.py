@@ -4,11 +4,11 @@ from dynmen import Menu, ValidationError, Default
 from collections import (namedtuple as _ntupl,
                          OrderedDict as _OrderedDict)
 try:
-    from functools import lru_cache
-    from inspect import signature
+    from functools import lru_cache as _lru_cache
+    from inspect import signature as _signature
 except ImportError:             # for Python 2.7
-    from functools32 import lru_cache
-    from funcsigs import signature
+    from functools32 import lru_cache as _lru_cache
+    from funcsigs import signature as _signature
 
 
 _logr = _logging.getLogger(__name__)
@@ -18,7 +18,7 @@ _logr.addHandler(_logging.NullHandler())
 Record = _ntupl('Record', 'name value transformed')
 DefaultRecord = _ntupl('DefaultRecord', Record._fields)
 
-@lru_cache(maxsize=256)
+@_lru_cache(maxsize=256)
 def _get_record(name, value, fn):
     return Record(name, value, fn(value))
 
@@ -104,7 +104,7 @@ class Descriptor(object):
         try:
             return getattr(cls, kname)
         except AttributeError:
-            sig = signature(cls)
+            sig = _signature(cls)
             keys = tuple(sig.parameters.keys())
             setattr(cls, kname, keys)
             return keys
