@@ -8,7 +8,7 @@ _logr = _logging.getLogger(__name__)
 _logr.addHandler(_logging.NullHandler())
 
 
-Record = _ntupl('Record', 'name value transformed info descr_obj')
+Record = _ntupl('Record', 'name value transformed info')
 DefaultRecord = _ntupl('DefaultRecord', Record._fields)
 
 class Descriptor(object):
@@ -34,9 +34,7 @@ class Descriptor(object):
             name=gattr('name'),
             value=gattr('default'),
             info=gattr('info'),
-            descr_obj=self,
         )
-        # if inst:
         try:
             rdict['value'] = inst.__dict__[self.under_name]
         except (KeyError, AttributeError):
