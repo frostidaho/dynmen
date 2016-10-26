@@ -12,7 +12,7 @@ class Default(Enum):
     value = 1
     type = 2
 
-Record = _ntupl('Record', 'name value transformed info')
+Record = _ntupl('Record', 'name value transformed')
 DefaultRecord = _ntupl('DefaultRecord', Record._fields)
 
 class Descriptor(object):
@@ -49,7 +49,6 @@ class Descriptor(object):
         rdict = dict(
             name=gattr('name'),
             value=gattr('default'),
-            info=gattr('info'),
         )
         try:
             rdict['value'] = inst.__dict__[self.under_name]

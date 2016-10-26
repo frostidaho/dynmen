@@ -27,14 +27,12 @@ class TestFlag(unittest.TestCase):
         self.assertRecordKeysEql(
             self.tflag.dflt_t,
             name='dflt_t',
-            info='default true',
             value=True,
         )
         self.tflag.dflt_t = False
         self.assertRecordKeysEql(
             self.tflag.dflt_t,
             name='dflt_t',
-            info='default true',
             value=False,
         )
 
