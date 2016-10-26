@@ -7,8 +7,8 @@ from enum import Enum
 _logr = _logging.getLogger(__name__)
 _logr.addHandler(_logging.NullHandler())
 
-class No(Enum):
-    default = 1
+class Default(Enum):
+    value = 1
     type = 2
 
 Record = _ntupl('Record', 'name value transformed info clsname')
@@ -27,7 +27,7 @@ class Descriptor(object):
     2. transform(self, value) which returns a transformation of the
        validated value. It is called by __get__()
     """
-    def __init__(self, name, default=No.default, info=''):
+    def __init__(self, name, default=Default.value, info=''):
         self.under_name = '_' + name
         self.name = name
         self.default = default
@@ -70,7 +70,7 @@ class Descriptor(object):
         if isinstance(value, Record):
             value = value.value
 
-        if (value is None) or (value is No.default):
+        if (value is None) or (value is Default.value):
             inst.__dict__.pop(self.under_name, None)
             # del inst.__dict__[self.under_name]
             return
@@ -145,7 +145,7 @@ class Flag(Descriptor):
         return [self.flag] if value else []
 
 class Option(Descriptor):
-    def __init__(self, name, default=No.default, info='', flag='', type=No.type):
+    def __init__(self, name, default=Default.value, info='', flag='', type=Default.type):
         super(Option, self).__init__(name, default=default, info=info)
         self.flag = flag
         self.type = type
@@ -153,15 +153,15 @@ class Option(Descriptor):
     def validate(self, value):
         if value == self.default:
             return value
-        if self.type != No.type:
+        if self.type != Default.type:
             return self.type(value)
         else:
             return value
 
     def transform(self, value):
         # print('muh value is', value, None)
-        if (value != No.default) and (value is not None):
-            if self.type != No.type:
+        if (value != Default.value) and (value is not None):
+            if self.type != Default.type:
                 return [self.flag, str(self.type(value))]
             else:
                 return [self.flag, str(value)]
