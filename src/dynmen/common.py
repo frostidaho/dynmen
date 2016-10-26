@@ -63,13 +63,8 @@ class Descriptor(object):
         raise NotImplementedError(msg.format(self.__class__.__name__))
 
     def __set__(self, inst, value):
-        if isinstance(value, Record):
+        if isinstance(value, (Record, DefaultRecord)):
             value = value.value
-
-        if (value is None) or (value is Default.value):
-            inst.__dict__.pop(self.under_name, None)
-            # del inst.__dict__[self.under_name]
-            return
 
         def err():
             msgfail = '{}->{}: validation failed for {!r}'
