@@ -18,9 +18,11 @@ _logr.addHandler(_logging.NullHandler())
 Record = _ntupl('Record', 'name value transformed')
 DefaultRecord = _ntupl('DefaultRecord', Record._fields)
 
+
 @_lru_cache(maxsize=256)
 def _get_record(name, value, fn):
     return Record(name, value, fn(value))
+
 
 class Descriptor(object):
     """
@@ -35,6 +37,7 @@ class Descriptor(object):
     2. transform(self, value) which returns a transformation of the
        validated value. It is called by __get__()
     """
+
     def __init__(self, name, default=Default.value, info=''):
         self.under_name = '_' + name
         self.name = name
@@ -56,7 +59,6 @@ class Descriptor(object):
             value = inst.__dict__.get(self.under_name, self.default)
         else:
             value = self.default
-        # return Record(name=self.name, value=value, transformed=self.transform(value))
         return _get_record(self.name, value, self.transform)
 
     @property
@@ -96,7 +98,6 @@ class Descriptor(object):
         rtuple = rtuple[rtuple.find('('):]
         return clsname + rtuple
 
-
     @classmethod
     def _get_constructor_keys(cls):
         kname = '_{}_constructor_keys'.format(cls.__name__)
@@ -128,6 +129,7 @@ class Descriptor(object):
 
 
 class Flag(Descriptor):
+
     def __init__(self, name, default=False, info='', flag=''):
         super(Flag, self).__init__(name, default=default, info=info)
         self.flag = flag
@@ -141,7 +143,9 @@ class Flag(Descriptor):
     def transform(self, value):
         return [self.flag] if value else []
 
+
 class Option(Descriptor):
+
     def __init__(self, name, default=Default.value, info='', flag='', type=Default.type):
         super(Option, self).__init__(name, default=default, info=info)
         self.flag = flag
@@ -161,7 +165,9 @@ class Option(Descriptor):
         else:
             return []
 
+
 class TraitMenu(Menu):
+
     def __call__(self, entries):
         cmd = list(self.command)
         opts = self._make_opts()
@@ -200,7 +206,6 @@ class TraitMenu(Menu):
             try:
                 od[opt_name].append(option.as_tuple)
             except KeyError:
-                od[opt_name] = [option.as_tuple,]
+                od[opt_name] = [option.as_tuple]
         setattr(self, settname, od)
         return od
-
