@@ -152,9 +152,7 @@ class Option(Descriptor):
         self.type = type
 
     def validate(self, value):
-        if value is self.default:
-            return value
-        if self.type == Default.type:
+        if (value is self.default) or (self.type is Default.type):
             return value
         return self.type(value)
 
