@@ -61,7 +61,8 @@ class Rofi(TraitMenu):
     opacity = Option(
         'opacity',
         flag='-opacity',
-        info='Set window opacity (0-100).'
+        info='Set window opacity (0-100).',
+        type=int,
     )
     border_width = Option(
         'border_width',

@@ -8,8 +8,11 @@ _logr = _logging.getLogger(__name__)
 _logr.addHandler(_logging.NullHandler())
 
 
-Record = _ntupl('Record', 'name value transformed info')
+Record = _ntupl('Record', 'name value transformed info type')
 DefaultRecord = _ntupl('DefaultRecord', Record._fields)
+
+class NoDefault:
+    pass
 
 class Descriptor(object):
     """
@@ -46,6 +49,7 @@ class Descriptor(object):
             name=gattr('name'),
             value=gattr('default'),
             info=gattr('info'),
+            type=self.__class__.__name__,
         )
         try:
             rdict['value'] = inst.__dict__[self.under_name]
@@ -63,6 +67,9 @@ class Descriptor(object):
         raise NotImplementedError(msg.format(self.__class__.__name__))
 
     def __set__(self, inst, value):
+        if value is None:
+            inst.__dict__[self.under_name] = value
+
         def err():
             msgfail = '{}->{}: validation failed for {!r}'
             cname = self.__class__.__name__
@@ -89,8 +96,7 @@ class Descriptor(object):
         rtuple = repr(self.as_tuple)
         rtuple = rtuple[rtuple.find('('):]
         return clsname + rtuple
-        
-        # return '{}({!r}, ...)'.format(clsname, self.name)
+
 
     @classmethod
     def _get_constructor_keys(cls):
@@ -142,6 +148,8 @@ class Option(Descriptor):
         self.type = type
 
     def validate(self, value):
+        if value == self.default:
+            return value
         if self.type is not None:
             return self.type(value)
         else:
