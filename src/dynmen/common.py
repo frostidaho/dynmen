@@ -94,24 +94,28 @@ class Descriptor(object):
 
     @classmethod
     def _get_constructor_keys(cls):
+        kname = '_{}_constructor_keys'.format(cls.__name__)
+
         try:
-            return cls._constructor_keys
+            return getattr(cls, kname)
         except AttributeError:
             from inspect import signature
             sig = signature(cls)
-            cls._constructor_keys = tuple(sig.parameters.keys())
-        return cls._constructor_keys
+            keys = tuple(sig.parameters.keys())
+            setattr(cls, kname, keys)
+            return keys
 
     @classmethod
     def _get_named_tuple(cls):
+        ntname = '_{}_named_tuple'.format(cls.__name__)
         try:
-            return cls._named_tuple
+            return getattr(cls, ntname)
         except AttributeError:
-            cname = cls.__name__
-            tuplname = 'NTuple{}'.format(cname)
+            tuplname = 'NTuple{}'.format(cls.__name__)
             keys = cls._get_constructor_keys()
-            cls._named_tuple = _ntupl(tuplname, keys)
-        return cls._named_tuple
+            nt = _ntupl(tuplname, keys)
+            setattr(cls, ntname, nt)
+            return nt
 
     @property
     def as_tuple(self):
