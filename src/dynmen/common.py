@@ -76,36 +76,38 @@ class Descriptor(object):
 
     def __repr__(self):
         clsname = self.__class__.__name__
-        return '{}({!r}, ...)'.format(clsname, self.name)
-
-    # @classmethod
-    # def _get_constructor_keys(cls):
-    #     try:
-    #         return cls._constructor_keys
-    #     except AttributeError:
-    #         from inspect import signature
-    #         sig = signature(self.__class__)
-    #         cls._constructor_keys = tuple(sig.parameters.keys())
-    #     return cls._constructor_keys
-
-    # @classmethod
-    # def _get_named_tuple(cls):
-    #     try:
-    #         return cls._named_tuple
-    #     except AttributeError:
-    #         keys = cls._get_constructor_keys()
-    #         cname = self.__class__.__name__
-    #         tuplname = 'Tupl{}'.format(cname)
-    #         cls._named_tuple = _ntupl(tuplname, keys)
-    #     return cls._named_tuple
-
-    # def as_tuple(self):
-    #     ntupl = self._get_named_tuple()
-    #     return ntupl._make((getattr(self, x) for x in ntupl._fields))
-    #     # return ntupl([])
-    #     # for key in ntupl._fields:
-            
+        rtuple = repr(self.as_tuple)
+        rtuple = rtuple[rtuple.find('('):]
+        return clsname + rtuple
         
+        # return '{}({!r}, ...)'.format(clsname, self.name)
+
+    @classmethod
+    def _get_constructor_keys(cls):
+        try:
+            return cls._constructor_keys
+        except AttributeError:
+            from inspect import signature
+            sig = signature(cls)
+            cls._constructor_keys = tuple(sig.parameters.keys())
+        return cls._constructor_keys
+
+    @classmethod
+    def _get_named_tuple(cls):
+        try:
+            return cls._named_tuple
+        except AttributeError:
+            cname = cls.__name__
+            tuplname = 'NTuple{}'.format(cname)
+            keys = cls._get_constructor_keys()
+            cls._named_tuple = _ntupl(tuplname, keys)
+        return cls._named_tuple
+
+    @property
+    def as_tuple(self):
+        ntupl = self._get_named_tuple()
+        return ntupl._make((getattr(self, x) for x in ntupl._fields))
+
 
 class Flag(Descriptor):
     def __init__(self, name, default=False, info='', flag=''):
