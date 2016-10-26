@@ -12,6 +12,18 @@ Record = _ntupl('Record', 'name value transformed info')
 DefaultRecord = _ntupl('DefaultRecord', Record._fields)
 
 class Descriptor(object):
+    """
+    When Descriptor instances are accessed normally
+    they return a Record tuple.
+
+    Subclasses of Descriptor can be created by implementing
+    1. validate(self, value) which returns the validated value
+       if the given value is not valid some exception should be raised.
+       validate() is called by __set__()
+
+    2. transform(self, value) which returns a transformation of the
+       validated value. It is called by __get__()
+    """
     def __init__(self, name, default=None, info=''):
         self.under_name = '_' + name
         self.name = name
