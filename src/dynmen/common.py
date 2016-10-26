@@ -3,6 +3,12 @@ import logging as _logging
 from dynmen import Menu, ValidationError, Default
 from collections import (namedtuple as _ntupl,
                          OrderedDict as _OrderedDict)
+try:
+    from functools import lru_cache
+    from inspect import signature
+except ImportError:             # for Python 2.7
+    from functools32 import lru_cache
+    from funcsigs import signature
 
 
 _logr = _logging.getLogger(__name__)
@@ -12,12 +18,10 @@ _logr.addHandler(_logging.NullHandler())
 Record = _ntupl('Record', 'name value transformed')
 DefaultRecord = _ntupl('DefaultRecord', Record._fields)
 
-# def _get_record(inst, cls, self.name, self.default, self.under_name):
-#     inst.__dict__[
+@lru_cache(maxsize=256)
+def _get_record(name, value, fn):
+    return Record(name=name, value=value, transformed=fn(value))
 
-# def _transform(fn, value):
-#     print('transforming!', value, fn)
-#     return fn(value)
 
 class Descriptor(object):
     """
@@ -49,16 +53,11 @@ class Descriptor(object):
         raise NotImplementedError(msg.format(self.__class__.__name__))
 
     def get_record(self, inst, cls):
-        rdict = dict(
-            name=getattr(self, 'name'),
-        )
-        if inst:
+        if inst is not None:
             value = inst.__dict__.get(self.under_name, self.default)
         else:
             value = self.default
-        rdict['value'] = value
-        rdict['transformed'] = self.transform(value)
-        return Record(**rdict)
+        return _get_record(self.name, value, self.transform)
 
     @property
     def default_record(self):
@@ -105,7 +104,6 @@ class Descriptor(object):
         try:
             return getattr(cls, kname)
         except AttributeError:
-            from inspect import signature
             sig = signature(cls)
             keys = tuple(sig.parameters.keys())
             setattr(cls, kname, keys)
