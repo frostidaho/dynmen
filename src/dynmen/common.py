@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging as _logging
 from dynmen import Menu, ValidationError
-from collections import namedtuple as _ntupl
+from collections import (namedtuple as _ntupl,
+                         OrderedDict as _OrderedDict)
 from enum import Enum
 
 _logr = _logging.getLogger(__name__)
@@ -120,7 +121,7 @@ class Descriptor(object):
         try:
             return getattr(cls, ntname)
         except AttributeError:
-            tuplname = 'NTuple{}'.format(cls.__name__)
+            tuplname = 'T{}'.format(cls.__name__)
             keys = cls._get_constructor_keys()
             nt = _ntupl(tuplname, keys)
             setattr(cls, ntname, nt)
@@ -159,7 +160,6 @@ class Option(Descriptor):
             return value
 
     def transform(self, value):
-        # print('muh value is', value, None)
         if (value != Default.value) and (value is not None):
             if self.type != Default.type:
                 return [self.flag, str(self.type(value))]
@@ -177,24 +177,37 @@ class TraitMenu(Menu):
         return self._run(cmd, entries)
 
     def _make_opts(self):
-        names = (x.name for x in self._default_opts())
+        def get_names():
+            settings = self.meta_settings
+            for opt_group in settings.values():
+                for opt in opt_group:
+                    yield opt.name
         opts = []
-        for name in names:
+        for name in get_names():
             opts.extend(getattr(self, name).transformed)
         return opts
 
-    @classmethod
-    def _default_opts(cls):
-        try:
-            return cls._default_opts_list
-        except AttributeError:
-            attribs = dir(cls)
-            names = (x for x in attribs if
-                     isinstance(getattr(cls, x), Descriptor))
-            cls._default_opts_list = [getattr(cls, x).default_record for x in names]
-        return cls._default_opts_list
-
     @property
-    def default_settings(self):
-        return self._default_opts()
+    def meta_settings(self):
+        cls = self.__class__
+        settname = '_meta_settings_{}'.format(cls.__name__)
+        try:
+            return getattr(self, settname)
+        except AttributeError:
+            pass
+
+        def get_descriptors():
+            for name in dir(cls):
+                val = getattr(cls, name)
+                if isinstance(val, Descriptor):
+                    yield val
+        od = _OrderedDict()
+        for option in get_descriptors():
+            opt_name = type(option).__name__
+            try:
+                od[opt_name].append(option.as_tuple)
+            except KeyError:
+                od[opt_name] = [option.as_tuple,]
+        setattr(self, settname, od)
+        return od
 
