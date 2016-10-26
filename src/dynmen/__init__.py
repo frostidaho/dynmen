@@ -7,8 +7,10 @@ from enum import Enum as _Enum
 _logr = _logging.getLogger(__name__)
 _logr.addHandler(_logging.NullHandler())
 
+
 class ValidationError(Exception):
     pass
+
 
 class Default(_Enum):
     value = 1
@@ -16,7 +18,10 @@ class Default(_Enum):
 
 
 MenuResult = _namedtuple('MenuResult', 'selected value returncode')
+
+
 class Menu(object):
+
     def __init__(self, command):
         "Create a python wrapper for command"
         self.command = command
