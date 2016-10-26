@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from dynmen.common import TraitMenu, Flag, Option
 
+
 class DMenu(TraitMenu):
     case_insensitive = Flag('case_insensitive', flag='-i',
                             info='Case insensitive matching')
@@ -58,6 +59,5 @@ class DMenu(TraitMenu):
     def __init__(self, *dmenu_args, **kwargs):
         super(DMenu, self).__init__(['dmenu'])
         self.command.extend(dmenu_args)
-        for k,v in kwargs.items():
+        for k, v in kwargs.items():
             setattr(self, k, v)
-

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from dynmen.common import TraitMenu, Flag, Option
 
+
 class Rofi(TraitMenu):
     ########################################
     # Common
-    ######################################## 
+    ########################################
     prompt = Option(
         'prompt',
         default='Input: ',
@@ -35,7 +36,7 @@ class Rofi(TraitMenu):
 
     ########################################
     # Multiline entry options
-    ######################################## 
+    ########################################
     element_height = Option(
         'element_height',
         type=int,
@@ -51,7 +52,7 @@ class Rofi(TraitMenu):
 
     ########################################
     # Aesthetic options
-    ######################################## 
+    ########################################
     font = Option(
         'font',
         info='Font to use with rofi',
@@ -79,6 +80,5 @@ class Rofi(TraitMenu):
     def __init__(self, *rofi_args, **kwargs):
         super(Rofi, self).__init__(['rofi', '-dmenu'])
         self.command.extend(rofi_args)
-        for k,v in kwargs.items():
+        for k, v in kwargs.items():
             setattr(self, k, v)
-
