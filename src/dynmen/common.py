@@ -129,6 +129,7 @@ class Descriptor(object):
 
 
 class Flag(Descriptor):
+    "A descriptor for setting menu flags without arguments. i.e., true/false flags"
 
     def __init__(self, name, default=False, info='', flag=''):
         super(Flag, self).__init__(name, default=default, info=info)
@@ -145,6 +146,7 @@ class Flag(Descriptor):
 
 
 class Option(Descriptor):
+    "A descriptor for setting menu flags with a single argument."
 
     def __init__(self, name, default=Default.value, info='', flag='', type=Default.type):
         super(Option, self).__init__(name, default=default, info=info)
