@@ -139,6 +139,8 @@ class Flag(Descriptor):
     def validate(self, value):
         if isinstance(value, bool):
             return value
+        else:
+            raise TypeError('{!r} is not a bool'.format(value))
 
     def transform(self, value):
         return [self.flag] if value else []
