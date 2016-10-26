@@ -2,17 +2,17 @@
 import logging as _logging
 from dynmen import Menu, ValidationError
 from collections import namedtuple as _ntupl
-
+from enum import Enum
 
 _logr = _logging.getLogger(__name__)
 _logr.addHandler(_logging.NullHandler())
 
+class No(Enum):
+    default = 1
+    type = 2
 
-Record = _ntupl('Record', 'name value transformed info type')
+Record = _ntupl('Record', 'name value transformed info clsname')
 DefaultRecord = _ntupl('DefaultRecord', Record._fields)
-
-class NoDefault:
-    pass
 
 class Descriptor(object):
     """
@@ -27,7 +27,7 @@ class Descriptor(object):
     2. transform(self, value) which returns a transformation of the
        validated value. It is called by __get__()
     """
-    def __init__(self, name, default=None, info=''):
+    def __init__(self, name, default=No.default, info=''):
         self.under_name = '_' + name
         self.name = name
         self.default = default
@@ -49,7 +49,7 @@ class Descriptor(object):
             name=gattr('name'),
             value=gattr('default'),
             info=gattr('info'),
-            type=self.__class__.__name__,
+            clsname=self.__class__.__name__,
         )
         try:
             rdict['value'] = inst.__dict__[self.under_name]
@@ -67,16 +67,19 @@ class Descriptor(object):
         raise NotImplementedError(msg.format(self.__class__.__name__))
 
     def __set__(self, inst, value):
-        if value is None:
-            inst.__dict__[self.under_name] = value
+        if isinstance(value, Record):
+            value = value.value
+
+        if (value is None) or (value is No.default):
+            inst.__dict__.pop(self.under_name, None)
+            # del inst.__dict__[self.under_name]
+            return
 
         def err():
             msgfail = '{}->{}: validation failed for {!r}'
             cname = self.__class__.__name__
             return ValidationError(msgfail.format(cname, self.name, value))
 
-        if isinstance(value, Record):
-            value = value.value
         try:
             validated = self.validate(value)
         except Exception as e:
@@ -142,7 +145,7 @@ class Flag(Descriptor):
         return [self.flag] if value else []
 
 class Option(Descriptor):
-    def __init__(self, name, default=None, info='', flag='', type=None):
+    def __init__(self, name, default=No.default, info='', flag='', type=No.type):
         super(Option, self).__init__(name, default=default, info=info)
         self.flag = flag
         self.type = type
@@ -150,14 +153,15 @@ class Option(Descriptor):
     def validate(self, value):
         if value == self.default:
             return value
-        if self.type is not None:
+        if self.type != No.type:
             return self.type(value)
         else:
             return value
 
     def transform(self, value):
-        if value:
-            if self.type is not None:
+        # print('muh value is', value, None)
+        if (value != No.default) and (value is not None):
+            if self.type != No.type:
                 return [self.flag, str(self.type(value))]
             else:
                 return [self.flag, str(value)]
