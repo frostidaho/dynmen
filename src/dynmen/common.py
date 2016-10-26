@@ -12,6 +12,13 @@ _logr.addHandler(_logging.NullHandler())
 Record = _ntupl('Record', 'name value transformed')
 DefaultRecord = _ntupl('DefaultRecord', Record._fields)
 
+# def _get_record(inst, cls, self.name, self.default, self.under_name):
+#     inst.__dict__[
+
+# def _transform(fn, value):
+#     print('transforming!', value, fn)
+#     return fn(value)
+
 class Descriptor(object):
     """
     When Descriptor instances are accessed normally
@@ -42,16 +49,15 @@ class Descriptor(object):
         raise NotImplementedError(msg.format(self.__class__.__name__))
 
     def get_record(self, inst, cls):
-        gattr = lambda x: getattr(self, x)
         rdict = dict(
-            name=gattr('name'),
-            value=gattr('default'),
+            name=getattr(self, 'name'),
         )
-        try:
-            rdict['value'] = inst.__dict__[self.under_name]
-        except (KeyError, AttributeError):
-            pass
-        rdict['transformed'] = self.transform(rdict['value'])
+        if inst:
+            value = inst.__dict__.get(self.under_name, self.default)
+        else:
+            value = self.default
+        rdict['value'] = value
+        rdict['transformed'] = self.transform(value)
         return Record(**rdict)
 
     @property
