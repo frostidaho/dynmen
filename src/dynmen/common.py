@@ -4,10 +4,10 @@ from dynmen import Menu, ValidationError, Default
 from collections import (namedtuple as _ntupl,
                          OrderedDict as _OrderedDict)
 try:
-    # from functools import lru_cache
+    from functools import lru_cache
     from inspect import signature
 except ImportError:             # for Python 2.7
-    # from functools32 import lru_cache
+    from functools32 import lru_cache
     from funcsigs import signature
 
 
@@ -18,9 +18,9 @@ _logr.addHandler(_logging.NullHandler())
 Record = _ntupl('Record', 'name value transformed')
 DefaultRecord = _ntupl('DefaultRecord', Record._fields)
 
-# @lru_cache(maxsize=256)
-# def _get_record(name, value, fn):
-#     return Record(name=name, value=value, transformed=fn(value))
+@lru_cache(maxsize=256)
+def _get_record(name, value, fn):
+    return Record(name, value, fn(value))
 
 class Descriptor(object):
     """
@@ -56,9 +56,8 @@ class Descriptor(object):
             value = inst.__dict__.get(self.under_name, self.default)
         else:
             value = self.default
-        return Record(self.name, value, self.transform(value))
         # return Record(name=self.name, value=value, transformed=self.transform(value))
-        # return _get_record(self.name, value, self.transform)
+        return _get_record(self.name, value, self.transform)
 
     @property
     def default_record(self):
