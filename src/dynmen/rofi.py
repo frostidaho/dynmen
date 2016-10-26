@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
 from dynmen.common import TraitMenu, Flag, Option
 
+def _opacity_type(val):
+    min_opacity = 0
+    max_opacity = 100
+
+    ival = int(val)
+    if min_opacity <= ival <= max_opacity:
+        return ival
+    else:
+        raise ValueError('Opacity must be in range [{}, {}]'.format(min_opacity, max_opacity))
 
 class Rofi(TraitMenu):
     ########################################
@@ -63,7 +72,7 @@ class Rofi(TraitMenu):
         'opacity',
         flag='-opacity',
         info='Set window opacity (0-100).',
-        type=int,
+        type=_opacity_type,
     )
     border_width = Option(
         'border_width',
