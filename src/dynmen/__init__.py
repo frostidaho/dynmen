@@ -32,6 +32,7 @@ class Menu(object):
         entries is an iterable where each element is a string that corresponds
         to an entry in the menu.
         """
+        _logr.debug('Running cmd: {!r}'.format(self.command))
         return self._run(self.command, entries)
 
     @classmethod

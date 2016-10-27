@@ -12,6 +12,7 @@ def _opacity_type(val):
         raise ValueError('Opacity must be in range [{}, {}]'.format(min_opacity, max_opacity))
 
 class Rofi(TraitMenu):
+    _base_command = ['rofi', '-dmenu']
     ########################################
     # Common
     ########################################
@@ -85,9 +86,3 @@ class Rofi(TraitMenu):
         flag='-hide-scrollbar',
         info='Hide the scrollbar on the right side'
     )
-
-    def __init__(self, *rofi_args, **kwargs):
-        super(Rofi, self).__init__(['rofi', '-dmenu'])
-        self.command.extend(rofi_args)
-        for k, v in kwargs.items():
-            setattr(self, k, v)

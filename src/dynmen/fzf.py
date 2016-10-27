@@ -3,6 +3,7 @@ from dynmen.common import TraitMenu, Flag, Option
 
 
 class FZF(TraitMenu):
+    _base_command = ['fzf']
     case_insensitive = Flag(
         'case_insensitive',
         flag='-i',
@@ -14,9 +15,3 @@ class FZF(TraitMenu):
         flag='--prompt',
         info='Display text to the left of the input',
     )
-
-    def __init__(self, *fzf_args, **kwargs):
-        super(FZF, self).__init__(['fzf'])
-        self.command.extend(fzf_args)
-        for k, v in kwargs.items():
-            setattr(self, k, v)

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import logging as _logging
 from dynmen import Menu, ValidationError, Default
 from collections import (namedtuple as _ntupl,
                          OrderedDict as _OrderedDict)
@@ -9,10 +8,6 @@ try:
 except ImportError:             # for Python 2.7
     from functools32 import lru_cache as _lru_cache
     from funcsigs import signature as _signature
-
-
-_logr = _logging.getLogger(__name__)
-_logr.addHandler(_logging.NullHandler())
 
 
 Record = _ntupl('Record', 'name value transformed')
@@ -169,24 +164,38 @@ class Option(Descriptor):
 
 
 class TraitMenu(Menu):
+    _base_command = None
+    def __init__(self, *menu_flags, **kwargs):
+        self._menu_flags = menu_flags
+        for k, v in kwargs.items():
+            setattr(self, k, v)
 
-    def __call__(self, entries):
-        cmd = list(self.command)
-        opts = self._make_opts()
-        cmd.extend(opts)
-        _logr.debug('Built cmd: {!r}'.format(cmd))
-        return self._run(cmd, entries)
+    @property
+    def command(self):
+        totl = []
+        totl.extend(self._base_command)
+        totl.extend(self._menu_flags)
+        totl.extend(self._make_opts())
+        return totl
 
     def _make_opts(self):
-        def get_names():
-            settings = self.meta_settings
-            for opt_group in settings.values():
-                for opt in opt_group:
-                    yield opt.name
-        opts = []
-        for name in get_names():
-            opts.extend(getattr(self, name).transformed)
-        return opts
+        for opt in (getattr(self, x) for x in self._get_descr_names()):
+            for val in opt.transformed:
+                yield val
+
+    @classmethod
+    def _get_descr_names(cls):
+        "Return list of this class' descriptors"
+        uname = '_descr_names_{}'.format(cls.__name__)
+        try:
+            return getattr(cls, uname)
+        except AttributeError:
+            names = []
+            for name in dir(cls):
+                if isinstance(getattr(cls, name), Descriptor):
+                    names.append(name)
+            setattr(cls, uname, names)
+            return names
 
     @property
     def meta_settings(self):
@@ -197,13 +206,8 @@ class TraitMenu(Menu):
         except AttributeError:
             pass
 
-        def get_descriptors():
-            for name in dir(cls):
-                val = getattr(cls, name)
-                if isinstance(val, Descriptor):
-                    yield val
         od = _OrderedDict()
-        for option in get_descriptors():
+        for option in (getattr(cls, x) for x in self._get_descr_names()):
             opt_name = type(option).__name__
             try:
                 od[opt_name].append(option.as_tuple)
