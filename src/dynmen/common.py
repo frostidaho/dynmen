@@ -164,6 +164,20 @@ class Option(Descriptor):
 
 
 class TraitMenu(Menu):
+    """Base class for menus with traits
+
+    Classes which inherit from TraitMenu should set _base_command.
+    e.g., _base_command = ['rofi', '-dmenu']
+
+    They should also specify options and flags corresponding to
+    the specific menu.
+    e.g.,
+    password = Flag(
+        'password',
+        flag='-password',
+        info='Hide the input text.',
+    )
+    """
     _base_command = None
     def __init__(self, *menu_flags, **kwargs):
         self._menu_flags = menu_flags
