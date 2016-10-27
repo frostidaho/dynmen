@@ -1,8 +1,8 @@
 #!/usr/bin/env python
+from __future__ import print_function
 import string
-import textwrap
 import pprint
-
+import textwrap
 from dynmen import Menu
 
 
@@ -15,7 +15,7 @@ def print_obj(obj, prefix='    '):
     txt = pprint.pformat(obj)
     lines = []
     for line in txt.splitlines():
-        line = textwrap.indent(line, prefix)
+        line = textwrap.fill(line, width=160, initial_indent=prefix, subsequent_indent=prefix)
         lines.append(line)
     print('\n'.join(lines))
 

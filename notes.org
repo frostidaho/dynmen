@@ -1,0 +1,60 @@
+* List of filters / dynamic menus
+** Graphical filters
+- [[http://tools.suckless.org/dmenu/][dmenu]] :: small & quick graphical filter (needs x11)
+  - Found in the default fedora repos & in the default arch linux repos
+  - It's fairly basic & there are a number of non-standard patches in circulation
+    - can't assume that the options / interface will be uniform across systems
+
+- [[https://github.com/DaveDavenport/rofi][rofi]] :: Has a number of different modes & a dmenu emulation mode
+  - Like dmenu + swiss army knife
+  - When run with the -dmenu flag, it operates similarly to dmenu
+  - [[https://github.com/okraits/rofi-tools][rofi-tools]]
+  - [[https://github.com/carnager/rofi-scripts][rofi-scripts]]
+
+** Terminal filters
+- [[https://github.com/junegunn/fzf][fzf]] :: a command-line fuzzy finder written in go
+  - probably the most popular of the terminal based tools
+- [[https://github.com/mooz/percol][percol]] :: adds interactive selection to the traditional pipe concept on UNIX
+  - It is available in the default fedora repositories
+  - written in python
+- [[https://github.com/keiji0/canything][canything]] :: percol's author mentions this.
+  - The source is very small.
+  - Inspired by emacs' anything.el (now called [[https://github.com/emacs-helm/helm][helm]])
+- [[https://github.com/peco/peco][peco]] :: another one, written in go
+  - has some interesting syntax for changing filtering mode on the fly
+  - It is a go remake of percol
+- [[https://github.com/garybernhardt/selecta][selecta]] :: written in ruby
+- [[https://github.com/felipesere/icepick][icepick]] :: a rust rewrite of selecta
+
+* Common functionality
+| Function                 | dmenu     | rofi                      | fzf             |
+|--------------------------+-----------+---------------------------+-----------------|
+| prompt                   | -p PROMPT | -p PROMPT (in dmenu-mode) | --prompt=PROMPT |
+| match - exact            |           |                           | -e, --exact     |
+| match - case insensitive | -i        | -i (in dmenu-mode)        | -i, +i          |
+|                          |           |                           |                 |
+|                          |           |                           |                 |
+| version info             | -v        | -version                  | --version       |
+
+
+
+* Interesting features
+
+** Rofi -format option
+Allows the output of dmenu to be customized (N is total number of input entries):
+ - 's' selected string.
+ - 'i' index (0 - (N-1)).
+ - 'd' index (1 - N).
+ - 'q' quote string.
+ - 'f' filter string (user input).
+ - 'F' quoted filter string (user input).
+
+** Rofi -sep option
+Separate entries on this character.
+Note that this separator can actually only be one ascii character.
+
+It might be useful to take an actual entry separator and replace it with some
+seldomly used ascii character like =\x02=.
+
+* Links
+- https://docs.rs/crate/interactor/0.1.1/source/README.md

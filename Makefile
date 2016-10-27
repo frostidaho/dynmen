@@ -9,30 +9,38 @@ install_develop:
 	@echo "----------------------------------------"
 	@echo -e "Installing dynmen in development mode from\n\t" $(project_dir)
 	@echo "----------------------------------------"
-	pip install --user -e $(project_dir)
+	pip3 install --user -e $(project_dir)
+	pip2 install --user -e $(project_dir)
 
 .PHONY: install_user
 install_user:
 	@echo "----------------------------------------"
 	@echo -e "Installing dynmen into home directory from\n\t" $(project_dir)
 	@echo "----------------------------------------"
-	pip install --user $(project_dir)
+	pip3 install --user $(project_dir)
+	pip2 install --user $(project_dir)
 
 .PHONY: install
 install:
 	@echo "----------------------------------------"
 	@echo -e "Installing dynmen - may need root\n\t" $(project_dir)
 	@echo "----------------------------------------"
-	pip install $(project_dir)
+	pip3 install $(project_dir)
+	pip2 install $(project_dir)
 
 .PHONY: uninstall
 uninstall:
-	-pip uninstall dynmen
+	-pip3 uninstall dynmen
+	-pip2 uninstall dynmen
 
 .PHONY: tests
 tests:
 	@echo "----------------------------------------"
-	@echo "Running tests for python3"
+	@echo "Running tests for python3 & python2"
 	@echo "----------------------------------------"
-	py.test "$(project_dir)tests/"
-
+# | Version | Fedora    | Arch Linux |
+# |---------+-----------+------------|
+# | python3 | py.test-3 | py.test    |
+# | python2 | py.test-2 | py.test2   |
+	eval `which py.test-3 || which py.test` "$(project_dir)tests/"
+	eval `which py.test-2 || which py.test2` "$(project_dir)tests/"
