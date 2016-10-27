@@ -7,7 +7,7 @@ from glob import glob
 
 setup(
     name='dynmen',
-    version='0.0.1',
+    version='0.0.2',
     description='A collection of dynamic menus',
     author='Idaho Frost',
     author_email='frostidaho@gmail.com',
