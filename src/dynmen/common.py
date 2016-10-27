@@ -211,21 +211,24 @@ class TraitMenu(Menu):
             setattr(cls, uname, names)
             return names
 
-    @property
-    def meta_settings(self):
-        cls = self.__class__
+    @classmethod
+    def _get_descr_meta(cls):
         settname = '_meta_settings_{}'.format(cls.__name__)
         try:
-            return getattr(self, settname)
+            return getattr(cls, settname)
         except AttributeError:
             pass
-
         od = _OrderedDict()
-        for option in (getattr(cls, x) for x in self._get_descr_names()):
+        for option in (getattr(cls, x) for x in cls._get_descr_names()):
             opt_name = type(option).__name__
             try:
                 od[opt_name].append(option.as_tuple)
             except KeyError:
                 od[opt_name] = [option.as_tuple]
-        setattr(self, settname, od)
+        setattr(cls, settname, od)
         return od
+
+    @property
+    def meta_settings(self):
+        return self._get_descr_meta()
+
