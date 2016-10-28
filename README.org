@@ -1,2 +1,18 @@
 #+TITLE: dynmen
-Python wrappers for dynamic menus (dmenu, rofi, fzf, ...)
+
+* Introduction
+/dynmen/ is a python library for dynamic menus like [[https://github.com/DaveDavenport/rofi][rofi]], [[http://tools.suckless.org/dmenu/][dmenu]], or [[https://github.com/junegunn/fzf][fzf]].
+
+* Installation
+You can install a released version using pip
+
+#+BEGIN_SRC sh
+pip install dynmen
+#+END_SRC
+
+Or the development version from github
+#+BEGIN_SRC sh
+git clone https://github.com/frostidaho/dynmen.git
+pip install ./dynmen
+# pip install --user ./dynmen
+#+END_SRC
