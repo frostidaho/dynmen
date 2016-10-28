@@ -16,3 +16,24 @@ git clone https://github.com/frostidaho/dynmen.git
 pip install ./dynmen
 # pip install --user ./dynmen
 #+END_SRC
+
+* Usage
+#+BEGIN_SRC python
+  from dynmen.rofi import Rofi
+  menu = Rofi()
+  menu.font = 'monospace 20'
+  menu.case_insensitive = True
+  menu.prompt = "Name of person: "
+  exdict = {
+      'Alyssa Boyd': ('Brownmouth', '09044'),
+      'Amy Martin': ('Mikechester', '33477'),
+      'Angela Mcdonald': ('North Gwendolynberg', '29053'),
+      'Bradley Santos': ('Andrewsmouth', '72513'),
+  }
+  # Menus will accept a dict-like object
+  selected0 = menu(exdict)
+  # Or a list-like object
+  selected1 = menu(['a', 'b', 'c'])
+#+END_SRC
+
+Please see the [[file:examples/][collection of examples]]
