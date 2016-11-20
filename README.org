@@ -40,6 +40,8 @@ pip install ./dynmen
 : MenuResult(selected='Alyssa Boyd', value=('Brownmouth', '09044'), returncode=0)
 : MenuResult(selected='c', value=None, returncode=0)
 
-[[file:readme_example.mp4]]
+#+begin_html
+<iframe src='https://gfycat.com/ifr/AltruisticMealyAustralianfreshwatercrocodile' frameborder='0' scrolling='no' width='640' height='360' allowfullscreen></iframe>
+#+end_html
 
 Please see the [[file:examples/][collection of examples]]
