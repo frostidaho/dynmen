@@ -18,7 +18,7 @@ pip install ./dynmen
 #+END_SRC
 
 * Usage
-#+BEGIN_SRC python
+#+BEGIN_SRC python :results output
   from dynmen.rofi import Rofi
   menu = Rofi()
   menu.font = 'monospace 20'
@@ -31,9 +31,15 @@ pip install ./dynmen
       'Bradley Santos': ('Andrewsmouth', '72513'),
   }
   # Menus will accept a dict-like object
-  selected0 = menu(exdict)
+  print(menu(exdict))
   # Or a list-like object
-  selected1 = menu(['a', 'b', 'c'])
+  print(menu(['a', 'b', 'c']))
 #+END_SRC
+
+#+RESULTS:
+: MenuResult(selected='Alyssa Boyd', value=('Brownmouth', '09044'), returncode=0)
+: MenuResult(selected='c', value=None, returncode=0)
+
+[[file:readme_example.mp4]]
 
 Please see the [[file:examples/][collection of examples]]
