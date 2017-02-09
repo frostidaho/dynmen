@@ -193,9 +193,13 @@ class TraitMenu(Menu):
         return totl
 
     def _make_opts(self):
-        for opt in (getattr(self, x) for x in self._get_descr_names()):
+        for opt in self._iter_opts():
             for val in opt.transformed:
                 yield val
+
+    def _iter_opts(self):
+        for opt in (getattr(self, x) for x in self._get_descr_names()):
+            yield opt
 
     @classmethod
     def _get_descr_names(cls):
@@ -232,3 +236,14 @@ class TraitMenu(Menu):
     def meta_settings(self):
         return self._get_descr_meta()
 
+    def __repr__(self):
+        clsname = self.__class__.__name__
+        menu_flags = ', '.join(map(repr, self._menu_flags))
+        opts = [x for x in self._iter_opts() if x.transformed]
+        if opts:
+            opts = ['{}={!r}'.format(x.name, x.value) for x in opts]
+            filling = ', '.join((menu_flags, ', '.join(opts)))
+        else:
+            filling = menu_flags
+        toret = [clsname, '(', filling, ')']
+        return ''.join(toret)
