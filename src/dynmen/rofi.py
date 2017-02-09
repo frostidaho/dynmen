@@ -24,6 +24,14 @@ class Rofi(TraitMenu):
     )
     case_insensitive = Flag('case_insensitive', flag='-i',
                             info='Case insensitive matching')
+
+    width = Option(
+        'width',
+        flag='-width',
+        info="Rofi's width as a percentage of the screen",
+        type=int,
+    )
+
     lines = Option(
         'lines',
         flag='-lines',
@@ -36,6 +44,14 @@ class Rofi(TraitMenu):
         info='Number of columns to display.',
         type=int,
     )
+
+    padding = Option(
+        'padding',
+        flag='-padding',
+        info='Inner margin of the window in pixels',
+        type=int,
+    )
+
     fullscreen = Flag('fullscreen', flag='-fullscreen',
                       info='Display menu using entire screen')
     password = Flag(
