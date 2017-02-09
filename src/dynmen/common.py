@@ -180,6 +180,22 @@ class TraitMenu(Menu):
     """
     _base_command = None
     def __init__(self, *menu_flags, **kwargs):
+        """Initialize the menu.
+
+        menu_flags are command-line flags / options which are passed
+        to the menu executable.
+
+        e.g., Rofi('-width', '50')
+
+
+        All of the key-word args in kwargs are simply set
+        as parameters on the instance.
+
+        e.g., Rofi(width=50)
+        which is equivalent to
+              menu = Rofi()
+              menu.width = 50
+        """
         self._menu_flags = menu_flags
         for k, v in kwargs.items():
             setattr(self, k, v)
@@ -217,6 +233,7 @@ class TraitMenu(Menu):
 
     @classmethod
     def _get_descr_meta(cls):
+        """Return an ordered dict containig the menu's options & flags."""
         settname = '_meta_settings_{}'.format(cls.__name__)
         try:
             return getattr(cls, settname)
