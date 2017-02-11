@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+# This example shows the usage of how to use the Menu() class with rofi.
+# Make a Menu() instance by passing a sequence containing your
+# menu's command and its corresponding flags & options.
+# e.g., rofi = Menu(command=('rofi', '-fullscreen', '-dmenu', '-i'))
+# The instance of Menu() is callable and can be given a sequence or a mapping.
 from __future__ import print_function
 import string
 import textwrap

@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 # The following is a basic example using the tty-based
 # interactive filtering tool percol (https://github.com/mooz/percol)
+
+# Make a Menu() instance by passing a sequence containing your
+# menu's command and its corresponding flags & options.
+# e.g., percol = Menu(command=('percol',))
+# The instance of Menu() is callable and can be given a sequence or a mapping.
+
 import logging
 
 # Setting up root logger to print logging msges from dynmen
