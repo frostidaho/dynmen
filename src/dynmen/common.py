@@ -241,7 +241,7 @@ class TraitMenu(Menu):
             pass
         od = _OrderedDict()
         for option in (getattr(cls, x) for x in cls._get_descr_names()):
-            opt_name = dtype(option).__name__
+            opt_name = type(option).__name__
             try:
                 od[opt_name].append(option.as_tuple)
             except KeyError:
