@@ -143,20 +143,20 @@ class Flag(Descriptor):
 class Option(Descriptor):
     "A descriptor for setting menu flags with a single argument."
 
-    def __init__(self, name, default=Default.value, info='', flag='', type=Default.type):
+    def __init__(self, name, default=Default.value, info='', flag='', dtype=Default.dtype):
         super(Option, self).__init__(name, default=default, info=info)
         self.flag = flag
-        self.type = type
+        self.dtype = dtype
 
     def validate(self, value):
-        if (value is self.default) or (self.type is Default.type):
+        if (value is self.default) or (self.dtype is Default.dtype):
             return value
-        return self.type(value)
+        return self.dtype(value)
 
     def transform(self, value):
         if (value != Default.value) and (value is not None):
-            if self.type != Default.type:
-                return [self.flag, str(self.type(value))]
+            if self.dtype != Default.dtype:
+                return [self.flag, str(self.dtype(value))]
             else:
                 return [self.flag, str(value)]
         else:
@@ -241,7 +241,7 @@ class TraitMenu(Menu):
             pass
         od = _OrderedDict()
         for option in (getattr(cls, x) for x in cls._get_descr_names()):
-            opt_name = type(option).__name__
+            opt_name = dtype(option).__name__
             try:
                 od[opt_name].append(option.as_tuple)
             except KeyError:

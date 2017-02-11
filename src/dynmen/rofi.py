@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from dynmen.common import TraitMenu, Flag, Option
 
-def _opacity_type(val):
+def _opacity_dtype(val):
     min_opacity = 0
     max_opacity = 100
 
@@ -29,27 +29,27 @@ class Rofi(TraitMenu):
         'width',
         flag='-width',
         info="Rofi's width as a percentage of the screen",
-        type=int,
+        dtype=int,
     )
 
     lines = Option(
         'lines',
         flag='-lines',
         info='Number of lines to display. (Does not work with fullscreen)',
-        type=int,
+        dtype=int,
     )
     columns = Option(
         'columns',
         flag='-columns',
         info='Number of columns to display.',
-        type=int,
+        dtype=int,
     )
 
     padding = Option(
         'padding',
         flag='-padding',
         info='Inner margin of the window in pixels',
-        type=int,
+        dtype=int,
     )
 
     fullscreen = Flag('fullscreen', flag='-fullscreen',
@@ -65,13 +65,13 @@ class Rofi(TraitMenu):
     ########################################
     element_height = Option(
         'element_height',
-        type=int,
+        dtype=int,
         flag='-eh',
         info='The height of a field in lines. Use in conjunction with -sep.',
     )
     separator = Option(
         'separator',
-        type=str,
+        dtype=str,
         flag='-sep',
         info='Separator for dmenu.'
     )
@@ -83,19 +83,19 @@ class Rofi(TraitMenu):
         'font',
         info='Font to use with rofi',
         flag='-font',
-        type=str,
+        dtype=str,
     )
     opacity = Option(
         'opacity',
         flag='-opacity',
         info='Set window opacity (0-100).',
-        type=_opacity_type,
+        dtype=_opacity_dtype,
     )
     border_width = Option(
         'border_width',
         flag='-bw',
         info='Set border width in pixels.',
-        type=int,
+        dtype=int,
     )
     hide_scrollbar = Flag(
         'hide_scrollbar',

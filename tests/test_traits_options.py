@@ -19,7 +19,7 @@ class TestOpts(unittest.TestCase):
                 default=15,
                 flag='-l',
                 info='Number of lines to display. (Does not work with fullscreen)',
-                type=int,
+                dtype=int,
             )
         cls.TOpt = TOpt
 

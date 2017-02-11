@@ -12,13 +12,13 @@ class DMenu(TraitMenu):
         'lines',
         flag='-l',
         info='dmenu lists items vertically, with the given number of lines.',
-        type=int,
+        dtype=int,
     )
     monitor = Option(
         'monitor',
         flag='-m',
         info='dmenu is displayed on the monitor number supplied. Monitor numbers are starting from 0.',
-        type=int,
+        dtype=int,
     )
     prompt = Option(
         'prompt',
@@ -30,29 +30,29 @@ class DMenu(TraitMenu):
         'font',
         info='Font to use with dmenu',
         flag='-fn',
-        type=str,
+        dtype=str,
     )
     color_bg_norm = Option(
         'color_bg_norm',
         info='Normal background color. #RGB, #RRGGBB, and X color names are supported.',
         flag='-nb',
-        type=str,
+        dtype=str,
     )
     color_fg_norm = Option(
         'color_fg_norm',
         info='Normal foreground color.',
         flag='-nf',
-        type=str,
+        dtype=str,
     )
     color_bg_sel = Option(
         'color_bg_sel',
         info='Selected background color.',
         flag='-sb',
-        type=str,
+        dtype=str,
     )
     color_fg_sel = Option(
         'color_fg_sel',
         info='Selected foreground color.',
         flag='-sf',
-        type=str,
+        dtype=str,
     )

@@ -14,7 +14,7 @@ class ValidationError(Exception):
 
 class Default(_Enum):
     value = 1
-    type = 2
+    dtype = 2
 
 
 MenuResult = _namedtuple('MenuResult', 'selected value returncode')
