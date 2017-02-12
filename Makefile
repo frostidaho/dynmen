@@ -44,3 +44,9 @@ tests:
 # | python2 | py.test-2 | py.test2   |
 	eval `which py.test-3 || which py.test` "$(project_dir)tests/"
 	eval `which py.test-2 || which py.test2` "$(project_dir)tests/"
+
+
+.PHONY: build
+build:
+	python "$(project_dir)setup.py" sdist
+
