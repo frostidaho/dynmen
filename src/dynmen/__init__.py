@@ -3,6 +3,7 @@ import logging as _logging
 from collections import (namedtuple as _namedtuple,
                          OrderedDict as _OrderedDict)
 from enum import Enum as _Enum
+from sys import version_info as _py_version_info
 
 _logr = _logging.getLogger(__name__)
 _logr.addHandler(_logging.NullHandler())
@@ -59,17 +60,30 @@ class Menu(object):
             data = sorted(entries, key=key, reverse=reverse)
         return self(data)
 
-    @staticmethod
-    def _launch_menu_proc(cmd, data, entry_sep='\n'):
+    @classmethod
+    def _launch_menu_proc(cls, cmd, data, entry_sep='\n'):
+        if _py_version_info < (3,0):
+            return cls._launch_menu_proc_py2(cmd, data, entry_sep)
+
         entries = entry_sep.join(data)
         from subprocess import Popen as _Popen, PIPE as _PIPE
         p = _Popen(cmd, stdout=_PIPE, stdin=_PIPE)
         stdout, stderr = p.communicate(entries.encode())
-        try:
-            p.terminate()
-        except OSError:
-            pass                # python2 compatibility
+        p.terminate()
         return stdout.decode().rstrip(), p.returncode
+
+    @staticmethod
+    def _launch_menu_proc_py2(cmd, data, entry_sep='\n'):
+        # print('using python2')
+        entries = entry_sep.join(data)
+        from subprocess import Popen as _Popen, PIPE as _PIPE
+        p = _Popen(cmd, stdout=_PIPE, stdin=_PIPE)
+        if isinstance(entries, unicode):
+            stdout, stderr = p.communicate(entries.encode('utf_8'))
+            return stdout.decode('utf_8').rstrip(), p.returncode
+        stdout, stderr = p.communicate(entries)
+        return stdout.rstrip(), p.returncode
+
 
     def __repr__(self):
         clsname = self.__class__.__name__

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # The following is a basic example using the tty-based
 # interactive filtering tool percol (https://github.com/mooz/percol)
