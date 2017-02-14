@@ -27,7 +27,7 @@ class Menu(object):
         "Create a python wrapper for command"
         self.command = command
 
-    def __call__(self, entries):
+    def __call__(self, entries=()):
         """Send entries to menu, return selected entry
 
         entries is an iterable where each element is a string that corresponds
