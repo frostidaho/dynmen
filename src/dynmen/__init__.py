@@ -38,7 +38,7 @@ class Menu(object):
 
     @classmethod
     def _run(cls, cmd, entries, entry_sep='\n'):
-        res, returncode = cls._launch_menu_proc(cmd, entries)
+        res, returncode = cls._launch_menu_proc(cmd, entries, entry_sep)
         try:
             val = entries.get(res)
         except AttributeError:

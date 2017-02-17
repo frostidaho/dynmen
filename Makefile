@@ -45,8 +45,13 @@ tests:
 	eval `which py.test-3 || which py.test` "$(project_dir)tests/"
 	eval `which py.test-2 || which py.test2` "$(project_dir)tests/"
 
+.PHONY: generate-options
+generate-options:
+	mkdir -p "$(project_dir)src/dynmen/data/"
+	sh -c "$(project_dir)utils/gen_opts_dmenu.py" > "$(project_dir)src/dynmen/data/dmenu_opts.json"
+	sh -c "$(project_dir)utils/gen_opts_rofi.py" > "$(project_dir)src/dynmen/data/rofi_opts.json"
 
 .PHONY: build
-build:
+build: generate-options
 	python "$(project_dir)setup.py" sdist
 

@@ -1,0 +1,86 @@
+[
+  {
+    "arg": "dmenu appears at the bottom of the screen.",
+    "default": false,
+    "dtype": "bool",
+    "flag": "-b",
+    "info": ""
+  },
+  {
+    "arg": "dmenu grabs the keyboard before reading stdin. This is faster, but will lock up X until stdin reaches end-of-file.",
+    "default": false,
+    "dtype": "bool",
+    "flag": "-f",
+    "info": ""
+  },
+  {
+    "arg": "dmenu matches menu items case insensitively.",
+    "default": false,
+    "dtype": "bool",
+    "flag": "-i",
+    "info": ""
+  },
+  {
+    "arg": "dmenu lists items vertically, with the given number of lines.",
+    "default": null,
+    "dtype": "int",
+    "flag": "-l",
+    "info": "lines"
+  },
+  {
+    "arg": "dmenu is displayed on the monitor number supplied. Monitor numbers are starting from 0.",
+    "default": null,
+    "dtype": "int",
+    "flag": "-m",
+    "info": "monitor"
+  },
+  {
+    "arg": "defines the prompt to be displayed to the left of the input field.",
+    "default": null,
+    "dtype": "str",
+    "flag": "-p",
+    "info": "prompt"
+  },
+  {
+    "arg": "defines the font or font set used.",
+    "default": null,
+    "dtype": null,
+    "flag": "-fn",
+    "info": "font"
+  },
+  {
+    "arg": "defines the normal background color. #RGB, #RRGGBB, and X color names are supported.",
+    "default": null,
+    "dtype": null,
+    "flag": "-nb",
+    "info": "color"
+  },
+  {
+    "arg": "defines the normal foreground color.",
+    "default": null,
+    "dtype": null,
+    "flag": "-nf",
+    "info": "color"
+  },
+  {
+    "arg": "defines the selected background color.",
+    "default": null,
+    "dtype": null,
+    "flag": "-sb",
+    "info": "color"
+  },
+  {
+    "arg": "defines the selected foreground color.",
+    "default": null,
+    "dtype": null,
+    "flag": "-sf",
+    "info": "color"
+  },
+  {
+    "arg": "prints version information to stdout, then exits.",
+    "default": false,
+    "dtype": "bool",
+    "flag": "-v",
+    "info": ""
+  }
+]

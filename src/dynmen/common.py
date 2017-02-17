@@ -10,13 +10,13 @@ except ImportError:             # for Python 2.7
     from funcsigs import signature as _signature
 
 
-Record = _ntupl('Record', 'name value transformed')
+Record = _ntupl('Record', 'name value transformed info')
 DefaultRecord = _ntupl('DefaultRecord', Record._fields)
 
 
 @_lru_cache(maxsize=256)
-def _get_record(name, value, fn):
-    return Record(name, value, fn(value))
+def _get_record(name, value, fn, info):
+    return Record(name, value, fn(value), info)
 
 
 class Descriptor(object):
@@ -54,7 +54,7 @@ class Descriptor(object):
             value = inst.__dict__.get(self.under_name, self.default)
         else:
             value = self.default
-        return _get_record(self.name, value, self.transform)
+        return _get_record(self.name, value, self.transform, self.info)
 
     @property
     def default_record(self):
@@ -262,3 +262,5 @@ class TraitMenu(Menu):
         filling = ', '.join((x for x in (menu_flags, opts) if x))
         toret = [clsname, '(', filling, ')']
         return ''.join(toret)
+
+
