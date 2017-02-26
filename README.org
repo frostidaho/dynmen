@@ -18,6 +18,9 @@ pip install ./dynmen
 #+END_SRC
 
 * Usage
+
+Please see the [[file:examples/][collection of examples]].
+
 ** Example using rofi
 #+BEGIN_SRC python :results output :exports both
   from dynmen.rofi import Rofi
@@ -49,4 +52,21 @@ pip install ./dynmen
 
 [[file:dynmen_readme_rofi_ex.png]]
 
-Please see the [[file:examples/][collection of examples]]
+
+** Example using dmenu
+
+#+BEGIN_SRC python :results output :exports both
+  from dynmen.dmenu import DMenu
+  menu = DMenu()
+  menu.l = 15
+  menu.i = True
+  menu.fn = 'sans mono - 20'
+  print(menu)
+  print(menu(['one', 'TWO', 'three']))
+#+END_SRC
+
+#+RESULTS:
+: DMenu(fn='sans mono - 20', i=True, l=15)
+: MenuResult(selected='TWO', value=None, returncode=0)
+
+[[file:dynmen_readme_dmenu_ex.png]]
