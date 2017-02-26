@@ -47,6 +47,6 @@ pip install ./dynmen
 : 	Rofi(dmenu=True, font='sans 30', lines=4)
 : MenuResult(selected='first', value='a', returncode=0)
 
-[[file:readme_example.gif]]
+[[file:dynmen_readme_rofi_ex.png]]
 
 Please see the [[file:examples/][collection of examples]]
