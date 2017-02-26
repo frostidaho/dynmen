@@ -18,27 +18,34 @@ pip install ./dynmen
 #+END_SRC
 
 * Usage
-#+BEGIN_SRC python :results output
+** Example using rofi
+#+BEGIN_SRC python :results output :exports both
   from dynmen.rofi import Rofi
+  import reprlib #reprlib is python3 only
+
   menu = Rofi()
-  menu.font = 'monospace 20'
-  menu.case_insensitive = True
-  menu.prompt = "Name of person: "
-  exdict = {
-      'Alyssa Boyd': ('Brownmouth', '09044'),
-      'Amy Martin': ('Mikechester', '33477'),
-      'Angela Mcdonald': ('North Gwendolynberg', '29053'),
-      'Bradley Santos': ('Andrewsmouth', '72513'),
-  }
-  # Menus will accept a dict-like object
-  print(menu(exdict))
-  # Or a list-like object
-  print(menu(['a', 'b', 'c']))
+  print(menu)
+  print("All of Rofi's options & flags are available as attributes")
+  rofi_options = reprlib.repr([x for x in dir(menu) if not x.startswith('_')])
+  print('\t', rofi_options, sep='')
+  print("For example, 'menu.font'", menu.font, sep='\n\t')
+
+  menu.font = "sans 30"
+  menu.lines = 4
+  print("Set rofi's font and number of lines", menu, sep='\n\t')
+  result = menu({'first': 'a', 'second': 'b', 'third': 'c'})
+  print(result)
 #+END_SRC
 
 #+RESULTS:
-: MenuResult(selected='Alyssa Boyd', value=('Brownmouth', '09044'), returncode=0)
-: MenuResult(selected='c', value=None, returncode=0)
+: Rofi(dmenu=True)
+: All of Rofi's options & flags are available as attributes
+: 	['a', 'auto_select', 'bw', 'case_sensitive', 'click_to_exit', 'color_active', ...]
+: For example, 'menu.font'
+: 	Record(name='font', value=<Default.value: 1>, transformed=[], info='Font to use @@@ mono 12 (Default)')
+: Set rofi's font and number of lines
+: 	Rofi(dmenu=True, font='sans 30', lines=4)
+: MenuResult(selected='first', value='a', returncode=0)
 
 [[file:readme_example.gif]]
 
