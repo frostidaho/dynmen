@@ -4,46 +4,45 @@ project_dir := $(dir $(mkfile_path))
 .PHONY: all
 all: uninstall install_user
 
-.PHONY: install_develop
-install_develop:
+.PHONY: user_reqs
+user_reqs:
+	@echo "----------------------------------------"
+	@echo -e "Installing dynmen depdencies for $$USER from\n\t" $(project_dir)requirements.txt
+	@echo "----------------------------------------"
+	python -m pip install --user -r $(project_dir)requirements.txt
+
+.PHONY: install-develop
+install-develop: user_reqs
 	@echo "----------------------------------------"
 	@echo -e "Installing dynmen in development mode from\n\t" $(project_dir)
 	@echo "----------------------------------------"
-	pip3 install --user -e $(project_dir)
-	pip2 install --user -e $(project_dir)
+	python -m pip install --user -e $(project_dir)
 
-.PHONY: install_user
-install_user:
+.PHONY: install-user
+install-user: user_reqs
 	@echo "----------------------------------------"
 	@echo -e "Installing dynmen into home directory from\n\t" $(project_dir)
 	@echo "----------------------------------------"
-	pip3 install --user $(project_dir)
-	pip2 install --user $(project_dir)
+	python -m pip install --user $(project_dir)
 
 .PHONY: install
 install:
 	@echo "----------------------------------------"
 	@echo -e "Installing dynmen - may need root\n\t" $(project_dir)
 	@echo "----------------------------------------"
-	pip3 install $(project_dir)
-	pip2 install $(project_dir)
+	python -m pip install -r $(project_dir)requirements.txt
+	python -m pip install $(project_dir)
 
 .PHONY: uninstall
 uninstall:
-	-pip3 uninstall dynmen
-	-pip2 uninstall dynmen
+	-python -m pip uninstall dynmen
 
 .PHONY: tests
 tests:
 	@echo "----------------------------------------"
-	@echo "Running tests for python3 & python2"
+	@echo "Running tests for $$(python --version)" 
 	@echo "----------------------------------------"
-# | Version | Fedora    | Arch Linux |
-# |---------+-----------+------------|
-# | python3 | py.test-3 | py.test    |
-# | python2 | py.test-2 | py.test2   |
-	eval `which py.test-3 || which py.test` "$(project_dir)tests/"
-	eval `which py.test-2 || which py.test2` "$(project_dir)tests/"
+	python -m pytest "$(project_dir)tests/"
 
 .PHONY: generate-options
 generate-options:
