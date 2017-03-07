@@ -54,3 +54,8 @@ generate-options:
 build: generate-options
 	python "$(project_dir)setup.py" sdist
 	python "$(project_dir)setup.py" bdist_wheel
+
+.PHONY: clean
+clean:
+	git clean -dxf
+
