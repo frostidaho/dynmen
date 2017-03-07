@@ -1,5 +1,6 @@
 #+TITLE: dynmen
 
+[[https://travis-ci.org/frostidaho/dynmen.svg?branch=master]]
 * Introduction
 /dynmen/ is a python library for dynamic menus like [[https://github.com/DaveDavenport/rofi][rofi]], [[http://tools.suckless.org/dmenu/][dmenu]], or [[https://github.com/junegunn/fzf][fzf]].
 
