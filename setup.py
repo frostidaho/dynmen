@@ -27,6 +27,15 @@ setup(
     package_dir={'': 'src'},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
     package_data = {'dynmen': ['data/*.json',]},
+    extras_require={
+        ':python_version < "3.0"': [
+            'functools32',
+            'funcsigs',
+        ],
+        ':python_version < "3.4"': [
+            'enum34',
+        ],
+    },
 )
 
 
