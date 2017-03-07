@@ -53,4 +53,4 @@ generate-options:
 .PHONY: build
 build: generate-options
 	python "$(project_dir)setup.py" sdist
-
+	python "$(project_dir)setup.py" bdist_wheel
