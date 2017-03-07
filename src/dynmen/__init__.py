@@ -69,7 +69,10 @@ class Menu(object):
         from subprocess import Popen as _Popen, PIPE as _PIPE
         p = _Popen(cmd, stdout=_PIPE, stdin=_PIPE)
         stdout, stderr = p.communicate(entries.encode())
-        p.terminate()
+        try:
+            p.terminate()
+        except ProcessLookupError:
+            pass
         return stdout.decode().rstrip(), p.returncode
 
     @staticmethod
