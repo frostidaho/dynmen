@@ -8,12 +8,18 @@ def test_coro_launch():
     @asyncio.coroutine
     def getinput():
         return inp
-    coro = dasync._launch(cmd, getinput())
     loop = asyncio.get_event_loop()
-    out = loop.run_until_complete(coro)
+
+    out = loop.run_until_complete(dasync._launch(cmd, getinput()))
     assert out.stdout == inp
     assert out.stderr == b''
     assert out.returncode == 0
+
+    out = loop.run_until_complete(dasync.launch(cmd, getinput()))
+    assert out.stdout == inp
+    assert out.stderr == b''
+    assert out.returncode == 0
+
 
 def test_bytes_launch():
     inp = b'4\n5\n6\n'
