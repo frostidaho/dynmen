@@ -18,6 +18,7 @@ class Default(_Enum):
     dtype = 2
 
 
+ProcStatus = _namedtuple('ProcStatus', 'stdout stderr returncode')
 MenuResult = _namedtuple('MenuResult', 'selected value returncode')
 
 
