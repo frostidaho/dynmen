@@ -40,20 +40,20 @@ def _launch(cmd, coro):
     return ProcStatus(stdout, stderr, retcode)
 
 
-def _build_coro(obj):
+def _build_coro(obj, *args):
     if asyncio.iscoroutine(obj):
         return obj
     elif asyncio.iscoroutinefunction(obj):
-        return obj()
+        return obj(*args)
 
     @asyncio.coroutine
-    def wrapper(obj):
-        return obj()
+    def wrapper(obj, *args):
+        return obj(*args)
 
-    return wrapper(obj)
+    return wrapper(obj, *args)
 
 @asyncio.coroutine
-def launch(cmd, fn_input):
+def launch(cmd, fn_input, fn_transform_res=None):
     result = yield from _launch(cmd, _build_coro(fn_input))
     return result
 

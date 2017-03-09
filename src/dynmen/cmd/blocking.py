@@ -2,7 +2,7 @@
 import subprocess as _sp
 from . import ProcStatus
 
-def launch(cmd, fn_input):
+def launch(cmd, fn_input, fn_transform_res=None):
     PIPE = _sp.PIPE
     proc = _sp.Popen(cmd, stdout=PIPE, stderr=PIPE, stdin=PIPE)
     bstr = fn_input()
@@ -11,5 +11,8 @@ def launch(cmd, fn_input):
         proc.terminate()
     except ProcessLookupError:
         pass
-    return ProcStatus(stdout, stderr, proc.returncode)
+    result = ProcStatus(stdout, stderr, proc.returncode)
+    if fn_transform_res is None:
+        return result
+    return fn_transform_res(result)
 
