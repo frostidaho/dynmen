@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from . import ProcStatus, _to_bytes
 import asyncio
 import os

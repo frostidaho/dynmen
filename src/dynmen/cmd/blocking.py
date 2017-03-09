@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import subprocess as _sp
 from . import ProcStatus, _to_bytes
 

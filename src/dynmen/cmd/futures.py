@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from .blocking import launch as _launch
 from concurrent.futures import ThreadPoolExecutor
 
