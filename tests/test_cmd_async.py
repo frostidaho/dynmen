@@ -1,4 +1,4 @@
-import dynmen.async as dasync
+import dynmen.cmd.async as dasync
 import asyncio
 
 
