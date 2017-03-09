@@ -59,3 +59,7 @@ build: generate-options
 clean:
 	git clean -dxf
 
+
+.PHONY: generate-test-data
+generate-test-data:
+	sh -c "$(project_dir)utils/gen_test_data.py" > "$(project_dir)tests/data.json"

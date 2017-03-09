@@ -2,6 +2,7 @@
 from faker import Factory
 import json
 fake = Factory.create('de_DE')
+fake.seed(1239847)
 
 people = []
 for idx in range(50):
@@ -13,7 +14,6 @@ for idx in range(50):
 
 total = {}
 total['people'] = people
-
 total['addresses'] = [fake.address() for x in range(50)]
-
+total['text'] = '\n'.join([fake.text() for x in range(30)])
 print(json.dumps(total, indent=2))
