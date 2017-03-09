@@ -20,20 +20,14 @@ def get_pipes():
 
 
 @asyncio.coroutine
-def new_proc(cmd, stdin_pipe):
+def _launch(cmd, coro):
+    transport, write_pipe, read_pipe = yield from get_pipes()
     proc = yield from asyncio.create_subprocess_exec(
         *cmd,
-        stdin=stdin_pipe,
+        stdin=read_pipe,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
-    return proc
-
-
-@asyncio.coroutine
-def _launch(cmd, coro):
-    transport, write_pipe, read_pipe = yield from get_pipes()
-    proc = yield from new_proc(cmd, read_pipe)
 
     stdin_bytes = yield from coro
     transport.write(stdin_bytes)
