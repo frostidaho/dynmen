@@ -55,6 +55,10 @@ def _build_coro(obj, *args):
 @asyncio.coroutine
 def launch(cmd, fn_input, fn_transform_res=None):
     result = yield from _launch(cmd, _build_coro(fn_input))
+    if fn_transform_res is None:
+        return result
+    else:
+        result = yield from _build_coro(fn_transform_res, result)
     return result
 
 

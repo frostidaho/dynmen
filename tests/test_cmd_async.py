@@ -1,6 +1,11 @@
 import dynmen.cmd.async as dasync
 import asyncio
+from data import MenuData
 
+def launch(*args, **kwargs):
+    loop = asyncio.get_event_loop()
+    coro = dasync.launch(*args, **kwargs)
+    return loop.run_until_complete(coro)
 
 def test_coro_launch():
     inp = b'1\n2\n3\n'
@@ -45,4 +50,39 @@ def test_fn_launch():
     assert out.stdout == inp
     assert out.stderr == b''
     assert out.returncode == 0
+
+
+def test_coro_transform_res():
+    md = MenuData()
+    lpeople = list(md.people)
+    @asyncio.coroutine
+    def inpfn():
+        x = '\n'.join(lpeople)
+        return x.encode()
+
+    out = launch(['cat'], inpfn)
+    assert out.stdout == '\n'.join(lpeople).encode()
+
+    @asyncio.coroutine
+    def trfn(result):
+        return result.stdout.decode()
+
+    out = launch(['cat'], inpfn, trfn)
+    assert out == '\n'.join(lpeople)
+
+
+def test_fn_transform_res():
+    md = MenuData()
+    lpeople = list(md.people)
+    @asyncio.coroutine
+    def inpfn():
+        x = '\n'.join(lpeople)
+        return x.encode()
+
+    def trfn(result):
+        return result.stdout.decode()
+
+    out = launch(['cat'], inpfn, trfn)
+    assert out == '\n'.join(lpeople)
+    
 

@@ -41,3 +41,4 @@ def test_transform_res():
     person = lpeople[23]
     out = launch(['grep', person], inpfn, lambda x: x.stdout.decode())
     assert out == person + '\n'
+    assert md.people[person] == md.people[out.rstrip()]
