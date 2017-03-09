@@ -4,22 +4,25 @@ launch = blocking.launch
 
 def test_launch_bytes():
     inp = b'sfd8zjzunfzl3'
-    out = launch(['cat'], inp)
+    inpfn = lambda: inp
+    out = launch(['cat'], inpfn)
     assert out.stdout == inp
     assert out.stderr == b''
     assert out.returncode == 0
 
 def test_launch_list_of_bytes():
     inp = [b'1', b'2', b'3']
-    out = launch(['cat'], inp)
-    assert out.stdout == b''.join(inp)
+    inpfn = lambda: b'@'.join(inp)
+    out = launch(['cat'], inpfn)
+    assert out.stdout == b'@'.join(inp)
     assert out.stderr == b''
     assert out.returncode == 0
 
 def test_launch_list_of_bytes2():
     inp = [b'4', b'5', b'6']
     entry_sep = b'\n'
-    out = launch(['cat'], inp, entry_sep)
+    inpfn = lambda: entry_sep.join(inp)
+    out = launch(['cat'], inpfn)
     assert out.stdout == entry_sep.join(inp)
     assert out.stderr == b''
     assert out.returncode == 0
