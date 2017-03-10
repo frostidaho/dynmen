@@ -13,8 +13,32 @@ from types import GeneratorType as _GeneratorType
 class MenuError(Exception):
     pass
 
+
+class _BaseTraits(tr.HasTraits):
+    def __hash__(self):
+        d_traits = self.traits()
+        info = [(x, getattr(self, x)) for x in sorted(d_traits)]
+        info_tuple = (self.__class__, repr(info))
+        return hash(info_tuple)
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            if hash(self) == hash(other):
+                return True
+        return False
+
+    def __repr__(self):
+        clsname = self.__class__.__name__
+        traits = []
+        for name, descriptor in self.traits().items():
+            txt = '{}={!r}'.format(name, descriptor.get(self))
+            traits.append(txt)
+        toret = [clsname, '(', ', '.join(traits), ')']
+        return ''.join(toret)
+
+
 MenuResult = _namedtuple('MenuResult', 'selected value returncode')
-class Menu(tr.HasTraits):
+class Menu(_BaseTraits):
     process_mode = tr.CaselessStrEnum(
         ('blocking', 'async', 'futures'),
         default_value='blocking',
@@ -22,11 +46,13 @@ class Menu(tr.HasTraits):
     command = tr.List()
     entry_sep = tr.CUnicode('\n')
 
-    def __init__(self, command, entry_sep='\n', process_mode='blocking'):
+    def __init__(self, command=(), entry_sep='\n', process_mode='blocking', **kw):
         "Create a python wrapper for command"
         self.command = command
         self.entry_sep = entry_sep
         self.process_mode = process_mode
+        for k,v in kw.items():
+            setattr(self, k, v)
 
     def __call__(self, entries=(), entry_sep=None):
         """Send entries to menu, return selected entry
@@ -49,11 +75,6 @@ class Menu(tr.HasTraits):
             entry_sep=entry_sep,
         )
         return launch(cmd, fn_input, fn_transform)
-
-    def __repr__(self):
-        clsname = self.__class__.__name__
-        toret = [clsname, '(command=', repr(self.command), ')']
-        return ''.join(toret)
 
     @staticmethod
     def _get_launch_fn(process_mode):
@@ -84,18 +105,10 @@ class Menu(tr.HasTraits):
         except AttributeError:
             pass
 
-        try:
-            bentry_sep = entry_sep.encode('utf8')
-        except AttributeError:
-            bentry_sep = entry_sep
-
+        bentry_sep = entry_sep.encode('utf8')
         try:
             elements = [x.encode('utf8') for x in elements]
         except AttributeError:
             pass
-
-        try:
-            return bentry_sep.join(elements)
-        except TypeError:
-            return bentry_sep.join((bytes(x) for x in elements))
+        return bentry_sep.join(elements)
 

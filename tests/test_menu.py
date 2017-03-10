@@ -162,6 +162,11 @@ def test_string_all2():
         value=None,
     )
 
+def test_convert_entries_bytes():
+    menu = Menu(['cat'])
+    entries = b'987654321'
+    run_all_modes(menu, entries, selected=entries.decode('utf8'), value=None)
+
 def test_entry_sep():
     menu = Menu(['cat'], entry_sep='@')
     entries = list('987654321')
@@ -178,4 +183,25 @@ def test_entry_sep3():
     entries = list('987654321')
     res = menu(entries, entry_sep='!')
     assert res.selected == '!'.join(entries)
+
+def test_entry_list_bytes():
+    menu = Menu(['cat'])
+    entries = [b'1', b'2', b'33']
+    res = menu(entries, entry_sep='!')
+    assert res.selected == b'!'.join(entries).decode('utf8')
+
+def test_menu_equality():
+    menu = Menu(['cat'])
+    menu2 = Menu(['cat'])
+    hash_menu2 = hash(menu2)
+    assert menu == menu2
+    assert hash(menu) == hash_menu2
+    menu.entry_sep = '@\n'
+    assert menu != menu2
+    assert hash(menu) != hash_menu2
+
+def test_menu_repr():
+    menu = Menu(['cat'])
+    rmenu = repr(menu)
+    assert eval(rmenu) == Menu(['cat'])
 
