@@ -134,3 +134,24 @@ def test_generator_all():
             modes=(mode,),
         )
 
+def test_string_all():
+    entries = '\n'.join('123456789')
+    selected = '4'
+    menu = Menu(['grep', selected])
+    run_all_modes(
+        menu,
+        entries,
+        selected=selected,
+        value=None,
+    )
+
+def test_string_all2():
+    entries = '\n'.join('123456789')
+    menu = Menu(['cat'])
+    run_all_modes(
+        menu,
+        entries,
+        selected=entries,
+        value=None,
+    )
+
