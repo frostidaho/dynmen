@@ -21,6 +21,7 @@ matrix:
           apt:
             packages:
               - xvfb
+              - rofi
 
 install:
     - pip install tox-travis

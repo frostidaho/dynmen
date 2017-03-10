@@ -77,7 +77,7 @@ def start_xvfb():
     for idx in range(20):
         cmd = build_cmd(idx)
         p = sp.Popen(cmd)
-        sleep(0.1)
+        sleep(1.0)
         retcode = p.poll()
         if retcode is None:
             break
