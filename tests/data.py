@@ -12,7 +12,7 @@ class MenuData(object):
     def __init__(self, *args, **kwargs):
         dfiles = [_os.path.join(_thisdir, x) for x in self._data_files]
         for fpath in dfiles:
-            with open(fpath, 'rb') as fdata:
+            with open(fpath, 'rt') as fdata:
                 dat = _json.load(fdata)
                 for k,v in dat.items():
                     setattr(self, k, v)
