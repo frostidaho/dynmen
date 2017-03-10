@@ -1,5 +1,8 @@
 import dynmen.cmd.async as dasync
-import asyncio
+try:
+    import asyncio
+except ImportError:
+    import trollius as asyncio
 from data import MenuData
 
 def launch(*args, **kwargs):

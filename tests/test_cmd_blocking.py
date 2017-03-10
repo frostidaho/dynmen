@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from dynmen.cmd import blocking
 from data import MenuData
 
@@ -28,9 +29,9 @@ def test_launch_list_of_bytes2():
 def test_transform_res():
     md = MenuData()
     lpeople = list(md.people)
-    people_txt = '\n'.join(lpeople)
-    inpfn = lambda: people_txt.encode()
-    cat_identity(inpfn, people_txt.encode())
+    people_txt = u'\n'.join(lpeople)
+    inpfn = lambda: people_txt.encode('utf8')
+    cat_identity(inpfn, people_txt.encode('utf8'))
 
     person = lpeople[10]
     out = launch(['grep', person], inpfn)
@@ -40,5 +41,5 @@ def test_transform_res():
 
     person = lpeople[23]
     out = launch(['grep', person], inpfn, lambda x: x.stdout.decode())
-    assert out == person + '\n'
+    assert out == person + u'\n'
     assert md.people[person] == md.people[out.rstrip()]

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from dynmen.cmd import futures
 from data import MenuData
 
@@ -31,8 +32,8 @@ def test_transform_res():
     md = MenuData()
     lpeople = list(md.people)
     people_txt = '\n'.join(lpeople)
-    inpfn = lambda: people_txt.encode()
-    cat_identity(inpfn, people_txt.encode())
+    inpfn = lambda: people_txt.encode('utf8')
+    cat_identity(inpfn, people_txt.encode('utf8'))
 
     person = lpeople[10]
     out = launch(['grep', person], inpfn)

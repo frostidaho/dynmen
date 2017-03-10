@@ -1,7 +1,10 @@
 import pytest
 from dynmen.menu import Menu, MenuError
 from traitlets import TraitError
-import asyncio
+try:
+    import asyncio
+except ImportError:
+    import trollius as asyncio
 import sys
 import logging
 logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)

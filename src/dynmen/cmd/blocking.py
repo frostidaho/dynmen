@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 import subprocess as _sp
 from . import ProcStatus
+try:
+    ProcessLookupError
+except NameError:               # python2 compatibility
+    ProcessLookupError = OSError
+
 
 def launch(cmd, fn_input, fn_transform_res=None):
     PIPE = _sp.PIPE
