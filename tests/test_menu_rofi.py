@@ -16,10 +16,14 @@ def xctrl():
 from dynmen.menu import Menu
 from time import sleep
 
-def test_simple(xctrl):
+@pytest.fixture(scope='function')
+def rofi_menu(xctrl):
     os.environ['DISPLAY'] = xctrl.display_str
-    menu = Menu(['rofi', '-dmenu'])
-    menu.process_mode = 'futures'
+    menu = Menu(['rofi', '-dmenu'], process_mode='futures')
+    return menu
+
+def test_simple(rofi_menu, xctrl):
+    menu = rofi_menu
     res = menu(['a', 'b', 'c'])
     sleep(1.0)
     xctrl.type_str('b')
@@ -28,10 +32,8 @@ def test_simple(xctrl):
     assert out.selected == 'b'
     assert out.value == None
 
-def test_non_matching(xctrl):
-    os.environ['DISPLAY'] = xctrl.display_str
-    menu = Menu(['rofi', '-dmenu'])
-    menu.process_mode = 'futures'
+def test_non_matching(rofi_menu, xctrl):
+    menu = rofi_menu
     res = menu(['a', 'b', 'c'])
     sleep(1.0)
     xctrl.type_str('asdfasdf')
@@ -40,10 +42,8 @@ def test_non_matching(xctrl):
     assert out.selected == 'asdfasdf'
     assert out.value == None
     
-def test_case_sensitive(xctrl):
-    os.environ['DISPLAY'] = xctrl.display_str
-    menu = Menu(['rofi', '-dmenu'])
-    menu.process_mode = 'futures'
+def test_case_sensitive(rofi_menu, xctrl):
+    menu = rofi_menu
     res = menu(['a', 'b', 'c'])
     sleep(1.0)
     xctrl.type_str('C')
@@ -52,10 +52,9 @@ def test_case_sensitive(xctrl):
     assert out.selected == 'C'
     assert out.value == None
 
-def test_case_insensitive(xctrl):
-    os.environ['DISPLAY'] = xctrl.display_str
-    menu = Menu(['rofi', '-dmenu', '-i'])
-    menu.process_mode = 'futures'
+def test_case_insensitive(rofi_menu, xctrl):
+    menu = rofi_menu
+    menu.command.append('-i')
     res = menu(['a', 'b', 'c'])
     sleep(1.0)
     xctrl.type_str('C')
