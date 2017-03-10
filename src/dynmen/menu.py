@@ -5,8 +5,15 @@ _logr.addHandler(_logging.NullHandler())
 
 import traitlets as tr
 from importlib import import_module as _import_module
-from functools import partial
+from functools import partial as _partial
+from collections import namedtuple as _namedtuple
+from types import GeneratorType as _GeneratorType
 
+
+class MenuError(Exception):
+    pass
+
+MenuResult = _namedtuple('MenuResult', 'selected value returncode')
 class Menu(tr.HasTraits):
     process_mode = tr.CaselessStrEnum(
         ('blocking', 'async', 'futures'),
@@ -32,8 +39,16 @@ class Menu(tr.HasTraits):
         cmd, launch = self.command, self._get_launch_fn(self.process_mode)
         _logr.debug('Running cmd: %r using the launcher %r',
                     cmd, launch)
-        fn = partial(self._convert_entries, entries, entry_sep)
-        return launch(cmd, fn)
+        if isinstance(entries, _GeneratorType):
+            entries = list(entries)
+
+        fn_input = _partial(self._convert_entries, entries, entry_sep)
+        fn_transform = _partial(
+            self._transform_output,
+            entries=entries,
+            entry_sep=entry_sep,
+        )
+        return launch(cmd, fn_input, fn_transform)
 
     def __repr__(self):
         clsname = self.__class__.__name__
@@ -44,6 +59,20 @@ class Menu(tr.HasTraits):
     def _get_launch_fn(process_mode):
         mod = _import_module('..cmd.' + process_mode, __name__)
         return mod.launch
+
+    @staticmethod
+    def _transform_output(result, entries, entry_sep):
+        stdout, stderr, returncode = result
+        if returncode != 0:
+            msg = 'Nonzero exit status: {!r}'.format(result)
+            raise MenuError(msg)
+        selected = stdout.decode().rstrip(entry_sep)
+        try:
+            value = entries[selected]
+        except (TypeError, KeyError):
+            value = None
+        return MenuResult(selected, value, returncode)
+        
 
     @staticmethod
     def _convert_entries(elements, entry_sep):
@@ -60,7 +89,6 @@ class Menu(tr.HasTraits):
         except AttributeError:
             bentry_sep = entry_sep
 
-        elements = list(elements)
         try:
             elements = [x.encode() for x in elements]
         except AttributeError:

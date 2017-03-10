@@ -14,5 +14,6 @@ def launch(cmd, fn_input, fn_transform_res=None):
     result = ProcStatus(stdout, stderr, proc.returncode)
     if fn_transform_res is None:
         return result
-    return fn_transform_res(result)
+    transformed = fn_transform_res(result)
+    return transformed
 
