@@ -1,6 +1,8 @@
-#+TITLE: dynmen
+#+TITLE: dynmen - rewrite with futures and async
 
-[[https://travis-ci.org/frostidaho/dynmen.svg?branch=master]]
+[[https://travis-ci.org/frostidaho/dynmen.svg?branch=async]]
+[[https://coveralls.io/repos/github/frostidaho/dynmen/badge.svg?branch=async]]
+
 * Introduction
 /dynmen/ is a python library for dynamic menus like [[https://github.com/DaveDavenport/rofi][rofi]], [[http://tools.suckless.org/dmenu/][dmenu]], or [[https://github.com/junegunn/fzf][fzf]].
 
