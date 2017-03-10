@@ -20,7 +20,7 @@ matrix:
         addons:
           apt:
             packages:
-              - xserver-xephyr
+              - xvfb
 
 install:
     - pip install tox-travis

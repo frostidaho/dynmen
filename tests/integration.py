@@ -7,7 +7,7 @@ import os
 
 class xcontrol(object):
     def __init__(self):
-        n_display, proc = start_xephyr()
+        n_display, proc = start_xvfb()
         self.n_display = n_display
         self.proc = proc
         self.display_str = ':{:d}'.format(n_display)
@@ -65,12 +65,12 @@ class xcontrol(object):
         display.sync()
 
 
-def start_xephyr():
+def start_xvfb():
     def build_cmd(n_display=0):
-        cmd = ['Xephyr']
+        cmd = ['Xvfb']
         display = ':{:d}'.format(n_display)
         cmd.append(display)
-        cmd.extend(['-screen', '800x600'])
+        cmd.extend(['-screen', 'scrn', '800x600x24'])
         return cmd
 
     import subprocess as sp
