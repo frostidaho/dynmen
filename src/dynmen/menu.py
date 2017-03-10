@@ -80,17 +80,17 @@ class Menu(tr.HasTraits):
         if isinstance(elements, bytes):
             return elements
         try:
-            return elements.encode()
+            return elements.encode('utf8')
         except AttributeError:
             pass
 
         try:
-            bentry_sep = entry_sep.encode()
+            bentry_sep = entry_sep.encode('utf8')
         except AttributeError:
             bentry_sep = entry_sep
 
         try:
-            elements = [x.encode() for x in elements]
+            elements = [x.encode('utf8') for x in elements]
         except AttributeError:
             pass
 

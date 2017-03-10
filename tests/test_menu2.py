@@ -1,11 +1,11 @@
 import pytest
 import sys
-pytestmark = pytest.mark.skipif(sys.version_info < (3,0), reason='needs python3')
+# skip_py2 = pytest.mark.skipif(sys.version_info < (3,0), reason='needs python3')
 try:
     import asyncio
+    all_modes = ('blocking', 'futures', 'async')
 except ImportError:
-    pass
-
+    all_modes = ('blocking', 'futures')
 
 from dynmen.menu import Menu, MenuError
 from traitlets import TraitError
@@ -13,7 +13,6 @@ from traitlets import TraitError
 import sys
 import logging
 logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
-
 
 @pytest.fixture(scope='module')
 def menudata():
@@ -81,7 +80,8 @@ def run_async_mode(menu, entries, exceptions):
         return res
 
 def run_all_modes(menu, entries, selected=noval, value=noval, exceptions=None,
-                  modes=(run_blocking_mode, run_futures_mode, run_async_mode)):
+                  modes=all_modes):
+                  # modes=(run_blocking_mode, run_futures_mode, run_async_mode)):
     def check_res(res):
         if selected != noval:
             assert res.selected == selected
@@ -89,6 +89,7 @@ def run_all_modes(menu, entries, selected=noval, value=noval, exceptions=None,
             assert res.value == value
         return res
         
+    modes = [globals()['run_{}_mode'.format(x)] for x in modes]
     for fn in modes:
         res = fn(menu, entries, exceptions)
         if res != noval:
@@ -128,12 +129,12 @@ def test_list_all(menudata):
 def test_generator_all():
     selected = '41'
     menu = Menu(['grep', selected])
-    modes = [
-        run_blocking_mode,
-        run_futures_mode,
-        run_async_mode,
-    ]
-    for mode in modes:
+    # modes = [
+    #     run_blocking_mode,
+    #     run_futures_mode,
+    #     run_async_mode,
+    # ]
+    for mode in all_modes:
         run_all_modes(
             menu,
             (str(x) for x in range(100)),
