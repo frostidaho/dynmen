@@ -18,5 +18,13 @@ matrix:
 
 install:
     - pip install tox-travis
+    - if [[ $TOXENV == py* ]]; then pip install coveralls; fi
+
 script:
  - tox
+
+after_success:
+  - if [[ $TOXENV == py* ]]; then coveralls; fi
+
+notifications:
+  email: false
