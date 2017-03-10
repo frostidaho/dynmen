@@ -4,7 +4,7 @@ integration = pytest.importorskip('integration')
 
 import os
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='module')
 def xctrl():
     xctrl = integration.xcontrol()
     yield xctrl
@@ -26,6 +26,18 @@ def test_simple(xctrl):
     xctrl.hit_enter()
     out = res.result()
     assert out.selected == 'b'
+    assert out.value == None
+
+def test_non_matching(xctrl):
+    os.environ['DISPLAY'] = xctrl.display_str
+    menu = Menu(['rofi', '-dmenu'])
+    menu.process_mode = 'futures'
+    res = menu(['a', 'b', 'c'])
+    sleep(1.0)
+    xctrl.type_str('asdfasdf')
+    xctrl.hit_enter()
+    out = res.result()
+    assert out.selected == 'asdfasdf'
     assert out.value == None
     
 
