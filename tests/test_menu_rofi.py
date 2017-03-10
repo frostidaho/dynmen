@@ -40,4 +40,26 @@ def test_non_matching(xctrl):
     assert out.selected == 'asdfasdf'
     assert out.value == None
     
+def test_case_sensitive(xctrl):
+    os.environ['DISPLAY'] = xctrl.display_str
+    menu = Menu(['rofi', '-dmenu'])
+    menu.process_mode = 'futures'
+    res = menu(['a', 'b', 'c'])
+    sleep(1.0)
+    xctrl.type_str('C')
+    xctrl.hit_enter()
+    out = res.result()
+    assert out.selected == 'C'
+    assert out.value == None
 
+def test_case_insensitive(xctrl):
+    os.environ['DISPLAY'] = xctrl.display_str
+    menu = Menu(['rofi', '-dmenu', '-i'])
+    menu.process_mode = 'futures'
+    res = menu(['a', 'b', 'c'])
+    sleep(1.0)
+    xctrl.type_str('C')
+    xctrl.hit_enter()
+    out = res.result()
+    assert out.selected == 'c'
+    assert out.value == None

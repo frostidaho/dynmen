@@ -28,22 +28,31 @@ class xcontrol(object):
     def str_to_keycodes(self, txt):
         d_keys = self.d_keys
         getkey = self.getkey
+        # shiftkey = getkey('Shift_L')
         for char in txt:
+            isup = char.isupper()
             try:
-                yield d_keys[char]
+                val = d_keys[char]
+                yield (val, isup)
             except KeyError:
                 val = getkey(char)
                 d_keys[char] = val
-                yield val
+                yield (val, isup)
 
     def type_str(self, txt):
         display = self.display
+        shiftkey = self.getkey('Shift_L')
         display.sync()
         sleep(0.3)
         for key in self.str_to_keycodes(txt):
+            code, shift = key
             sleep(0.1)
-            fake_input(display, X.KeyPress, key)
-            fake_input(display, X.KeyRelease, key)
+            if shift:
+                fake_input(display, X.KeyPress, shiftkey)
+            fake_input(display, X.KeyPress, code)
+            fake_input(display, X.KeyRelease, code)
+            if shift:
+                fake_input(display, X.KeyRelease, shiftkey)
             display.sync()
 
     def hit_enter(self):
