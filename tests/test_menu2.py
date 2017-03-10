@@ -155,3 +155,20 @@ def test_string_all2():
         value=None,
     )
 
+def test_entry_sep():
+    menu = Menu(['cat'], entry_sep='@')
+    entries = list('987654321')
+    run_all_modes(menu, entries, selected='@'.join(entries), value=None)
+
+def test_entry_sep2():
+    menu = Menu(['cat'])
+    menu.entry_sep = '#'
+    entries = list('987654321')
+    run_all_modes(menu, entries, selected='#'.join(entries), value=None)
+
+def test_entry_sep3():
+    menu = Menu(['cat'])
+    entries = list('987654321')
+    res = menu(entries, entry_sep='!')
+    assert res.selected == '!'.join(entries)
+
