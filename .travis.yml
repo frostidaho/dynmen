@@ -15,6 +15,12 @@ matrix:
         env: TOXENV=py35
       - python: 3.6
         env: TOXENV=py36
+      - python: 3.6
+        env: TOXENV=py36-integration
+        addons:
+          apt:
+            packages:
+              - xserver-xephyr
 
 install:
     - pip install tox-travis
