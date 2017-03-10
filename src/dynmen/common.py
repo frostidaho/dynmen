@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import traitlets as tr
-from menu import Menu as _Menu
+from .menu import Menu as _Menu
 
 
 class TraitMenu(tr.HasTraits):
