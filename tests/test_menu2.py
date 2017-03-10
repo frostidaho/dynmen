@@ -1,10 +1,15 @@
 import pytest
-from dynmen.menu import Menu, MenuError
-from traitlets import TraitError
+import sys
+pytestmark = pytest.mark.skipif(sys.version_info < (3,0), reason='needs python3')
 try:
     import asyncio
 except ImportError:
-    import trollius as asyncio
+    pass
+
+
+from dynmen.menu import Menu, MenuError
+from traitlets import TraitError
+
 import sys
 import logging
 logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)

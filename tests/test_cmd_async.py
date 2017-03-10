@@ -1,10 +1,13 @@
-import dynmen.cmd.async as dasync
+import pytest
+import sys
+pytestmark = pytest.mark.skipif(sys.version_info < (3,0), reason='needs python3')
 try:
     import asyncio
+    import dynmen.cmd.async as dasync
 except ImportError:
-    import trollius as asyncio
-from data import MenuData
+    pass
 
+from data import MenuData
 def launch(*args, **kwargs):
     loop = asyncio.get_event_loop()
     coro = dasync.launch(*args, **kwargs)
@@ -87,5 +90,5 @@ def test_fn_transform_res():
 
     out = launch(['cat'], inpfn, trfn)
     assert out == '\n'.join(lpeople)
-    
+
 
