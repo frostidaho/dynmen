@@ -6,7 +6,10 @@ from time import sleep
 import os
 
 class xcontrol(object):
-    def __init__(self, n_display=0):
+    def __init__(self):
+        n_display, proc = start_xephyr()
+        self.n_display = n_display
+        self.proc = proc
         self.display_str = ':{:d}'.format(n_display)
         self.display = Display(self.display_str)
         display = self.display
@@ -77,7 +80,7 @@ def start_xephyr():
             continue
     else:
         raise ValueError("Couldn't start server")
-    return idx
+    return idx, p
 
 # x = start_xephyr()
 

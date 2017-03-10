@@ -3,15 +3,21 @@ import pytest
 integration = pytest.importorskip('integration')
 
 import os
-n_display = integration.start_xephyr()
-xctrl = integration.xcontrol(n_display)
-os.environ['DISPLAY'] = ':{:d}'.format(n_display)
+
+@pytest.fixture(scope='function')
+def xctrl():
+    xctrl = integration.xcontrol()
+    yield xctrl
+    try:
+        xctrl.proc.terminate()
+    except:
+        pass
 
 from dynmen.menu import Menu
 from time import sleep
 
-
-def test_simple():
+def test_simple(xctrl):
+    os.environ['DISPLAY'] = xctrl.display_str
     menu = Menu(['rofi', '-dmenu'])
     menu.process_mode = 'futures'
     res = menu(['a', 'b', 'c'])
@@ -21,4 +27,5 @@ def test_simple():
     out = res.result()
     assert out.selected == 'b'
     assert out.value == None
+    
 
