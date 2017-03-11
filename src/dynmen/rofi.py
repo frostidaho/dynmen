@@ -17,10 +17,10 @@ class Rofi(_TraitMenu):
 
     # Explicitly add dmenu flag and set it to True by default.
     # This makes rofi read choices from stdin
-    dmenu = _Flag(
-        'dmenu',
-        default=True,
-        info="Start in dmenu mode.",
-        flag='-dmenu',
-    )
+    # dmenu = _Flag(
+    #     'dmenu',
+    #     default=True,
+    #     info="Start in dmenu mode.",
+    #     flag='-dmenu',
+    # )
 
