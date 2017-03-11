@@ -1,15 +1,51 @@
 # -*- coding: utf-8 -*-
+import logging as _logging
+_logr = _logging.getLogger(__name__)
+_logr.addHandler(_logging.NullHandler())
+
 import traitlets as tr
-from .menu import Menu as _Menu
+from .menu import Menu, _BaseTraits
+from collections import namedtuple as _namedtuple
+from itertools import chain
+
+Record = _namedtuple('Record', 'name value transformed')
+
+class Flag(tr.Bool):
+    def __init__(self, flag, default_value=False, **kwargs):
+        super(Flag, self).__init__(default_value=default_value, **kwargs)
+        self.flag = flag
+
+    def validate(self, obj, value):
+        if isinstance(value, Record):
+            value = value.value
+        val = super(Flag, self).validate(obj, value)
+        transformed = [self.flag] if val else []
+        return Record(self.name, val, transformed)
 
 
-class TraitMenu(tr.HasTraits):
+class Option(tr.TraitType):
+    def __init__(self, flag, **kwargs):
+        super(Option, self).__init__(**kwargs)
+        self.flag = flag
+
+    def validate(self, obj, value):
+        if isinstance(value, Record):
+            value = value.value
+        default_vals = {tr.Undefined, None}
+        if any((value is x for x in default_vals)):
+            transformed = []
+        else:
+            transformed = [self.flag, value]
+        return Record(self.name, value, transformed)
+
+
+class TraitMenu(_BaseTraits):
     _base_command = tr.List(
         trait=tr.CUnicode(),
         default_value=[''],
     )
 
-    menu = tr.Instance(klass=_Menu)
+    menu = tr.Instance(klass=Menu)
 
     def __init__(self, **kwargs):
         """Initialize the menu.
@@ -24,5 +60,16 @@ class TraitMenu(tr.HasTraits):
         """
         for k, v in kwargs.items():
             setattr(self, k, v)
-        self.menu = _Menu(self._base_command)
+        self.menu = Menu(self._base_command)
+
+
+    def __call__(self, entries=(), entry_sep=None, **kw):
+        descriptors = self.traits.values()
+        flags = (x for x in descriptors if isinstance(x, (Flag, Option)))
+        flags = (x.get(self).value for x in flags)
+        total_cmd = chain(self._base_command, *flags)
+        total_cmd = [str(x) for x in total_cmd]
+        self.menu.command = total_cmd
+        _logr.debug('Set menu command to %r', total_cmd)
+        return self.menu(entries, entry_sep, **kw)
 
