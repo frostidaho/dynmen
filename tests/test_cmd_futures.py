@@ -9,7 +9,7 @@ def launch(*args, **kwargs):
 def cat_identity(input_fn, stdout):
     out = launch(['cat'], input_fn)
     assert out.stdout == stdout
-    assert out.stderr == b''
+    assert out.stderr == None
     assert out.returncode == 0
 
 def test_launch_bytes():

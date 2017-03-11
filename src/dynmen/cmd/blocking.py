@@ -7,9 +7,9 @@ except NameError:               # python2 compatibility
     ProcessLookupError = OSError
 
 
-def launch(cmd, fn_input, fn_transform_res=None):
+def launch(cmd, fn_input, fn_transform_res=None, **kw):
     PIPE = _sp.PIPE
-    proc = _sp.Popen(cmd, stdout=PIPE, stderr=PIPE, stdin=PIPE)
+    proc = _sp.Popen(cmd, stdout=PIPE, stdin=PIPE, **kw)
     bstr = fn_input()
     stdout, stderr = proc.communicate(bstr)
     try:

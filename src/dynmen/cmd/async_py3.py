@@ -21,9 +21,9 @@ def get_pipes():
 
 
 @asyncio.coroutine
-def _launch(cmd, coro):
+def _launch(cmd, coro, **kw):
     transport, write_pipe, read_pipe = yield from get_pipes()
-    proc = yield from asyncio.create_subprocess_exec(*cmd, stdin=read_pipe, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc = yield from asyncio.create_subprocess_exec(*cmd, stdin=read_pipe, stdout=subprocess.PIPE, **kw)
 
     stdin_bytes = yield from coro
     transport.write(stdin_bytes)
@@ -48,8 +48,8 @@ def _build_coro(obj, *args):
     return wrapper(obj, *args)
 
 @asyncio.coroutine
-def launch(cmd, fn_input, fn_transform_res=None):
-    result = yield from _launch(cmd, _build_coro(fn_input))
+def launch(cmd, fn_input, fn_transform_res=None, **kw):
+    result = yield from _launch(cmd, _build_coro(fn_input), **kw)
     if fn_transform_res is None:
         return result
     else:

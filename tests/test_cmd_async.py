@@ -23,12 +23,12 @@ def test_coro_launch():
 
     out = loop.run_until_complete(dasync._launch(cmd, getinput()))
     assert out.stdout == inp
-    assert out.stderr == b''
+    assert out.stderr == None
     assert out.returncode == 0
 
     out = loop.run_until_complete(dasync.launch(cmd, getinput()))
     assert out.stdout == inp
-    assert out.stderr == b''
+    assert out.stderr == None
     assert out.returncode == 0
 
 def test_coro_fn_launch():
@@ -41,7 +41,7 @@ def test_coro_fn_launch():
     loop = asyncio.get_event_loop()
     out = loop.run_until_complete(coro)
     assert out.stdout == inp
-    assert out.stderr == b''
+    assert out.stderr == None
     assert out.returncode == 0
 
 def test_fn_launch():
@@ -54,7 +54,7 @@ def test_fn_launch():
     loop = asyncio.get_event_loop()
     out = loop.run_until_complete(coro)
     assert out.stdout == inp
-    assert out.stderr == b''
+    assert out.stderr == None
     assert out.returncode == 0
 
 
