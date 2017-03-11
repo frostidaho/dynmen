@@ -31,6 +31,12 @@ def test_flag(grep):
     grep.ignore_case = False
     assert_record(grep.ignore_case, 'ignore_case', False, [])
 
+def test_flag2(grep):
+    assert_record(grep.ignore_case, 'ignore_case', False, [])
+    from copy import copy
+    grep.ignore_case = copy(grep.ignore_case)
+    assert_record(grep.ignore_case, 'ignore_case', False, [])
+    
 def test_option(grep):
     assert_record(grep.pattern, 'pattern', None, [])
     txt = 'some pattern'
@@ -38,6 +44,12 @@ def test_option(grep):
     assert_record(grep.pattern, 'pattern', txt, ['-e', txt])
     grep.pattern = None
     assert_record(grep.pattern, 'pattern', None, [])
+
+def test_option2(grep):
+    txt = 'some pattern'
+    grep.pattern = txt
+    grep.pattern = grep.pattern
+    assert_record(grep.pattern, 'pattern', txt, ['-e', txt])
 
 def test_usage(grep):
     grep.menu.process_mode = 'futures'
@@ -64,3 +76,15 @@ def test_usage_update(grep):
         grep(inp).result(MAX_WAIT)
     grep.ignore_case = True
     assert_future(grep(inp), 'c', None)
+
+def test_trait_menu_kwargs():
+    grep = Grep(ignore_case=True)
+    assert_record(grep.ignore_case, 'ignore_case', True, ['-i'])
+
+def test_update_base():
+    grep = Grep(ignore_case=True)
+    grep._needs_update = False
+    grep.base_command = ['cat']
+    assert grep._needs_update == True
+
+
