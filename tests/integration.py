@@ -14,7 +14,6 @@ class xcontrol(object):
         self.n_display = n_display
         self.proc = proc
         self.display_str = ':{:d}.0'.format(n_display)
-        os.environ["DISPLAY"] = self.display_str
         self.display = Display(self.display_str)
         display = self.display
 
@@ -102,6 +101,7 @@ def start_x_server(build_cmd, max_wait_time=10.0):
         print('starting server on display {}'.format(idx))
         success, proc = start_cmd(idx)
         if success:
+            os.environ["DISPLAY"] = ':{:d}'.format(idx)
             return idx, proc
     raise ValueError("Couldn't start xserver")
 
