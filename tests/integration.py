@@ -87,14 +87,14 @@ def start_x_server(build_cmd, max_wait_time=10.0):
             if p.poll() is not None:
                 return False, p
             try:
-                Display(':{:d}'.format(idx))
+                Display(':{:d}.0'.format(idx))
                 return True, p
-            except (Xlib.error.DisplayConnectionError, XauthError):
+            except DisplayConnectionError:
                 sleep(0.1)
         return False, p
 
     disp_idx = _find_display()
-    for n_try in range(20):
+    for n_try in range(5):
         idx = next(disp_idx)
         print('starting server on display {}'.format(idx))
         success, proc = start_cmd(idx)
