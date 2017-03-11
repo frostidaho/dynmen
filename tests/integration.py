@@ -1,6 +1,7 @@
 from Xlib.display import Display
 from Xlib import X
 from Xlib.ext.xtest import fake_input
+from Xlib.error import DisplayConnectionError, XauthError
 import Xlib.XK
 from time import sleep
 import os
@@ -87,7 +88,7 @@ def start_x_server(build_cmd, max_wait_time=10.0):
             try:
                 Display(':{:d}'.format(idx))
                 return True, p
-            except Xlib.error.DisplayConnectionError:
+            except (Xlib.error.DisplayConnectionError, XauthError):
                 sleep(0.02)
         return False, p
 
