@@ -68,7 +68,7 @@ class xcontrol(object):
 
 def _find_display():
     """Returns the next available display"""
-    idx = 1
+    idx = 0
     while True:
         if not os.path.exists("/tmp/.X11-unix/X{0}".format(idx)):
             yield idx
@@ -89,7 +89,7 @@ def start_x_server(build_cmd, max_wait_time=10.0):
                 Display(':{:d}'.format(idx))
                 return True, p
             except (Xlib.error.DisplayConnectionError, XauthError):
-                sleep(0.02)
+                sleep(0.1)
         return False, p
 
     disp_idx = _find_display()
@@ -105,7 +105,7 @@ def _build_xvfb(n_display=1):
     cmd = ['Xvfb']
     display = ':{:d}'.format(n_display)
     cmd.append(display)
-    cmd.extend(['-screen', '1', '800x600x24'])
+    cmd.extend(['-screen', '0', '800x600x24'])
     return cmd
 
 def _build_xephyr(n_display=1):
