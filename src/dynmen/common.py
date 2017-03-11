@@ -4,7 +4,7 @@ from .menu import Menu as _Menu
 
 
 class TraitMenu(tr.HasTraits):
-    executable = tr.List(
+    _base_command = tr.List(
         trait=tr.CUnicode(),
         default_value=[''],
     )
@@ -24,5 +24,5 @@ class TraitMenu(tr.HasTraits):
         """
         for k, v in kwargs.items():
             setattr(self, k, v)
-        self.menu = _Menu(self.executable)
+        self.menu = _Menu(self._base_command)
 
