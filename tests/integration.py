@@ -15,6 +15,7 @@ class xcontrol(object):
         self.proc = proc
         self.display_str = ':{:d}'.format(n_display)
         self.display = Display(self.display_str)
+        os.environ["DISPLAY"] = self.display_str
         display = self.display
 
         getkey = lambda x: display.keysym_to_keycode(Xlib.XK.string_to_keysym(x))
