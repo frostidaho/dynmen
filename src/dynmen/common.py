@@ -39,7 +39,7 @@ class Option(tr.TraitType):
         return Record(self.name, value, transformed)
 
 
-class TraitMenu(_BaseTraits):
+class TraitMenu(tr.HasTraits):
     _base_command = tr.List(
         trait=tr.CUnicode(),
         default_value=[''],
@@ -61,15 +61,30 @@ class TraitMenu(_BaseTraits):
         for k, v in kwargs.items():
             setattr(self, k, v)
         self.menu = Menu(self._base_command)
+        self._needs_update = True
+        self.observe(self._check_needs_update)
 
 
     def __call__(self, entries=(), entry_sep=None, **kw):
-        descriptors = self.traits.values()
+        if self._needs_update:
+            self._menu_update()
+        return self.menu(entries, entry_sep, **kw)
+
+    def _menu_update(self):
+        descriptors = self.traits().values()
         flags = (x for x in descriptors if isinstance(x, (Flag, Option)))
-        flags = (x.get(self).value for x in flags)
+        flags = (x.get(self).transformed for x in flags)
         total_cmd = chain(self._base_command, *flags)
         total_cmd = [str(x) for x in total_cmd]
         self.menu.command = total_cmd
         _logr.debug('Set menu command to %r', total_cmd)
-        return self.menu(entries, entry_sep, **kw)
+        self._needs_update = False
+
+    def _check_needs_update(self, change):
+        print(change)
+        if change['old'] != change['new']:
+            self._needs_update = True
+
+
+
 
