@@ -40,10 +40,14 @@ class Option(tr.TraitType):
 
 
 class TraitMenu(tr.HasTraits):
-    _base_command = tr.List(
+    _base_command = ['']
+    base_command = tr.List(
         trait=tr.CUnicode(),
-        default_value=[''],
     )
+
+    @tr.default('base_command')
+    def _default_username(self):
+        return self._base_command
 
     menu = tr.Instance(klass=Menu)
 
@@ -60,10 +64,9 @@ class TraitMenu(tr.HasTraits):
         """
         for k, v in kwargs.items():
             setattr(self, k, v)
-        self.menu = Menu(self._base_command)
-        self._needs_update = True
+        self.menu = Menu(self.base_command)
         self.observe(self._check_needs_update)
-
+        self._needs_update = True
 
     def __call__(self, entries=(), entry_sep=None, **kw):
         if self._needs_update:
@@ -81,10 +84,8 @@ class TraitMenu(tr.HasTraits):
         self._needs_update = False
 
     def _check_needs_update(self, change):
-        print(change)
-        if change['old'] != change['new']:
+        if isinstance(change['old'], Record) or isinstance(change['new'], Record):
             self._needs_update = True
-
-
-
+        elif change['name'] == 'base_command':
+            self._needs_update = True
 
