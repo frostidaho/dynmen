@@ -81,10 +81,10 @@ def start_x_server(build_cmd, max_wait_time=10.0):
 
     def start_cmd(idx):
         cmd = build_cmd(idx)
-        p = sp.Popen(cmd)
         p2 = sp.Popen(['xauth', 'generate', ':{:d}'.format(idx),
                        '.', 'trusted'])
         p2.wait()
+        p = sp.Popen(cmd)
         tmax = time() + max_wait_time
         while time() <= tmax:
             if p.poll() is not None:
