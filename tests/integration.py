@@ -7,7 +7,9 @@ import os
 
 class xcontrol(object):
     def __init__(self):
-        n_display, proc = start_xvfb()
+        server = os.getenv('DYNMENXSERVER', 'xvfb')
+        build_cmd = globals()['_build_{}'.format(server.lower())]
+        n_display, proc = start_x_server(build_cmd)
         self.n_display = n_display
         self.proc = proc
         self.display_str = ':{:d}'.format(n_display)
@@ -17,9 +19,7 @@ class xcontrol(object):
         getkey = lambda x: display.keysym_to_keycode(Xlib.XK.string_to_keysym(x))
         self.getkey = getkey
 
-        # retkey = getkey('Return')
         spacekey = getkey('space')
-
         self.d_keys = {
             ' ': spacekey,
         }
@@ -65,32 +65,50 @@ class xcontrol(object):
         display.sync()
 
 
-def start_xvfb():
-    def build_cmd(n_display=0):
-        cmd = ['Xvfb']
-        display = ':{:d}'.format(n_display)
-        cmd.append(display)
-        cmd.extend(['-screen', 'scrn', '800x600x24'])
-        return cmd
+def _find_display():
+    """Returns the next available display"""
+    idx = 1
+    while True:
+        if not os.path.exists("/tmp/.X11-unix/X{0}".format(idx)):
+            yield idx
+        idx += 1
 
+def start_x_server(build_cmd, max_wait_time=10.0):
     import subprocess as sp
-    for idx in range(20):
+    from time import time
+
+    def start_cmd(idx):
         cmd = build_cmd(idx)
         p = sp.Popen(cmd)
-        sleep(1.0)
-        retcode = p.poll()
-        if retcode is None:
-            break
-        else:
+        tmax = time() + max_wait_time
+        while time() <= tmax:
+            if p.poll() is not None:
+                return False, p
             try:
-                p.terminate()
-            except:
-                pass
-            continue
-    else:
-        raise ValueError("Couldn't start server")
-    return idx, p
+                Display(':{:d}'.format(idx))
+                return True, p
+            except Xlib.error.DisplayConnectionError:
+                sleep(0.02)
+        return False, p
 
-# x = start_xephyr()
+    disp_idx = _find_display()
+    for n_try in range(20):
+        idx = next(disp_idx)
+        success, proc = start_cmd(idx)
+        if success:
+            return idx, proc
 
+def _build_xvfb(n_display=1):
+    cmd = ['Xvfb']
+    display = ':{:d}'.format(n_display)
+    cmd.append(display)
+    cmd.extend(['-screen', 'scrn', '800x600x24'])
+    return cmd
+
+def _build_xephyr(n_display=1):
+    cmd = ['Xephyr']
+    display = ':{:d}'.format(n_display)
+    cmd.append(display)
+    cmd.extend(['-screen', '800x600'])
+    return cmd
 
