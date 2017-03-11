@@ -54,7 +54,7 @@ class Menu(_BaseTraits):
         for k,v in kw.items():
             setattr(self, k, v)
 
-    def __call__(self, entries=(), entry_sep=None):
+    def __call__(self, entries=(), entry_sep=None, **kw):
         """Send entries to menu, return selected entry
 
         entries is an iterable where each element is a bytes-string that corresponds
@@ -74,7 +74,7 @@ class Menu(_BaseTraits):
             entries=entries,
             entry_sep=entry_sep,
         )
-        return launch(cmd, fn_input, fn_transform)
+        return launch(cmd, fn_input, fn_transform, **kw)
 
     @staticmethod
     def _get_launch_fn(process_mode):

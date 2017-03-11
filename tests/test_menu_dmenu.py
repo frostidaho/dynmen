@@ -18,7 +18,7 @@ MAX_WAIT = 3.0
 @pytest.fixture(scope='function')
 def dmenu_menu(xctrl):
     os.environ['DISPLAY'] = xctrl.display_str
-    menu = Menu(['dmenu'], process_mode='futures')
+    menu = Menu(['dmenu'], process_mode='futures', env={'DISPLAY': xctrl.display_str})
     return menu
 
 def test_simple(dmenu_menu, xctrl):
