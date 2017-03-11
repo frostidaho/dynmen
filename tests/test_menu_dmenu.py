@@ -1,6 +1,13 @@
 import os
 import pytest
 fixtures = pytest.importorskip('fixtures')
+from distutils.spawn import find_executable
+exists = find_executable('dmenu')
+pytestmark = pytest.mark.skipif(
+    not exists,
+    reason="dmenu isn't available.",
+)
+
 xctrl = fixtures.xctrl
 from dynmen.menu import Menu
 from time import sleep

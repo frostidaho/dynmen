@@ -1,5 +1,12 @@
 import pytest
 fixtures = pytest.importorskip('fixtures')
+from distutils.spawn import find_executable
+exists = find_executable('rofi')
+pytestmark = pytest.mark.skipif(
+    not exists,
+    reason="Rofi isn't available.",
+)
+
 import os
 from dynmen.menu import Menu
 from time import sleep
