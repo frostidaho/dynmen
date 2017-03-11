@@ -95,9 +95,11 @@ def start_x_server(build_cmd, max_wait_time=10.0):
     disp_idx = _find_display()
     for n_try in range(20):
         idx = next(disp_idx)
+        print('starting server on display {}'.format(idx))
         success, proc = start_cmd(idx)
         if success:
             return idx, proc
+    raise ValueError("Couldn't start xserver")
 
 def _build_xvfb(n_display=1):
     cmd = ['Xvfb']

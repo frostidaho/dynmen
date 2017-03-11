@@ -21,6 +21,7 @@ matrix:
           apt:
             packages:
               - xvfb
+              - suckless-tools
 
 install:
     - pip install tox-travis
