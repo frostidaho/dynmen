@@ -24,8 +24,8 @@ class Flag(tr.Bool):
 
 
 class Option(tr.TraitType):
-    def __init__(self, flag, **kwargs):
-        super(Option, self).__init__(**kwargs)
+    def __init__(self, flag, default_value=None, **kwargs):
+        super(Option, self).__init__(default_value=default_value, **kwargs)
         self.flag = flag
 
     def validate(self, obj, value):
