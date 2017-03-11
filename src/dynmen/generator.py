@@ -56,6 +56,7 @@ class AddOptions(object):
         for opt in self.options:
             if getattr(cls, opt.name, None) is None:
                 setattr(cls, opt.name, opt.descriptor)
+                opt.descriptor.class_init(cls, opt.name)
         return cls
 
 def load_options(filepath):
