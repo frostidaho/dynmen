@@ -20,6 +20,7 @@ matrix:
         addons:
           apt:
             packages:
+              - x11-apps
               - xvfb
               - suckless-tools
 

@@ -14,8 +14,8 @@ class xcontrol(object):
         self.n_display = n_display
         self.proc = proc
         self.display_str = ':{:d}.0'.format(n_display)
-        self.display = Display(self.display_str)
         os.environ["DISPLAY"] = self.display_str
+        self.display = Display(self.display_str)
         display = self.display
 
         getkey = lambda x: display.keysym_to_keycode(Xlib.XK.string_to_keysym(x))
@@ -81,9 +81,9 @@ def start_x_server(build_cmd, max_wait_time=10.0):
 
     def start_cmd(idx):
         cmd = build_cmd(idx)
-        p2 = sp.Popen(['xauth', 'generate', ':{:d}'.format(idx),
-                       '.', 'trusted'])
-        p2.wait()
+        # p2 = sp.Popen(['xauth', 'generate', ':{:d}'.format(idx),
+        #                '.', 'trusted'])
+        # p2.wait()
         p = sp.Popen(cmd)
         tmax = time() + max_wait_time
         while time() <= tmax:
