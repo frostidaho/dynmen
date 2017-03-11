@@ -13,7 +13,7 @@ class xcontrol(object):
         n_display, proc = start_x_server(build_cmd)
         self.n_display = n_display
         self.proc = proc
-        self.display_str = ':{:d}'.format(n_display)
+        self.display_str = ':{:d}.0'.format(n_display)
         self.display = Display(self.display_str)
         os.environ["DISPLAY"] = self.display_str
         display = self.display
