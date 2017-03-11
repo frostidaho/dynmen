@@ -4,9 +4,9 @@ _logr = _logging.getLogger(__name__)
 _logr.addHandler(_logging.NullHandler())
 
 import traitlets as tr
-from .menu import Menu, _BaseTraits
+from .menu import Menu
 from collections import namedtuple as _namedtuple
-from itertools import chain
+from itertools import chain as _chain
 
 Record = _namedtuple('Record', 'name value transformed')
 
@@ -74,7 +74,7 @@ class TraitMenu(tr.HasTraits):
         descriptors = self.traits().values()
         flags = (x for x in descriptors if isinstance(x, (Flag, Option)))
         flags = (x.get(self).transformed for x in flags)
-        total_cmd = chain(self._base_command, *flags)
+        total_cmd = _chain(self._base_command, *flags)
         total_cmd = [str(x) for x in total_cmd]
         self.menu.command = total_cmd
         _logr.debug('Set menu command to %r', total_cmd)
