@@ -105,7 +105,7 @@ def _build_xvfb(n_display=1):
     cmd = ['Xvfb']
     display = ':{:d}'.format(n_display)
     cmd.append(display)
-    cmd.extend(['-screen', '0', '800x600x24'])
+    cmd.extend(['-screen', '0', '800x600x16'])
     return cmd
 
 def _build_xephyr(n_display=1):
