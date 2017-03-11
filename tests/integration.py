@@ -80,9 +80,6 @@ def start_x_server(build_cmd, max_wait_time=10.0):
 
     def start_cmd(idx):
         cmd = build_cmd(idx)
-        # p2 = sp.Popen(['xauth', 'generate', ':{:d}'.format(idx),
-        #                '.', 'trusted'])
-        # p2.wait()
         p = sp.Popen(cmd)
         tmax = time() + max_wait_time
         while time() <= tmax:
@@ -108,8 +105,13 @@ def start_x_server(build_cmd, max_wait_time=10.0):
 def _build_xvfb(n_display=1):
     cmd = ['Xvfb']
     display = ':{:d}'.format(n_display)
+    xauth = '/tmp/xvfb_{:d}_auth'.format(n_display)
     cmd.append(display)
     cmd.extend(['-screen', '0', '800x600x16'])
+    cmd.extend(['-auth', xauth])
+    os.environ['XAUTHORITY'] = xauth
+    with open(xauth, 'wb') as fb:
+        pass
     return cmd
 
 def _build_xephyr(n_display=1):
