@@ -14,13 +14,11 @@ _path = _path.join(_dirname, 'data/rofi_opts.json')
 @_AddOptions(*_load_options(_path))
 class Rofi(_TraitMenu):
     _base_command = ['rofi']
-
     # Explicitly add dmenu flag and set it to True by default.
     # This makes rofi read choices from stdin
-    # dmenu = _Flag(
-    #     'dmenu',
-    #     default=True,
-    #     info="Start in dmenu mode.",
-    #     flag='-dmenu',
-    # )
+    dmenu = _Flag(
+        '-dmenu',
+        default_value=True,
+        help="Start in dmenu mode.",
+    )
 
