@@ -50,20 +50,14 @@ print('Output from rofi:', out)
 from dynmen.dmenu import DMenu
 menu = DMenu()
 menu.font = 'Satisfy-20'
-menu.color_fg_norm = '#6FC3DF'
-menu.color_bg_norm = '#0C141F'
-menu.color_fg_sel = '#FFE64D'
-menu.color_bg_sel = '#0C141F'
+menu.nf = '#6FC3DF'
+menu.nb = '#0C141F'
+menu.sf = '#FFE64D'
+menu.sb = '#0C141F'
 menu.lines = 20
 menu.prompt = "Name of person: "
 menu.case_insensitive = True
 out = menu(exdict)
 print('Output from dmenu:', out)
 
-from dynmen.fzf import FZF
-menu = FZF()
-menu.prompt = "Name of person: "
-menu.case_insensitive = True
-out = menu(exdict)
-print('Output from fzf:', out)
 
