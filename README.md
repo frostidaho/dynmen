@@ -4,11 +4,21 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/frostidaho/dynmen/badge.svg?branch=develop)](https://coveralls.io/github/frostidaho/dynmen?branch=develop)
 
-This branch is a WIP rewrite of the original dynmen which uses
-- traitlets for menu attributes
-- additional execution modes like using concurrent.futures or asyncio coroutines
-
+## Introduction
+*dynmen* is a python library for controlling dynamic menus like
+* [dmenu](http://tools.suckless.org/dmenu/)
+* [rofi](https://github.com/DaveDavenport/rofi)
+* [fzf](https://github.com/junegunn/fzf)
+* [percol](https://github.com/mooz/percol)
 
 ## Usage
+
+```python
+from dynmen import Menu
+rofi = Menu(['rofi', '-dmenu'])
+result = rofi({'a': 1, 'b': 2, 'c': 3})
+print(result)
+```
+
 Please see the [examples](examples/) folder for more examples.
 
