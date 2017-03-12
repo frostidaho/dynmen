@@ -4,7 +4,7 @@ _logr = _logging.getLogger(__name__)
 _logr.addHandler(_logging.NullHandler())
 
 import traitlets as tr
-from .menu import Menu
+from .menu import Menu, _BaseTraits
 from collections import namedtuple as _namedtuple
 from itertools import chain as _chain
 
@@ -39,8 +39,8 @@ class Option(tr.TraitType):
         return Record(self.name, value, transformed)
 
 
-class TraitMenu(tr.HasTraits):
-    _base_command = ['']
+class TraitMenu(_BaseTraits):
+    _base_command = ('',)
     base_command = tr.List(
         trait=tr.CUnicode(),
     )
@@ -62,8 +62,9 @@ class TraitMenu(tr.HasTraits):
               menu = Rofi()
               menu.width = 50
         """
-        for k, v in kwargs.items():
-            setattr(self, k, v)
+        super(TraitMenu, self).__init__(**kwargs)
+        # for k, v in kwargs.items():
+        #     setattr(self, k, v)
         self.menu = Menu(self.base_command)
         self.observe(self._check_needs_update)
         self._needs_update = True
@@ -77,13 +78,14 @@ class TraitMenu(tr.HasTraits):
         descriptors = self.traits().values()
         flags = (x for x in descriptors if isinstance(x, (Flag, Option)))
         flags = (x.get(self).transformed for x in flags)
-        total_cmd = _chain(self._base_command, *flags)
+        total_cmd = _chain(self.base_command, *flags)
         total_cmd = [str(x) for x in total_cmd]
         self.menu.command = total_cmd
         _logr.debug('Set menu command to %r', total_cmd)
         self._needs_update = False
 
     def _check_needs_update(self, change):
+        # print(change)
         if isinstance(change['old'], Record) or isinstance(change['new'], Record):
             self._needs_update = True
         elif change['name'] == 'base_command':
