@@ -27,7 +27,7 @@ def _prep_dict(d):
         d_new['info_text'] = d['arg']
     except KeyError:
         pass
-    if d.get('arg', None) is not None:
+    if d.get('arg', ''):
         d_new['klass'] = Option
     else:
         d_new['klass'] = Flag

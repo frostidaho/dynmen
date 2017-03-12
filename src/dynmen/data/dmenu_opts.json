@@ -1,86 +1,86 @@
 [
   {
-    "arg": "dmenu appears at the bottom of the screen.",
+    "arg": "",
     "default": false,
     "dtype": "bool",
     "flag": "-b",
-    "info": ""
+    "info": "dmenu appears at the bottom of the screen."
   },
   {
-    "arg": "dmenu grabs the keyboard before reading stdin. This is faster, but will lock up X until stdin reaches end-of-file.",
+    "arg": "",
     "default": false,
     "dtype": "bool",
     "flag": "-f",
-    "info": ""
+    "info": "dmenu grabs the keyboard before reading stdin. This is faster, but will lock up X until stdin reaches end-of-file."
   },
   {
-    "arg": "dmenu matches menu items case insensitively.",
+    "arg": "",
     "default": false,
     "dtype": "bool",
     "flag": "-i",
-    "info": ""
+    "info": "dmenu matches menu items case insensitively."
   },
   {
-    "arg": "dmenu lists items vertically, with the given number of lines.",
+    "arg": "lines",
     "default": null,
     "dtype": "int",
     "flag": "-l",
-    "info": "lines"
+    "info": "dmenu lists items vertically, with the given number of lines."
   },
   {
-    "arg": "dmenu is displayed on the monitor number supplied. Monitor numbers are starting from 0.",
+    "arg": "monitor",
     "default": null,
     "dtype": "int",
     "flag": "-m",
-    "info": "monitor"
+    "info": "dmenu is displayed on the monitor number supplied. Monitor numbers are starting from 0."
   },
   {
-    "arg": "defines the prompt to be displayed to the left of the input field.",
+    "arg": "prompt",
     "default": null,
     "dtype": "str",
     "flag": "-p",
-    "info": "prompt"
+    "info": "defines the prompt to be displayed to the left of the input field."
   },
   {
-    "arg": "defines the font or font set used.",
+    "arg": "font",
     "default": null,
     "dtype": null,
     "flag": "-fn",
-    "info": "font"
+    "info": "defines the font or font set used."
   },
   {
-    "arg": "defines the normal background color. #RGB, #RRGGBB, and X color names are supported.",
+    "arg": "color",
     "default": null,
     "dtype": null,
     "flag": "-nb",
-    "info": "color"
+    "info": "defines the normal background color. #RGB, #RRGGBB, and X color names are supported."
   },
   {
-    "arg": "defines the normal foreground color.",
+    "arg": "color",
     "default": null,
     "dtype": null,
     "flag": "-nf",
-    "info": "color"
+    "info": "defines the normal foreground color."
   },
   {
-    "arg": "defines the selected background color.",
+    "arg": "color",
     "default": null,
     "dtype": null,
     "flag": "-sb",
-    "info": "color"
+    "info": "defines the selected background color."
   },
   {
-    "arg": "defines the selected foreground color.",
+    "arg": "color",
     "default": null,
     "dtype": null,
     "flag": "-sf",
-    "info": "color"
+    "info": "defines the selected foreground color."
   },
   {
-    "arg": "prints version information to stdout, then exits.",
+    "arg": "",
     "default": false,
     "dtype": "bool",
     "flag": "-v",
-    "info": ""
+    "info": "prints version information to stdout, then exits."
   }
 ]

@@ -9,7 +9,7 @@ def opt(flag, arg='', info='', default=None, dtype=None):
     info = re.sub('\s+', ' ', info).strip()
     if dtype is not None:
         dtype = dtype.__name__
-    options.append(OptTuple(flag, info, arg, default, dtype))
+    options.append(OptTuple(flag, arg, info, default, dtype))
 
 def switch(flag, info=''):
     opt(flag, arg='', info=info, default=False, dtype=bool)
