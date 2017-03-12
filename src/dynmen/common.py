@@ -86,8 +86,12 @@ class TraitMenu(_BaseTraits):
 
         def linkit(name):
             return link_trait((self._menu, name), (self, name))
-        linkit('process_mode')
-        linkit('entry_sep')
+
+        menu_traits = set(self._menu.traits())
+        menu_traits.discard('command')
+        for name in menu_traits:
+            linkit(name)
+
         self.observe(self._check_needs_update)
         self._needs_update = True
 
