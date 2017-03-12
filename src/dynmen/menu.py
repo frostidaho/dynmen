@@ -42,10 +42,8 @@ class _BaseTraits(tr.HasTraits):
             try:
                 if not record.transformed:
                     continue
-            except AttributeError:
-                pass
-            try:
-                record = record.value
+                else:
+                    record = record.value
             except AttributeError:
                 pass
             txt = '{}={!r}'.format(name, record)
