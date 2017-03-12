@@ -38,7 +38,12 @@ class _BaseTraits(tr.HasTraits):
         clsname = self.__class__.__name__
         traits = []
         for name, descriptor in self._restricted_traits().items():
-            txt = '{}={!r}'.format(name, descriptor.get(self))
+            record = descriptor.get(self)
+            try:
+                record = record.value
+            except AttributeError:
+                pass
+            txt = '{}={!r}'.format(name, record)
             traits.append(txt)
         toret = [clsname, '(', ', '.join(traits), ')']
         return ''.join(toret)
