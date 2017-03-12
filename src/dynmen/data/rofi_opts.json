@@ -158,22 +158,22 @@
   {
     "arg": "[string]",
     "flag": "-color-normal",
-    "info": "Color scheme for normal row @@@ argb:00000000,  #D8DEE9 , argb:00000000,  #FAC863 ,  #1B2B34 (XResources)"
+    "info": "Color scheme for normal row @@@ argb:00000000, #D8DEE9 , argb:00000000, #FAC863 , #1B2B34 (XResources)"
   },
   {
     "arg": "[string]",
     "flag": "-color-urgent",
-    "info": "Color scheme for urgent row @@@ argb:00000000,  #F99157 , argb:00000000,  #F99157 ,  #1B2B34 (XResources)"
+    "info": "Color scheme for urgent row @@@ argb:00000000, #F99157 , argb:00000000, #F99157 , #1B2B34 (XResources)"
   },
   {
     "arg": "[string]",
     "flag": "-color-active",
-    "info": "Color scheme for active row @@@ argb:00000000,  #6699CC , argb:00000000,  #6699CC ,  #1B2B34 (XResources)"
+    "info": "Color scheme for active row @@@ argb:00000000, #6699CC , argb:00000000, #6699CC , #1B2B34 (XResources)"
   },
   {
     "arg": "[string]",
     "flag": "-color-window",
-    "info": "Color scheme window @@@ argb:ee222222,  #FAC863 ,  #FAC863 (XResources)"
+    "info": "Color scheme window @@@ argb:ee222222, #FAC863 , #FAC863 (XResources)"
   },
   {
     "arg": "[number]",
