@@ -18,9 +18,10 @@ Please see the [examples](examples/) folder for more examples.
 ```python
 from dynmen import Menu
 rofi = Menu(['rofi', '-dmenu'])
-result = rofi({'a': 1, 'b': 2, 'c': 3})
+result = rofi({'first': 1, 'second': 2, 'third': 3})
 print(result)
 ```
+![rofi dynmen.Menu example](dynmen_readme_rofi_ex.png "rofi dynmen.Menu example")
 
 ### Using a menu in non-blocking mode
 ```python
