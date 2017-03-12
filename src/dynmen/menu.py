@@ -81,8 +81,8 @@ class Menu(_BaseTraits):
         if entry_sep is None:
             entry_sep = self.entry_sep
         cmd, launch = self.command, self._get_launch_fn(self.process_mode)
-        _logr.debug('Running cmd: %r using the launcher %r',
-                    cmd, launch)
+        _logr.debug('Building cmd: %r using the %r launcher',
+                    cmd, self.process_mode)
         if isinstance(entries, _GeneratorType):
             entries = list(entries)
 
