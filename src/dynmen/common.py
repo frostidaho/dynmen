@@ -82,18 +82,19 @@ class TraitMenu(_BaseTraits):
               menu.width = 50
         """
         super(TraitMenu, self).__init__(**kwargs)
-        self._menu = Menu(self.base_command)
+        self._init_menu()
+        self.observe(self._check_needs_update)
+        self._needs_update = True
 
+    def _init_menu(self):
+        self._menu = Menu(self.base_command)
         def linkit(name):
             return link_trait((self._menu, name), (self, name))
-
         menu_traits = set(self._menu.traits())
         menu_traits.discard('command')
         for name in menu_traits:
             linkit(name)
-
-        self.observe(self._check_needs_update)
-        self._needs_update = True
+        return
 
     def __call__(self, entries=(), entry_sep=None, **kw):
         if self._needs_update:
@@ -111,8 +112,8 @@ class TraitMenu(_BaseTraits):
         self._needs_update = False
 
     def _check_needs_update(self, change):
-        # print(change)
-        if isinstance(change['old'], Record) or isinstance(change['new'], Record):
+        if isinstance(change['old'], Record) or \
+           isinstance(change['new'], Record):
             self._needs_update = True
         elif change['name'] == 'base_command':
             self._needs_update = True
