@@ -94,3 +94,34 @@ def test_process_mode(grep):
     assert grep.process_mode == 'async'
     assert grep._menu.process_mode == 'async'
 
+
+def compare_alias(obj1, obj2):
+    assert obj1.name != obj2.name
+    assert obj1.value == obj2.value
+    assert obj1.transformed == obj2.transformed
+
+def test_alias():
+    class Grep2(Grep):
+        _aliases = (
+            ('ignore_case', 'case_insensitive'),
+        )
+    grep = Grep2()
+    compare_alias(grep.ignore_case, grep.case_insensitive)
+    grep.ignore_case = True
+    compare_alias(grep.ignore_case, grep.case_insensitive)
+    grep.case_insensitive = False
+    compare_alias(grep.ignore_case, grep.case_insensitive)
+
+def test_alias_menu_command():
+    class Grep2(Grep):
+        _aliases = (
+            ('ignore_case', 'case_insensitive'),
+        )
+    grep = Grep2()
+    grep.case_insensitive = True
+    compare_alias(grep.ignore_case, grep.case_insensitive)
+    assert grep.case_insensitive.transformed == ['-i']
+    assert grep.ignore_case.transformed == ['-i']
+    grep._menu_update()
+    assert grep._menu.command.count('-i') == 1
+
