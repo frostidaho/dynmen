@@ -11,4 +11,9 @@ _path = _path.join(_dirname, 'data/dmenu_opts.json')
 @_AddOptions(*_load_options(_path))
 class DMenu(_TraitMenu):
     _base_command = ['dmenu']
+    _aliases = (
+        ('i', 'case_insensitive'),
+        ('p', 'prompt'),
+        ('fn', 'font'),
+    )
 
