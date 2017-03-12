@@ -17,7 +17,7 @@ SPAWN_WAIT = 1.0
 
 @pytest.fixture(scope='function')
 def dmenu(xctrl):
-    menu = Menu(['dmenu'], process_mode='futures', env={'DISPLAY': xctrl.display_str})
+    menu = Menu(['dmenu'], process_mode='futures')
     return menu
 
 def assert_future(future, selected, value):
