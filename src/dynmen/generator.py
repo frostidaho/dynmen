@@ -16,7 +16,7 @@ def _prep_dict(d):
     flag = d['flag']
     d_new = {}
     # type(u'') is unicode or str type depending on python version
-    if not isinstance(flag, type(u'')): 
+    if not isinstance(flag, (str, type(u''))):
         flag = max(flag, key=len)
     d_new['flag'] = flag
     d_new['name'] = flag.lstrip('-').replace('-', '_')
