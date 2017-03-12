@@ -33,7 +33,6 @@ def _prep_dict(d):
         d_new['klass'] = Option
     else:
         d_new['klass'] = Flag
-    _logr.debug('Transformed option dictionary %r into %r', d, d_new)
     return d_new
 
 NamedDescriptor = namedtuple('NamedDescriptor', 'name descriptor')
@@ -44,7 +43,6 @@ def dict_to_descriptor(d):
     cls = d.pop('klass')
     name = d.pop('name')
     res = NamedDescriptor(name, cls(**d))
-    _logr.debug('Created descriptor %r', res)
     return res
 
 
@@ -59,6 +57,7 @@ class AddOptions(object):
         self.options = options
 
     def __call__(self, cls):
+        _logr.debug('Adding %r options to %r', len(self.options), cls.__name__)
         for opt in self.options:
             if getattr(cls, opt.name, None) is None:
                 setattr(cls, opt.name, opt.descriptor)
@@ -68,5 +67,6 @@ class AddOptions(object):
 
 def load_options(filepath):
     import json
+    _logr.debug('Loading menu options from %r', filepath)
     with open(filepath, mode='rt') as fp:
         return [dict_to_descriptor(x) for x in json.load(fp)]
