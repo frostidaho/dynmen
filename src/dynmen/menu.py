@@ -65,7 +65,16 @@ class Menu(_BaseTraits):
     entry_sep = tr.CUnicode('\n')
 
     def __init__(self, command=(), entry_sep='\n', process_mode='blocking'):
-        "Create a python wrapper for command"
+        """Create a python wrapper for command
+
+        Menu.__call__ sends entries to the stdin of the process given by command
+        the behavior of __call__ changes depending on process_mode
+
+        process_mode is either
+            - blocking -> subprocess and blocks until process finishes
+            - futures -> run the process in a thread pool and immediately return a future
+            - async -> do not start process, but return a coroutine that can be scheduled
+        """
         self.command = command
         self.entry_sep = entry_sep
         self.process_mode = process_mode
@@ -73,7 +82,7 @@ class Menu(_BaseTraits):
     def __call__(self, entries=(), entry_sep=None, **kw):
         """Send entries to menu, return selected entry
 
-        entries is an iterable where each element is a bytes-string that corresponds
+        entries is an iterable where each element corresponds
         to an entry in the menu.
         """
         if entry_sep is None:
