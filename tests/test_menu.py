@@ -205,10 +205,6 @@ def test_menu_repr():
     rmenu = repr(menu)
     assert eval(rmenu) == Menu(['cat'])
 
-def test_set_kws():
-    menu = Menu([], someattr=37)
-    assert menu.someattr == 37
-
 def test_restricted_traits():
     menu = Menu([])
     keys0 = list(menu._restricted_traits().keys())

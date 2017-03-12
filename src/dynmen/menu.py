@@ -64,13 +64,11 @@ class Menu(_BaseTraits):
     command = tr.List(trait=tr.CUnicode())
     entry_sep = tr.CUnicode('\n')
 
-    def __init__(self, command=(), entry_sep='\n', process_mode='blocking', **kw):
+    def __init__(self, command=(), entry_sep='\n', process_mode='blocking'):
         "Create a python wrapper for command"
         self.command = command
         self.entry_sep = entry_sep
         self.process_mode = process_mode
-        for k, v in kw.items():
-            setattr(self, k, v)
 
     def __call__(self, entries=(), entry_sep=None, **kw):
         """Send entries to menu, return selected entry
