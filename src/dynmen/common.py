@@ -81,8 +81,9 @@ class TraitMenu(_BaseTraits):
               menu = Rofi()
               menu.width = 50
         """
-        super(TraitMenu, self).__init__(**kwargs)
         self._init_menu()
+        self._init_aliases()
+        super(TraitMenu, self).__init__(**kwargs)
         self.observe(self._check_needs_update)
         self._needs_update = True
 
@@ -95,6 +96,20 @@ class TraitMenu(_BaseTraits):
         for name in menu_traits:
             linkit(name)
         return
+
+    def _init_aliases(self):
+        try:
+            aliases = self._aliases
+        except AttributeError:
+            return
+        for alias in aliases:
+            self._add_alias(*alias)
+
+    def _add_alias(self, source_name, *target_names):
+        source = (self, source_name)
+        addlink = lambda x: link_trait(source, (self, x))
+        for name in target_names:
+            addlink(name)
 
     def __call__(self, entries=(), entry_sep=None, **kw):
         if self._needs_update:
