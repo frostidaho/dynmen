@@ -52,7 +52,7 @@ class _BaseTraits(tr.HasTraits):
         return ''.join(toret)
 
 
-MenuResult = _namedtuple('MenuResult', 'selected value returncode')
+MenuResult = _namedtuple('MenuResult', 'selected value')
 class Menu(_BaseTraits):
     process_mode = tr.CaselessStrEnum(
         ('blocking', 'async', 'futures'),
@@ -107,7 +107,7 @@ class Menu(_BaseTraits):
             value = entries[selected]
         except (TypeError, KeyError):
             value = None
-        return MenuResult(selected, value, returncode)
+        return MenuResult(selected, value)
         
 
     @staticmethod
