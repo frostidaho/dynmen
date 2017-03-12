@@ -15,8 +15,15 @@ class MenuError(Exception):
 
 
 class _BaseTraits(tr.HasTraits):
+    _traits_ignore = ()
+    def _restricted_traits(self):
+        traits = self.traits()
+        for trait in self._traits_ignore:
+            traits.pop(trait, None)
+        return traits
+
     def __hash__(self):
-        d_traits = self.traits()
+        d_traits = self._restricted_traits()
         info = [(x, getattr(self, x)) for x in sorted(d_traits)]
         info_tuple = (self.__class__, repr(info))
         return hash(info_tuple)
@@ -30,7 +37,7 @@ class _BaseTraits(tr.HasTraits):
     def __repr__(self):
         clsname = self.__class__.__name__
         traits = []
-        for name, descriptor in self.traits().items():
+        for name, descriptor in self._restricted_traits().items():
             txt = '{}={!r}'.format(name, descriptor.get(self))
             traits.append(txt)
         toret = [clsname, '(', ', '.join(traits), ')']
@@ -43,7 +50,7 @@ class Menu(_BaseTraits):
         ('blocking', 'async', 'futures'),
         default_value='blocking',
     )
-    command = tr.List()
+    command = tr.List(trait = tr.CUnicode())
     entry_sep = tr.CUnicode('\n')
 
     def __init__(self, command=(), entry_sep='\n', process_mode='blocking', **kw):

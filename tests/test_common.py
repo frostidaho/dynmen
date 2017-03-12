@@ -52,14 +52,14 @@ def test_option2(grep):
     assert_record(grep.pattern, 'pattern', txt, ['-e', txt])
 
 def test_usage(grep):
-    grep.menu.process_mode = 'futures'
+    grep._menu.process_mode = 'futures'
     inp = list('abcdefghijklmnopqrstuv')
     grep.pattern = 'm'
     future = grep(inp)
     assert_future(future, 'm', None)
 
 def test_usage_fail(grep):
-    grep.menu.process_mode = 'futures'
+    grep._menu.process_mode = 'futures'
     inp = list('abcdefghijklmnopqrstuv')
     grep.pattern = 'M'
     future = grep(inp)
@@ -67,7 +67,7 @@ def test_usage_fail(grep):
         future.result(MAX_WAIT)
 
 def test_usage_update(grep):
-    grep.menu.process_mode = 'futures'
+    grep._menu.process_mode = 'futures'
     inp = list('abcdefghijklmnopqrstuv')
     grep.pattern = 'o'
     assert_future(grep(inp), 'o', None)

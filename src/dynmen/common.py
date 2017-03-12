@@ -41,6 +41,8 @@ class Option(tr.TraitType):
 
 class TraitMenu(_BaseTraits):
     _base_command = ('',)
+    _traits_ignore = ('_menu',)
+
     base_command = tr.List(
         trait=tr.CUnicode(),
     )
@@ -49,7 +51,8 @@ class TraitMenu(_BaseTraits):
     def _default_username(self):
         return self._base_command
 
-    menu = tr.Instance(klass=Menu)
+    _menu = tr.Instance(klass=Menu)
+
 
     def __init__(self, **kwargs):
         """Initialize the menu.
@@ -65,14 +68,14 @@ class TraitMenu(_BaseTraits):
         super(TraitMenu, self).__init__(**kwargs)
         # for k, v in kwargs.items():
         #     setattr(self, k, v)
-        self.menu = Menu(self.base_command)
+        self._menu = Menu(self.base_command)
         self.observe(self._check_needs_update)
         self._needs_update = True
 
     def __call__(self, entries=(), entry_sep=None, **kw):
         if self._needs_update:
             self._menu_update()
-        return self.menu(entries, entry_sep, **kw)
+        return self._menu(entries, entry_sep, **kw)
 
     def _menu_update(self):
         descriptors = self.traits().values()
@@ -80,7 +83,7 @@ class TraitMenu(_BaseTraits):
         flags = (x.get(self).transformed for x in flags)
         total_cmd = _chain(self.base_command, *flags)
         total_cmd = [str(x) for x in total_cmd]
-        self.menu.command = total_cmd
+        self._menu.command = total_cmd
         _logr.debug('Set menu command to %r', total_cmd)
         self._needs_update = False
 
