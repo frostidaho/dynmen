@@ -105,11 +105,22 @@ class TraitMenu(_BaseTraits):
         for alias in aliases:
             self._add_alias(*alias)
 
+    @property
+    def _cmd_ignore_traits(self):
+        try:
+            return self._cmd_ignore_traits_
+        except AttributeError:
+            x = set()
+            self._cmd_ignore_traits_ = x
+            return x
+
     def _add_alias(self, source_name, *target_names):
         source = (self, source_name)
         addlink = lambda x: link_trait(source, (self, x))
+        ignore = self._cmd_ignore_traits
         for name in target_names:
             addlink(name)
+            ignore.add(name)
 
     def __call__(self, entries=(), entry_sep=None, **kw):
         if self._needs_update:
@@ -117,7 +128,8 @@ class TraitMenu(_BaseTraits):
         return self._menu(entries, entry_sep, **kw)
 
     def _menu_update(self):
-        descriptors = self.traits().values()
+        ignore = self._cmd_ignore_traits
+        descriptors = (v for k,v in self.traits().items() if k not in ignore)
         flags = (x for x in descriptors if isinstance(x, (Flag, Option)))
         flags = (x.get(self).transformed for x in flags)
         total_cmd = _chain(self.base_command, *flags)
