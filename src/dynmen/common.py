@@ -7,6 +7,23 @@ import traitlets as tr
 from .menu import Menu, _BaseTraits
 from collections import namedtuple as _namedtuple
 from itertools import chain as _chain
+from copy import copy
+
+
+def link_trait(source, target):
+    """
+    This is a small wrapper around traitlets.link
+    e.g., link_trait((menu, 'i'), (menu, 'case_insensitive'))
+    """
+    try:
+        obj = tr.link(source, target)
+    except TypeError:
+        cls, attr = source[0].__class__, source[1]
+        trait = getattr(cls, attr)
+        trait = copy(trait)
+        target[0].add_traits(**{target[1]: trait})
+        obj = tr.link(source, target)
+    return obj
 
 Record = _namedtuple('Record', 'name value transformed')
 
@@ -53,18 +70,6 @@ class TraitMenu(_BaseTraits):
 
     _menu = tr.Instance(klass=Menu)
 
-    process_mode = tr.CaselessStrEnum(
-        ('blocking', 'async', 'futures'),
-        default_value=Menu.process_mode.default_value,
-    )
-
-    entry_sep = tr.CUnicode(Menu.entry_sep.default_value)
-
-    @tr.observe('process_mode', 'entry_sep')
-    def _menu_param_changed(self, change):
-        name, value = change['name'], change['new']
-        setattr(self._menu, name, value)
-
     def __init__(self, **kwargs):
         """Initialize the menu.
 
@@ -77,9 +82,12 @@ class TraitMenu(_BaseTraits):
               menu.width = 50
         """
         super(TraitMenu, self).__init__(**kwargs)
-        # for k, v in kwargs.items():
-        #     setattr(self, k, v)
         self._menu = Menu(self.base_command)
+
+        def linkit(name):
+            return link_trait((self._menu, name), (self, name))
+        linkit('process_mode')
+        linkit('entry_sep')
         self.observe(self._check_needs_update)
         self._needs_update = True
 
