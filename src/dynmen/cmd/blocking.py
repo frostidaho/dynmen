@@ -21,4 +21,3 @@ def launch(cmd, fn_input, fn_transform_res=None, **kw):
         return result
     transformed = fn_transform_res(result)
     return transformed
-

@@ -27,7 +27,9 @@ def link_trait(source, target):
 
 Record = _namedtuple('Record', 'name value transformed')
 
+
 class Flag(tr.Bool):
+
     def __init__(self, flag, default_value=False, **kwargs):
         super(Flag, self).__init__(default_value=default_value, **kwargs)
         self.flag = flag
@@ -41,6 +43,7 @@ class Flag(tr.Bool):
 
 
 class Option(tr.TraitType):
+
     def __init__(self, flag, default_value=None, **kwargs):
         super(Option, self).__init__(default_value=default_value, **kwargs)
         self.flag = flag
@@ -129,7 +132,7 @@ class TraitMenu(_BaseTraits):
 
     def _menu_update(self):
         ignore = self._cmd_ignore_traits
-        descriptors = (v for k,v in self.traits().items() if k not in ignore)
+        descriptors = (v for k, v in self.traits().items() if k not in ignore)
         flags = (x for x in descriptors if isinstance(x, (Flag, Option)))
         flags = (x.get(self).transformed for x in flags)
         total_cmd = _chain(self.base_command, *flags)
@@ -144,4 +147,3 @@ class TraitMenu(_BaseTraits):
             self._needs_update = True
         elif change['name'] == 'base_command':
             self._needs_update = True
-

@@ -12,6 +12,7 @@ from dynmen.generator import (AddOptions as _AddOptions,
 _dirname = _path.dirname(_path.abspath(__file__))
 _path = _path.join(_dirname, 'data/rofi_opts.json')
 
+
 @_AddOptions(*_load_options(_path))
 class Rofi(TraitMenu):
     _base_command = ['rofi']
@@ -26,5 +27,3 @@ class Rofi(TraitMenu):
         default_value=True,
         help="Start in dmenu mode.",
     )
-
-

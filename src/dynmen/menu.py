@@ -16,6 +16,7 @@ class MenuError(Exception):
 
 class _BaseTraits(tr.HasTraits):
     _traits_ignore = ()
+
     def _restricted_traits(self):
         traits = self.traits()
         for trait in self._traits_ignore:
@@ -53,12 +54,14 @@ class _BaseTraits(tr.HasTraits):
 
 
 MenuResult = _namedtuple('MenuResult', 'selected value')
+
+
 class Menu(_BaseTraits):
     process_mode = tr.CaselessStrEnum(
         ('blocking', 'async', 'futures'),
         default_value='blocking',
     )
-    command = tr.List(trait = tr.CUnicode())
+    command = tr.List(trait=tr.CUnicode())
     entry_sep = tr.CUnicode('\n')
 
     def __init__(self, command=(), entry_sep='\n', process_mode='blocking', **kw):
@@ -66,7 +69,7 @@ class Menu(_BaseTraits):
         self.command = command
         self.entry_sep = entry_sep
         self.process_mode = process_mode
-        for k,v in kw.items():
+        for k, v in kw.items():
             setattr(self, k, v)
 
     def __call__(self, entries=(), entry_sep=None, **kw):
@@ -108,7 +111,6 @@ class Menu(_BaseTraits):
         except (TypeError, KeyError):
             value = None
         return MenuResult(selected, value)
-        
 
     @staticmethod
     def _convert_entries(elements, entry_sep):
@@ -126,4 +128,3 @@ class Menu(_BaseTraits):
         except AttributeError:
             pass
         return bentry_sep.join(elements)
-

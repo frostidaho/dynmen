@@ -7,6 +7,8 @@ from collections import namedtuple as _namedtuple
 
 
 TransPipe = _namedtuple('TransPipe', 'writer write_pipe read_pipe')
+
+
 @asyncio.coroutine
 def get_pipes():
     read_fd, write_fd = os.pipe()
@@ -28,7 +30,7 @@ def _launch(cmd, coro, **kw):
     stdin_bytes = yield from coro
     transport.write(stdin_bytes)
     transport.close()
-    
+
     stdout, stderr = yield from proc.communicate()
     retcode = proc.returncode
     write_pipe.close(), read_pipe.close()
@@ -47,6 +49,7 @@ def _build_coro(obj, *args):
 
     return wrapper(obj, *args)
 
+
 @asyncio.coroutine
 def launch(cmd, fn_input, fn_transform_res=None, **kw):
     result = yield from _launch(cmd, _build_coro(fn_input), **kw)
@@ -55,6 +58,3 @@ def launch(cmd, fn_input, fn_transform_res=None, **kw):
     else:
         result = yield from _build_coro(fn_transform_res, result)
     return result
-
-
-

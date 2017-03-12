@@ -5,5 +5,3 @@ try:
 except SyntaxError:
     from sys import version_info
     raise ImportError('Async is not available for python %r', version_info)
-
-    

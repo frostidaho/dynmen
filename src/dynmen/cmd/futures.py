@@ -2,6 +2,7 @@
 from .blocking import launch as _launch
 from concurrent.futures import ThreadPoolExecutor
 
+
 def launch(cmd, fn_input, fn_transform_res=None, **kw):
     # Do not pass a thread_name_prefix to ThreadPoolExecutor
     # as that is only for py36 and beyond.

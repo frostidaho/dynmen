@@ -12,6 +12,7 @@ _logr.addHandler(_logging.NullHandler())
 from dynmen.common import Option, Flag
 from collections import namedtuple
 
+
 def _prep_dict(d):
     flag = d['flag']
     d_new = {}
@@ -36,6 +37,8 @@ def _prep_dict(d):
     return d_new
 
 NamedDescriptor = namedtuple('NamedDescriptor', 'name descriptor')
+
+
 def dict_to_descriptor(d):
     d = _prep_dict(d)
     cls = d.pop('klass')
@@ -44,11 +47,13 @@ def dict_to_descriptor(d):
     _logr.debug('Created descriptor %r', res)
     return res
 
+
 class AddOptions(object):
     """
     A class decorator for TraitMenus which
     adds options to the menu
     """
+
     def __init__(self, *options):
         """Create AddOptions decorator."""
         self.options = options
@@ -60,8 +65,8 @@ class AddOptions(object):
                 opt.descriptor.class_init(cls, opt.name)
         return cls
 
+
 def load_options(filepath):
     import json
     with open(filepath, mode='rt') as fp:
         return [dict_to_descriptor(x) for x in json.load(fp)]
-
