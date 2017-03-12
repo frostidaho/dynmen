@@ -53,6 +53,16 @@ class TraitMenu(_BaseTraits):
 
     _menu = tr.Instance(klass=Menu)
 
+    process_mode = tr.CaselessStrEnum(
+        ('blocking', 'async', 'futures'),
+        default_value='blocking',
+    )
+    entry_sep = tr.CUnicode('\n')
+
+    @tr.observe('process_mode', 'entry_sep')
+    def _menu_param_changed(self, change):
+        name, value = change['name'], change['new']
+        setattr(self._menu, name, value)
 
     def __init__(self, **kwargs):
         """Initialize the menu.
