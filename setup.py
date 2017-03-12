@@ -7,7 +7,7 @@ from glob import glob
 
 setup(
     name='dynmen',
-    version='0.1.0',
+    version='0.1.1',
     description='dynmen is an interface to dynamic menus, like dmenu, rofi, or fzf.',
     author='Idaho Frost',
     author_email='frostidaho@gmail.com',
