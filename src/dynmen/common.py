@@ -55,9 +55,10 @@ class TraitMenu(_BaseTraits):
 
     process_mode = tr.CaselessStrEnum(
         ('blocking', 'async', 'futures'),
-        default_value='blocking',
+        default_value=Menu.process_mode.default_value,
     )
-    entry_sep = tr.CUnicode('\n')
+
+    entry_sep = tr.CUnicode(Menu.entry_sep.default_value)
 
     @tr.observe('process_mode', 'entry_sep')
     def _menu_param_changed(self, change):

@@ -87,4 +87,10 @@ def test_update_base():
     grep.base_command = ['cat']
     assert grep._needs_update == True
 
+def test_process_mode(grep):
+    pm = grep.process_mode
+    assert pm == grep._menu.process_mode
+    grep.process_mode = 'async'
+    assert grep.process_mode == 'async'
+    assert grep._menu.process_mode == 'async'
 
