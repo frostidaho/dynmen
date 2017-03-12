@@ -209,3 +209,11 @@ def test_set_kws():
     menu = Menu([], someattr=37)
     assert menu.someattr == 37
 
+def test_restricted_traits():
+    menu = Menu([])
+    keys0 = list(menu._restricted_traits().keys())
+    some_key = keys0[0]
+    menu._traits_ignore = [some_key]
+    keys1 = set(menu._restricted_traits().keys())
+    assert some_key not in keys1
+    
