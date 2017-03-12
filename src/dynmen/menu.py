@@ -40,6 +40,11 @@ class _BaseTraits(tr.HasTraits):
         for name, descriptor in self._restricted_traits().items():
             record = descriptor.get(self)
             try:
+                if not record.transformed:
+                    continue
+            except AttributeError:
+                pass
+            try:
                 record = record.value
             except AttributeError:
                 pass
