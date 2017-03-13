@@ -39,4 +39,16 @@ rofi.font = 'sans 30'
 result = rofi(['x', 'y', 'z'])
 print(result)
 ```
+## Installation
 
+### Installing from pypi
+```bash
+pip install --user dynmen
+```
+
+### Installing development version from github
+```bash
+git clone https://github.com/frostidaho/dynmen.git
+cd dynmen
+make install-user
+```
