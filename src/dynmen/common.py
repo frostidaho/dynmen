@@ -72,12 +72,16 @@ class Option(TransformedTrait):
         value = super(Option, self).validate(obj, value)
         return value
 
+class IdentityList(TransformedTrait, tr.List):
+    def transform(self, obj, value):
+        return value
+
 
 class TraitMenu(_BaseTraits):
     _base_command = ('',)
     _traits_ignore = ('_menu',)
 
-    base_command = tr.List(
+    base_command = IdentityList(
         trait=tr.CUnicode(),
     )
 
@@ -145,7 +149,8 @@ class TraitMenu(_BaseTraits):
         return self._menu(entries, entry_sep, **kw)
 
     def _menu_update(self):
-        ignore = self._cmd_ignore_traits
+        ignore = set(self._cmd_ignore_traits)
+        ignore.add('base_command')
         names = (x for x in self._trait_transformed if x not in ignore)
         flags = (self._trait_transformed[x] for x in names)
         total_cmd = _chain(self.base_command, *flags)
@@ -156,6 +161,4 @@ class TraitMenu(_BaseTraits):
 
     def _check_needs_update(self, change):
         if isinstance(getattr(self.__class__, change['name']), TransformedTrait):
-            self._needs_update = True
-        elif change['name'] == 'base_command':
             self._needs_update = True
