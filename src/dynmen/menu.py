@@ -44,13 +44,6 @@ class _BaseTraits(tr.HasTraits):
         traits = []
         for name, descriptor in self._restricted_traits().items():
             record = descriptor.get(self)
-            try:
-                if not record.transformed:
-                    continue
-                else:
-                    record = record.value
-            except AttributeError:
-                pass
             txt = '{}={!r}'.format(name, record)
             traits.append(txt)
         toret = [clsname, '(', ', '.join(traits), ')']

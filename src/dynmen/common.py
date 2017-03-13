@@ -25,8 +25,6 @@ def link_trait(source, target):
         obj = tr.link(source, target)
     return obj
 
-Record = _namedtuple('Record', 'name value transformed')
-
 
 class TransformedTrait(tr.TraitType):
     def _transform(self, obj, value):
