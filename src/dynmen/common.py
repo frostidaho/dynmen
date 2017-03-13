@@ -28,35 +28,51 @@ def link_trait(source, target):
 Record = _namedtuple('Record', 'name value transformed')
 
 
-class Flag(tr.Bool):
+class TransformedTrait(tr.TraitType):
+    def _transform(self, obj, value):
+        val = self.transform(obj, value)
+        obj._trait_transformed[self.name] = val
+
+    def validate(self, obj, value):
+        try:
+            validate_fn = super(TransformedTrait, self).validate
+            value = validate_fn(obj, value)
+        except AttributeError:
+            pass
+        self._transform(obj, value)
+        return value
+
+class Flag(TransformedTrait, tr.Bool):
 
     def __init__(self, flag, default_value=False, **kwargs):
         super(Flag, self).__init__(default_value=default_value, **kwargs)
         self.flag = flag
 
+    def transform(self, obj, value):
+        return [self.flag] if value else []
+
     def validate(self, obj, value):
-        if isinstance(value, Record):
-            value = value.value
         val = super(Flag, self).validate(obj, value)
-        transformed = [self.flag] if val else []
-        return Record(self.name, val, transformed)
+        return value
 
 
-class Option(tr.TraitType):
+class Option(TransformedTrait):
 
     def __init__(self, flag, default_value=None, **kwargs):
         super(Option, self).__init__(default_value=default_value, **kwargs)
         self.flag = flag
 
-    def validate(self, obj, value):
-        if isinstance(value, Record):
-            value = value.value
+    def transform(self, obj, value):
         default_vals = {tr.Undefined, None}
         if any((value is x for x in default_vals)):
             transformed = []
         else:
             transformed = [self.flag, value]
-        return Record(self.name, value, transformed)
+        return transformed
+
+    def validate(self, obj, value):
+        value = super(Option, self).validate(obj, value)
+        return value
 
 
 class TraitMenu(_BaseTraits):
@@ -132,9 +148,8 @@ class TraitMenu(_BaseTraits):
 
     def _menu_update(self):
         ignore = self._cmd_ignore_traits
-        descriptors = (v for k, v in self.traits().items() if k not in ignore)
-        flags = (x for x in descriptors if isinstance(x, (Flag, Option)))
-        flags = (x.get(self).transformed for x in flags)
+        names = (x for x in self._trait_transformed if x not in ignore)
+        flags = (self._trait_transformed[x] for x in names)
         total_cmd = _chain(self.base_command, *flags)
         total_cmd = [str(x) for x in total_cmd]
         self._menu.command = total_cmd
@@ -142,8 +157,7 @@ class TraitMenu(_BaseTraits):
         self._needs_update = False
 
     def _check_needs_update(self, change):
-        if isinstance(change['old'], Record) or \
-           isinstance(change['new'], Record):
+        if isinstance(getattr(self.__class__, change['name']), TransformedTrait):
             self._needs_update = True
         elif change['name'] == 'base_command':
             self._needs_update = True

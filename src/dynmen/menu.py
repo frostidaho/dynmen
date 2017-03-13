@@ -15,6 +15,10 @@ class MenuError(Exception):
 
 
 class _BaseTraits(tr.HasTraits):
+    def setup_instance(self, *args, **kwargs):
+        self._trait_transformed = {}
+        super(_BaseTraits, self).setup_instance(*args, **kwargs)
+
     _traits_ignore = ()
 
     def _restricted_traits(self):
