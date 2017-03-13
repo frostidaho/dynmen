@@ -43,6 +43,11 @@ class _BaseTraits(tr.HasTraits):
         clsname = self.__class__.__name__
         traits = []
         for name, descriptor in self._restricted_traits().items():
+            try:
+                if not self._trait_transformed[name]:
+                    continue
+            except KeyError:
+                pass
             record = descriptor.get(self)
             txt = '{}={!r}'.format(name, record)
             traits.append(txt)
