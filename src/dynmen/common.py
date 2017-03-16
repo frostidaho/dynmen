@@ -111,7 +111,10 @@ class TraitMenu(_BaseTraits):
     def _init_menu(self):
         self._menu = Menu(self.base_command)
         def linkit(name):
-            return link_trait((self._menu, name), (self, name))
+            try:
+                return link_trait((self, name), (self._menu, name))
+            except AttributeError:
+                return link_trait((self._menu, name), (self, name))
         menu_traits = set(self._menu.traits())
         menu_traits.discard('command')
         for name in menu_traits:
@@ -119,12 +122,14 @@ class TraitMenu(_BaseTraits):
         return
 
     def _init_aliases(self):
-        try:
-            aliases = self._aliases
-        except AttributeError:
-            return
-        for alias in aliases:
-            self._add_alias(*alias)
+        for cls in self.__class__.__mro__:
+            if not issubclass(cls, TraitMenu):
+                continue
+            try:
+                for alias in cls._aliases:
+                    self._add_alias(*alias)
+            except AttributeError:
+                continue
 
     @property
     def _cmd_ignore_traits(self):
@@ -146,6 +151,11 @@ class TraitMenu(_BaseTraits):
     def __call__(self, entries=(), entry_sep=None, **kw):
         if self._needs_update:
             self._menu_update()
+        if entry_sep is None:
+            try:
+                entry_sep = self.entry_sep
+            except AttributeError:
+                pass
         return self._menu(entries, entry_sep, **kw)
 
     def _menu_update(self):

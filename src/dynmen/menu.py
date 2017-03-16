@@ -55,6 +55,11 @@ class _BaseTraits(tr.HasTraits):
         return ''.join(toret)
 
 
+class CUnicodeNull(tr.CUnicode):
+    def validate(self, obj, value):
+        value = super(CUnicodeNull, self).validate(obj, value)
+        return value.replace('\00', '\\0')
+
 MenuResult = _namedtuple('MenuResult', 'selected value')
 
 
@@ -63,7 +68,7 @@ class Menu(_BaseTraits):
         ('blocking', 'async', 'futures'),
         default_value='blocking',
     )
-    command = tr.List(trait=tr.CUnicode())
+    command = tr.List(trait=CUnicodeNull())
     entry_sep = tr.CUnicode('\n')
 
     def __init__(self, command=(), entry_sep='\n', process_mode='blocking'):
