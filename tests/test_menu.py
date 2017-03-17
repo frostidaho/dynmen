@@ -213,3 +213,13 @@ def test_restricted_traits():
     keys1 = set(menu._restricted_traits().keys())
     assert some_key not in keys1
     
+def test_on_data(menudata):
+    m = Menu([])
+    people = menudata.people
+    for i, person in enumerate(people):
+        m.command = ["cat - | sed -n '{:d} p'".format(i+1)]
+        print(m.command)
+        res = m(people, shell=True)
+        assert res.selected == person
+        assert res.value == people[person]
+
