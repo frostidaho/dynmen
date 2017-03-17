@@ -119,7 +119,7 @@ class Menu(_BaseTraits):
         if returncode != 0:
             msg = 'Nonzero exit status: {!r}'.format(result)
             raise MenuError(msg)
-        selected = stdout.decode()
+        selected = stdout.decode('utf8')
         if selected.endswith('\n'):
             selected = selected[:-1]
         try:
