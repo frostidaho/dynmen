@@ -119,7 +119,9 @@ class Menu(_BaseTraits):
         if returncode != 0:
             msg = 'Nonzero exit status: {!r}'.format(result)
             raise MenuError(msg)
-        selected = stdout.decode().rstrip('\n')
+        selected = stdout.decode()
+        if selected.endswith('\n'):
+            selected = selected[:-1]
         try:
             value = entries[selected]
         except (TypeError, KeyError):
