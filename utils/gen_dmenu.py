@@ -119,6 +119,7 @@ if __name__ == '__main__':
     ]
     opts.extend(attrs)
     dmenu_src = MenuType('DMenu', *opts)
+    dmenu_src.sort = True
 
     try:
         dmenu_src.create_class()
