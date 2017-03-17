@@ -94,7 +94,7 @@ def make_attribute(option, *args, **kwargs):
     except AttributeError:
         flag = max(flag)
         name = str_to_ident(flag)
-    return kt.make_attribute(name, klass, flag, *args, **kwargs)
+    return kt.make_attribute(name, klass, flag, *args, info_text=info, **kwargs)
     
 if __name__ == '__main__':
     opts = get_option_strings()
