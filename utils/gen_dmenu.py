@@ -4,6 +4,11 @@ import subprocess as sp
 from itertools import chain
 from class_generator import Flag, Option, MenuType, Assignment
 
+import logging
+logr = logging.getLogger(__name__)
+logr.addHandler(logging.NullHandler())
+
+
 def get_outp(*cmd):
     p = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.PIPE)
     stdout, stderr = p.communicate()
@@ -11,6 +16,9 @@ def get_outp(*cmd):
 
 def man_dmenu():
     return get_outp('man', '-P', 'cat', 'dmenu')
+
+def dmenu_version():
+    return get_outp('dmenu', '-v').strip()
 
 def get_sections(man_page):
     pat = '^(?P<section>[A-Z]+[\sA-Z]*$)'
@@ -79,13 +87,37 @@ def make_attribute(option):
     info_text = option['info']
     return klass(flag, info_text=info_text)
 
+
+def get_aliases(attributes, **kw):
+    attr_names = set((x.name for x in attributes))
+    aliases = set((x for x in kw if x in attr_names))
+    res = [(x, kw[x]) for x in aliases]
+    missing = set(kw) - aliases
+    if missing:
+        logr.warning("Some aliases were not used %r", missing)
+    return res
+
+
 if __name__ == '__main__':
-    import logging
-    logr = logging.getLogger(__name__)
+    logr.addHandler(logging.StreamHandler())
     logr.setLevel(logging.DEBUG)
 
-    opts = parse_options(man_dmenu())
-    opts = [make_attribute(x) for x in opts]
+    attrs = parse_options(man_dmenu())
+    attrs = [make_attribute(x) for x in attrs]
+
+    aliases = get_aliases(
+        attrs,
+        i='case_insensitive',
+        p='prompt',
+        fn='font',
+    )
+
+    opts = [
+        Assignment('_base_command', ['dmenu']),
+        Assignment('_aliases', aliases),
+        Assignment('_version', dmenu_version()),
+    ]
+    opts.extend(attrs)
     dmenu_src = MenuType('DMenu', *opts)
 
     try:
@@ -102,8 +134,5 @@ if __name__ == '__main__':
         )
     except ImportError:
         logr.exception("Couldn't import the yapf code formatter!")
-
     print(source)
-
-
 
