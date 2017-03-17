@@ -110,7 +110,10 @@ if __name__ == '__main__':
     Rofi = kt.create_class('Rofi', *options.values())
     try:
         from yapf.yapflib.yapf_api import FormatCode
-        source, changed = FormatCode(Rofi._source)
+        source, changed = FormatCode(
+            Rofi._source,
+            style_config='pep8',
+        )
     except ImportError:
         source = Rofi._source
     print(source)
