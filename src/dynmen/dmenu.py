@@ -3,7 +3,7 @@ from dynmen.common import TraitMenu, Flag, Option
 
 class DMenu(TraitMenu):
     _base_command = ['dmenu']
-    _aliases = [('fn', 'font'), ('p', 'prompt'), ('i', 'case_insensitive')]
+    _aliases = [('fn', 'font'), ('i', 'case_insensitive'), ('p', 'prompt')]
     _version = 'dmenu-4.6'
     b = Flag('-b', info_text='dmenu appears at the bottom of the screen.')
     f = Flag(

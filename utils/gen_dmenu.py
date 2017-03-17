@@ -95,7 +95,7 @@ def get_aliases(attributes, **kw):
     missing = set(kw) - aliases
     if missing:
         logr.warning("Some aliases were not used %r", missing)
-    return res
+    return sorted(res)
 
 
 if __name__ == '__main__':
