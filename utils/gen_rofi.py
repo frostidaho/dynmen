@@ -108,5 +108,11 @@ if __name__ == '__main__':
         options[attr['attr_name']] = attr
     options['dmenu'] = kt.make_attribute('dmenu', 'Flag', '-dmenu', default_value=True)
     Rofi = kt.create_class('Rofi', *options.values())
-    print(Rofi._source)
+    try:
+        from yapf.yapflib.yapf_api import FormatCode
+        source, changed = FormatCode(Rofi._source)
+    except ImportError:
+        source = Rofi._source
+    print(source)
+    # print(Rofi._source)
 
