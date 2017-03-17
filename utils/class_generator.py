@@ -1,6 +1,3 @@
-import logging
-logr = logging.getLogger(__name__)
-logr.addHandler(logging.NullHandler())
 
 def format_code(source):
     import yapf
@@ -92,6 +89,9 @@ class MenuType(Code):
         try:
             return format_code(txt)
         except ImportError:
+            import logging
+            logr = logging.getLogger(__name__)
+            logr.addHandler(logging.NullHandler())
             logr.warning("Couldn't import 'yapf'; generated code won't be formatted")
             return txt
 
