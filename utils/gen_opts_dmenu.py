@@ -1,47 +1,109 @@
 #!/usr/bin/env python
-from collections import namedtuple
 import re
+import subprocess as sp
+from itertools import chain
+from class_generator import Flag, Option, MenuType, Assignment
 
-OptTuple = namedtuple('OptTuple', ('flag', 'arg', 'info', 'default', 'dtype'))
+def get_outp(*cmd):
+    p = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.PIPE)
+    stdout, stderr = p.communicate()
+    return stdout.decode()
 
-options = []
-def opt(flag, arg='', info='', default=None, dtype=None):
-    info = re.sub('\s+', ' ', info).strip()
-    if dtype is not None:
-        dtype = dtype.__name__
-    options.append(OptTuple(flag, arg, info, default, dtype))
+def man_dmenu():
+    return get_outp('man', '-P', 'cat', 'dmenu')
 
-def switch(flag, info=''):
-    opt(flag, arg='', info=info, default=False, dtype=bool)
+def get_sections(man_page):
+    pat = '^(?P<section>[A-Z]+[\sA-Z]*$)'
+    secs = list(re.finditer(pat, man_page, flags=re.MULTILINE))
+    locs = list(chain(*(x.span() for x in secs)))
+    # print(locs)
+    d = {}
+    
+    for sec in secs:
+        gdict = sec.groupdict()
+        section_name = gdict['section']
+        sec_begin = sec.end()
+        idxend = locs.index(sec_begin) + 1
+        # print('idxend = ', idxend)
+        try:
+            sec_end = locs[idxend]
+            d[section_name] = man_page[sec_begin:sec_end]
+        except IndexError:
+            d[section_name] = man_page[sec_begin:]
 
-switch('-b', 'dmenu appears at the bottom of the screen.')
-switch('-f',
-    """dmenu grabs the keyboard before reading stdin.  This is
-    faster,  but  will  lock   up  X  until  stdin  reaches
-    end-of-file.""")
-switch('-i', 'dmenu matches menu items case insensitively.')
-opt('-l', 'lines',
-    "dmenu lists items vertically,  with the given number of lines.",
-    dtype=int,)
-opt('-m', 'monitor',
-    "dmenu    is   displayed    on   the    monitor   number supplied. Monitor numbers are starting from 0.",
-    dtype=int)
-opt('-p', 'prompt',
-    "defines the prompt  to be displayed to the  left of the input field.",
-    dtype=str)
+    return d
 
-opt('-fn', 'font',
-    "defines the font or font set used.")
-opt('-nb', 'color',
-    "defines  the normal  background color.   #RGB, #RRGGBB, and X color names are supported.")
-opt('-nf', 'color', 'defines the normal foreground color.')
-opt('-sb', 'color', 'defines the selected background color.')
-opt('-sf', 'color', 'defines the selected foreground color.')
-switch('-v', 'prints version information to stdout, then exits.')
+def build_pattern():
+    from collections import OrderedDict
+    patterns = OrderedDict()
+    patterns['flag'] = '-\w+'
+    patterns['arg'] = '\s\w+'
+    patterns['info'] = '\s+\w+(.|\n)+'
 
+    patts = OrderedDict()
+    for k,v in patterns.items():
+        patts[k] = '(?P<{}>'.format(k) + v + ')'
+
+    pat = '^' + patts['flag'] + patts['arg'] + '*' + patts['info']
+
+    pc = re.compile(pat, flags=re.MULTILINE)
+    return pc
+
+def parse_options(man_page):
+    pc = build_pattern()
+    def search_str(txt):
+        res = pc.search(txt)
+        gdict = res.groupdict()
+        # print(gdict)
+        d = {}
+        for k,v in gdict.items():
+            if v is not None:
+                d[k] = v.strip().replace('\n', ' ')
+            else:
+                d[k] = v
+        return d
+
+    txt = get_sections(man_page)['OPTIONS']
+    opts = re.split('^\n', txt, flags=re.MULTILINE)
+    opts = (x.strip() for x in opts if x)
+    opts = (search_str(x) for x in opts)
+    return list(opts)
+
+
+def make_attribute(option):
+    if option['arg'] is None:
+        klass = Flag
+    else:
+        klass = Option
+    flag = option['flag']
+    info_text = option['info']
+    return klass(flag, info_text=info_text)
 
 if __name__ == '__main__':
-    import json
-    options = [x._asdict() for x in options]
-    print(json.dumps(options, indent=2, sort_keys=True))
+    import logging
+    logr = logging.getLogger(__name__)
+    logr.setLevel(logging.DEBUG)
+
+    opts = parse_options(man_dmenu())
+    opts = [make_attribute(x) for x in opts]
+    dmenu_src = MenuType('DMenu', *opts)
+
+    try:
+        dmenu_src.create_class()
+    except:
+        logr.exception("Couldn't create DMenu class")
+
+    source = str(dmenu_src)
+    try:
+        from yapf.yapflib.yapf_api import FormatCode
+        source, changed = FormatCode(
+            source,
+            style_config='pep8',
+        )
+    except ImportError:
+        logr.exception("Couldn't import the yapf code formatter!")
+
+    print(source)
+
+
 
