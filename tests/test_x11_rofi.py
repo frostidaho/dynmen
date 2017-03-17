@@ -26,13 +26,10 @@ MAX_WAIT = 3.0
 @pytest.fixture(scope='function')
 def rofi_menu(request, xctrl):
     if request.param == 'Menu':
-        os.environ['DISPLAY'] = xctrl.display_str
         menu = Menu(['rofi', '-dmenu'], process_mode='futures')
         return menu
     elif request.param == 'Rofi':
         menu = Rofi(process_mode='futures')
-        # os.environ['DISPLAY'] = xctrl.display_str
-        # menu = Menu(['rofi', '-dmenu'], process_mode='futures')
         return menu
 
 def test_simple(rofi_menu, xctrl):
