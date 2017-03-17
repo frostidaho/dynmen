@@ -48,7 +48,7 @@ tests:
 generate-options:
 	mkdir -p "$(project_dir)src/dynmen/data/"
 	sh -c "$(project_dir)utils/gen_opts_dmenu.py" > "$(project_dir)src/dynmen/data/dmenu_opts.json"
-	sh -c "$(project_dir)utils/gen_opts_rofi.py" > "$(project_dir)src/dynmen/data/rofi_opts.json"
+	sh -c "$(project_dir)utils/gen_rofi.py" > "$(project_dir)src/dynmen/rofi.py"
 
 .PHONY: build
 build: generate-options
