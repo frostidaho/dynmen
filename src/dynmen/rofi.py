@@ -3,6 +3,8 @@ from dynmen.common import TraitMenu, Flag, Option
 
 class Rofi(TraitMenu):
     _base_command = ['rofi']
+    _aliases = [('sep', 'entry_sep'), ('p', 'prompt'), ('i', 'case_insensitive'
+                                                        )]
     no_config = Flag(
         '-no-config',
         info_text='Do not load configuration, use default values.')

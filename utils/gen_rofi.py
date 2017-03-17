@@ -4,6 +4,10 @@ from parsimonious.grammar import Grammar
 import subprocess as sp
 import re
 
+import logging
+logr = logging.getLogger(__name__)
+logr.addHandler(logging.NullHandler())
+
 def get_outp(*cmd):
     p = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.PIPE)
     stdout, stderr = p.communicate()
@@ -85,20 +89,33 @@ def make_attribute(option, *args, **kwargs):
 
 if __name__ == '__main__':
     from collections import OrderedDict
-    import logging
-    logr = logging.getLogger(__name__)
     logr.setLevel(logging.DEBUG)
+    logr.addHandler(logging.StreamHandler())
 
     opts = get_option_strings()
     od = OrderedDict()
-    od['_base_command'] = Assignment('_base_command', ['rofi'])
+    def add(x):
+        od[x.name] = x
     for option in opts:
         option = parse_opt(option)
-        attr = make_attribute(option)
-        od[attr.name] = attr
-    od['dmenu'] = Flag('-dmenu', default_value=True)
-    od['sep'] = Option('-sep', default_value='\0')
-    rofi_src = MenuType('Rofi', *od.values())
+        add(make_attribute(option))
+    add(Flag('-dmenu', default_value=True))
+    add(Option('-sep', default_value='\0'))
+
+    aliases = [
+        ('sep', 'entry_sep'),
+        ('p', 'prompt'),
+        ('i', 'case_insensitive'),
+    ]
+    aliases = [x for x in aliases if x[0] in od]
+    aliases = Assignment('_aliases', aliases)
+
+    rofi_src = MenuType(
+        'Rofi',
+        Assignment('_base_command', ['rofi']),
+        aliases,
+        *od.values(),
+    )
     try:
         Rofi = rofi_src.create_class()
     except:
