@@ -1,3 +1,19 @@
+import logging
+logr = logging.getLogger(__name__)
+logr.addHandler(logging.NullHandler())
+
+def format_code(source):
+    import yapf
+    from yapf.yapflib.yapf_api import FormatCode
+    SetGlobalStyle = yapf.style.SetGlobalStyle
+    cfg = yapf.style.CreatePEP8Style()
+    cfg['ALLOW_MULTILINE_DICTIONARY_KEYS'] = True
+    cfg['COLUMN_LIMIT'] = 90
+    cfg['DEDENT_CLOSING_BRACKETS'] = True
+    SetGlobalStyle(cfg)
+    source, changed = FormatCode(source)
+    return source
+
 class Code(object):
     _template = ''
     level = 0
@@ -70,6 +86,14 @@ class MenuType(Code):
             attributes='\n'.join(attrs),
         )
 
+
+    def __str__(self):
+        txt = super(MenuType, self).__str__()
+        try:
+            return format_code(txt)
+        except ImportError:
+            logr.warning("Couldn't import 'yapf'; generated code won't be formatted")
+            return txt
 
     def create_class(self):
         """Although we're primarily interested in the source of the class

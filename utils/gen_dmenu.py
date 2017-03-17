@@ -126,13 +126,5 @@ if __name__ == '__main__':
         logr.exception("Couldn't create DMenu class")
 
     source = str(dmenu_src)
-    try:
-        from yapf.yapflib.yapf_api import FormatCode
-        source, changed = FormatCode(
-            source,
-            style_config='pep8',
-        )
-    except ImportError:
-        logr.exception("Couldn't import the yapf code formatter!")
     print(source)
 

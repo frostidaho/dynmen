@@ -12,8 +12,7 @@ class DMenu(TraitMenu):
     )
     i = Flag('-i', info_text='dmenu matches menu items case insensitively.')
     l = Option(
-        '-l',
-        info_text='dmenu lists items vertically, with the given number of lines.'
+        '-l', info_text='dmenu lists items vertically, with the given number of lines.'
     )
     m = Option(
         '-m',
@@ -31,6 +30,5 @@ class DMenu(TraitMenu):
     nf = Option('-nf', info_text='defines the normal foreground color.')
     sb = Option('-sb', info_text='defines the selected background color.')
     sf = Option('-sf', info_text='defines the selected foreground color.')
-    v = Flag(
-        '-v', info_text='prints version information to stdout, then exits.')
+    v = Flag('-v', info_text='prints version information to stdout, then exits.')
 

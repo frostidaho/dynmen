@@ -4,10 +4,6 @@ from parsimonious.grammar import Grammar
 import subprocess as sp
 import re
 
-import logging
-logr = logging.getLogger(__name__)
-logr.addHandler(logging.NullHandler())
-
 def get_outp(*cmd):
     p = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.PIPE)
     stdout, stderr = p.communicate()
@@ -92,8 +88,11 @@ def make_attribute(option, *args, **kwargs):
 
 if __name__ == '__main__':
     from collections import OrderedDict
-    logr.setLevel(logging.DEBUG)
+    import logging
+    logr = logging.getLogger()
     logr.addHandler(logging.StreamHandler())
+    logr.setLevel(logging.DEBUG)
+
 
     opts = get_option_strings()
     od = OrderedDict()
@@ -126,13 +125,5 @@ if __name__ == '__main__':
         logr.exception("Couldn't create Rofi class")
 
     source = str(rofi_src)
-    try:
-        from yapf.yapflib.yapf_api import FormatCode
-        source, changed = FormatCode(
-            source,
-            style_config='pep8',
-        )
-    except ImportError:
-        logr.exception("Couldn't import the yapf code formatter!")
     print(source)
 
