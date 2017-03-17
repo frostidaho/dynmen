@@ -9,16 +9,31 @@ pytestmark = pytest.mark.skipif(
 
 import os
 from dynmen.menu import Menu
+from dynmen.rofi import Rofi 
 from time import sleep
 xctrl = fixtures.xctrl
+
+def pytest_generate_tests(metafunc):
+    if 'rofi_menu' in metafunc.fixturenames:
+        metafunc.parametrize(
+            'rofi_menu',
+            ['Menu', 'Rofi'],
+            indirect=True,
+        )
 
 
 MAX_WAIT = 3.0
 @pytest.fixture(scope='function')
-def rofi_menu(xctrl):
-    os.environ['DISPLAY'] = xctrl.display_str
-    menu = Menu(['rofi', '-dmenu'], process_mode='futures')
-    return menu
+def rofi_menu(request, xctrl):
+    if request.param == 'Menu':
+        os.environ['DISPLAY'] = xctrl.display_str
+        menu = Menu(['rofi', '-dmenu'], process_mode='futures')
+        return menu
+    elif request.param == 'Rofi':
+        menu = Rofi(process_mode='futures')
+        # os.environ['DISPLAY'] = xctrl.display_str
+        # menu = Menu(['rofi', '-dmenu'], process_mode='futures')
+        return menu
 
 def test_simple(rofi_menu, xctrl):
     menu = rofi_menu
@@ -51,9 +66,11 @@ def test_case_sensitive(rofi_menu, xctrl):
     assert out.value == None
 
 def test_case_insensitive(rofi_menu, xctrl):
-    menu = rofi_menu
-    menu.command.append('-i')
-    res = menu(['a', 'b', 'c'])
+    try:
+        rofi_menu.command.append('-i')
+    except AttributeError:
+        rofi_menu.i = True
+    res = rofi_menu(['a', 'b', 'c'])
     sleep(1.0)
     xctrl.type_str('C')
     xctrl.hit_enter()
