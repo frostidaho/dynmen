@@ -3,6 +3,8 @@ from parsimonious.grammar import Grammar
 import subprocess as sp
 import re
 
+
+
 def get_outp(*cmd):
     p = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.PIPE)
     stdout, stderr = p.communicate()
@@ -33,7 +35,6 @@ def get_option_strings():
             opts2.append(opt)
     return opts2
 
-opts = get_option_strings()
 
 grammar = Grammar(
     r"""
@@ -71,8 +72,43 @@ def parse_opt(opt):
         d2[k] = v
     return d2
 
-opts = [parse_opt(x) for x in opts]
-import json
-print(json.dumps(opts, indent=2, sort_keys=True))
+# opts = [parse_opt(x) for x in opts]
+def str_to_ident(txt):
+    clean = lambda varStr: re.sub('\W|^(?=\d)','_', varStr)
+    txt =  txt.lstrip('-')
+    return clean(txt)
+
+
+# import json
+# print(json.dumps(opts, indent=2, sort_keys=True))
+import klass_template as kt
+
+def make_attribute(option, *args, **kwargs):
+    flag = option['flag']
+    info = option['info']
+    try:
+        arg = option['arg']
+        klass = 'Option'
+    except KeyError:
+        klass = 'Flag'
+    try:
+        name = str_to_ident(flag)
+    except AttributeError:
+        flag = max(flag)
+        name = str_to_ident(flag)
+    return kt.make_attribute(name, klass, flag, *args, **kwargs)
+    
+if __name__ == '__main__':
+    opts = get_option_strings()
+    options = []
+    for option in opts:
+        option = parse_opt(option)
+        options.append(make_attribute(option))
+
+    Rofi = kt.create_class('Rofi', *options)
+
+        
+    
+    
 
 
