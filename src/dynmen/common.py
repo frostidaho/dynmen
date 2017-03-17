@@ -152,10 +152,7 @@ class TraitMenu(_BaseTraits):
         if self._needs_update:
             self._menu_update()
         if entry_sep is None:
-            try:
-                entry_sep = self.entry_sep
-            except AttributeError:
-                pass
+            entry_sep = self.entry_sep
         return self._menu(entries, entry_sep, **kw)
 
     def _menu_update(self):
