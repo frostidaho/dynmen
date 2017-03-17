@@ -100,13 +100,14 @@ if __name__ == '__main__':
     opts = get_option_strings()
     from collections import OrderedDict
     options = OrderedDict()
-    basecmd = {'attr_name': '_base_command', 'attr_value': ['rofi']}
+    basecmd = {'name': '_base_command', 'value': ['rofi']}
     options['_base_command'] = basecmd
     for option in opts:
         option = parse_opt(option)
         attr = make_attribute(option)
-        options[attr['attr_name']] = attr
+        options[attr['name']] = attr
     options['dmenu'] = kt.make_attribute('dmenu', 'Flag', '-dmenu', default_value=True)
+    # options['sep'] = kt.make_attribute('sep', 'Option', '-sep', default_value='\0')
     Rofi = kt.create_class('Rofi', *options.values())
     try:
         from yapf.yapflib.yapf_api import FormatCode

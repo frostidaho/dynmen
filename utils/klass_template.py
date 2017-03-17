@@ -7,7 +7,7 @@ class {typename}(TraitMenu):
     pass
 
 """
-attr_template = """    {attr_name} = {attr_value}"""
+attr_template = """    {name} = {value}"""
 
 def get_klass_defn(typename, *attributes):
     frmt = attr_template.format
@@ -39,8 +39,8 @@ def make_attribute(name, callable_name, *args, **kwargs):
     total.append(')')
     value = ''.join(total)
     d = {
-        'attr_value': value,
-        'attr_name': name,
+        'value': value,
+        'name': name,
     }
     return d
 
