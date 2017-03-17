@@ -1,6 +1,8 @@
 __pycache__/
+build/
 *.egg-info
 *.pyc
 .cache/
 dist/
 .tox/
+.coverage
