@@ -7,8 +7,10 @@ def test_import():
     menu = DMenu()
     assert menu._trait_transformed['i'] == []
     assert menu.i is False
+    assert menu.case_insensitive is False
     menu.i = True
     assert menu.i is True
+    assert menu.case_insensitive is True
     assert menu._trait_transformed['i'] == ['-i']
 
 def test_import2():
