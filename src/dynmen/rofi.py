@@ -5,6 +5,7 @@ class Rofi(TraitMenu):
     _base_command = ['rofi']
     _aliases = [('sep', 'entry_sep'), ('p', 'prompt'), ('i', 'case_insensitive'
                                                         )]
+    _version = 'Version: 1.3.1'
     no_config = Flag(
         '-no-config',
         info_text='Do not load configuration, use default values.')

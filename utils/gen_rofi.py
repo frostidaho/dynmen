@@ -13,6 +13,9 @@ def get_outp(*cmd):
     stdout, stderr = p.communicate()
     return stdout.decode()
 
+def rofi_version():
+    return get_outp('rofi', '-v').strip()
+
 def get_option_strings():
     rofi_help = get_outp('rofi', '-h')
     begin_str = 'rofi [-options ...]'
@@ -114,6 +117,7 @@ if __name__ == '__main__':
         'Rofi',
         Assignment('_base_command', ['rofi']),
         aliases,
+        Assignment('_version', rofi_version()),
         *od.values(),
     )
     try:
