@@ -119,6 +119,7 @@ if __name__ == '__main__':
         Assignment('_version', rofi_version()),
         *od.values(),
     )
+    rofi_src.sort = True
     try:
         Rofi = rofi_src.create_class()
     except:
