@@ -77,16 +77,12 @@ def parse_options(man_page):
     opts = (search_str(x) for x in opts)
     return list(opts)
 
-
 def make_attribute(option):
     if option['arg'] is None:
         klass = Flag
     else:
         klass = Option
-    flag = option['flag']
-    info_text = option['info']
-    return klass(flag, help=info_text)
-
+    return klass(option['flag'], help=option['info'])
 
 def get_aliases(attributes, **kw):
     attr_names = set((x.name for x in attributes))
