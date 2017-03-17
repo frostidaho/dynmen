@@ -3,8 +3,6 @@ from parsimonious.grammar import Grammar
 import subprocess as sp
 import re
 
-
-
 def get_outp(*cmd):
     p = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.PIPE)
     stdout, stderr = p.communicate()
@@ -100,15 +98,15 @@ def make_attribute(option, *args, **kwargs):
     
 if __name__ == '__main__':
     opts = get_option_strings()
-    options = []
+    from collections import OrderedDict
+    options = OrderedDict()
+    basecmd = {'attr_name': '_base_command', 'attr_value': ['rofi']}
+    options['_base_command'] = basecmd
     for option in opts:
         option = parse_opt(option)
-        options.append(make_attribute(option))
-
-    Rofi = kt.create_class('Rofi', *options)
-
-        
-    
-    
-
+        attr = make_attribute(option)
+        options[attr['attr_name']] = attr
+    options['dmenu'] = kt.make_attribute('dmenu', 'Flag', '-dmenu', default_value=True)
+    Rofi = kt.create_class('Rofi', *options.values())
+    print(Rofi._source)
 
