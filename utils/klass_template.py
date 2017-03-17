@@ -3,16 +3,11 @@ class_template = """
 from dynmen.common import TraitMenu, Flag, Option
 
 class {typename}(TraitMenu):
+{attributes}
     pass
 
-{attributes}
 """
-
-attr_template = """
-x = {attr_value}
-{typename}.{attr_name} = x
-x.class_init({typename}, {attr_name!r})"""
-
+attr_template = """    {attr_name} = {attr_value}"""
 
 def get_klass_defn(typename, *attributes):
     frmt = attr_template.format
