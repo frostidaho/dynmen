@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from class_generator import Assignment, Flag, Option, MenuType
 from parsimonious.grammar import Grammar
 import subprocess as sp
 import re
@@ -70,53 +71,47 @@ def parse_opt(opt):
         d2[k] = v
     return d2
 
-# opts = [parse_opt(x) for x in opts]
-def str_to_ident(txt):
-    clean = lambda varStr: re.sub('\W|^(?=\d)','_', varStr)
-    txt =  txt.lstrip('-')
-    return clean(txt)
-
-
-# import json
-# print(json.dumps(opts, indent=2, sort_keys=True))
-import klass_template as kt
-
 def make_attribute(option, *args, **kwargs):
     flag = option['flag']
+    if isinstance(flag, list):
+        flag = max(flag)
     info = option['info']
     try:
         arg = option['arg']
-        klass = 'Option'
+        klass = Option
     except KeyError:
-        klass = 'Flag'
-    try:
-        name = str_to_ident(flag)
-    except AttributeError:
-        flag = max(flag)
-        name = str_to_ident(flag)
-    return kt.make_attribute(name, klass, flag, *args, info_text=info, **kwargs)
-    
+        klass = Flag
+    return klass(flag, *args, info_text=info, **kwargs)
+
 if __name__ == '__main__':
-    opts = get_option_strings()
     from collections import OrderedDict
-    options = OrderedDict()
-    basecmd = {'name': '_base_command', 'value': ['rofi']}
-    options['_base_command'] = basecmd
+    import logging
+    logr = logging.getLogger(__name__)
+    logr.setLevel(logging.DEBUG)
+
+    opts = get_option_strings()
+    od = OrderedDict()
+    od['_base_command'] = Assignment('_base_command', ['rofi'])
     for option in opts:
         option = parse_opt(option)
         attr = make_attribute(option)
-        options[attr['name']] = attr
-    options['dmenu'] = kt.make_attribute('dmenu', 'Flag', '-dmenu', default_value=True)
-    # options['sep'] = kt.make_attribute('sep', 'Option', '-sep', default_value='\0')
-    Rofi = kt.create_class('Rofi', *options.values())
+        od[attr.name] = attr
+    od['dmenu'] = Flag('-dmenu', default_value=True)
+    od['sep'] = Option('-sep', default_value='\0')
+    rofi_src = MenuType('Rofi', *od.values())
+    try:
+        Rofi = rofi_src.create_class()
+    except:
+        logr.exception("Couldn't create Rofi class")
+
+    source = str(rofi_src)
     try:
         from yapf.yapflib.yapf_api import FormatCode
         source, changed = FormatCode(
-            Rofi._source,
+            source,
             style_config='pep8',
         )
     except ImportError:
-        source = Rofi._source
+        logr.exception("Couldn't import the yapf code formatter!")
     print(source)
-    # print(Rofi._source)
 
