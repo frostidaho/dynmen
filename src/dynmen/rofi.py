@@ -53,7 +53,7 @@ class Rofi(TraitMenu):
     markup_rows = Flag(
         '-markup-rows',
         info_text='Allow and render pango markup as input data.')
-    sep = Option('-sep', info_text="Element separator. @@@ '\\n'")
+    sep = Option('-sep', default_value='\x00')
     input = Option(
         '-input',
         info_text='Read input from file instead from standard input.')
@@ -409,5 +409,4 @@ class Rofi(TraitMenu):
     display_combi = Option(
         '-display-combi',
         info_text='The display name of this browser @@@ (unset) (Default)')
-    pass
 
