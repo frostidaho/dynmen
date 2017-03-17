@@ -84,7 +84,7 @@ def make_attribute(option, *args, **kwargs):
         klass = Option
     except KeyError:
         klass = Flag
-    return klass(flag, *args, info_text=info, **kwargs)
+    return klass(flag, *args, help=info, **kwargs)
 
 if __name__ == '__main__':
     from collections import OrderedDict

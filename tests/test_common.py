@@ -7,8 +7,8 @@ from dynmen.menu import MenuError
 
 class Grep(TraitMenu):
     _base_command = ['grep']
-    ignore_case = Flag('-i')
-    pattern = Option('-e')
+    ignore_case = Flag('-i', help='ignore case')
+    pattern = Option('-e', help='regex pattern')
 
 import pytest
 MAX_WAIT = 3.0
@@ -77,3 +77,8 @@ def test_alias():
     grep.case_insensitive = False
     compare_alias(grep, 'ignore_case', 'case_insensitive')
 
+def test_help_msg(grep):
+    cls = grep.__class__
+    assert cls.ignore_case.help == 'ignore case'
+    assert cls.pattern.help == 'regex pattern'
+    

@@ -85,7 +85,7 @@ def make_attribute(option):
         klass = Option
     flag = option['flag']
     info_text = option['info']
-    return klass(flag, info_text=info_text)
+    return klass(flag, help=info_text)
 
 
 def get_aliases(attributes, **kw):
