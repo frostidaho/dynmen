@@ -46,7 +46,6 @@ tests:
 
 .PHONY: generate-options
 generate-options:
-	mkdir -p "$(project_dir)src/dynmen/data/"
 	sh -c "$(project_dir)utils/gen_dmenu.py" > "$(project_dir)src/dynmen/dmenu.py"
 	sh -c "$(project_dir)utils/gen_rofi.py" > "$(project_dir)src/dynmen/rofi.py"
 
