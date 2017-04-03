@@ -35,7 +35,7 @@ install:
 
 .PHONY: uninstall
 uninstall:
-	-python -m pip uninstall dynmen
+	-yes | python -m pip uninstall dynmen
 
 .PHONY: tests
 tests:
