@@ -13,6 +13,9 @@ All of the menu instances take an iterable like a
 list or a dict as input, and return a tuple
 containing the selected key and its associated value.
 Please see the [examples](examples/) folder for more examples.
+I've used dynmen in a number of programs:
+* [dynmen_scripts](https://github.com/frostidaho/dynmen_scripts) is a collection of small programs using dynmen
+* [python-vpnmenu](https://github.com/frostidaho/python-vpnmenu) uses networkmanager to control vpn connections
 
 ### Using the dynmen.Menu class
 ```python
