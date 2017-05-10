@@ -9,7 +9,7 @@ from dynmen.common import TraitMenu, Flag, Option
 class DMenu(TraitMenu):
     _aliases = [('fn', 'font'), ('i', 'case_insensitive'), ('p', 'prompt')]
     _base_command = ['dmenu']
-    _version = 'dmenu-4.6'
+    _version = 'dmenu-4.7'
     b = Flag('-b', help='dmenu appears at the bottom of the screen.')
     f = Flag(
         '-f',
@@ -33,4 +33,5 @@ class DMenu(TraitMenu):
     sb = Option('-sb', help='defines the selected background color.')
     sf = Option('-sf', help='defines the selected foreground color.')
     v = Flag('-v', help='prints version information to stdout, then exits.')
+    w = Option('-w', help='embed into windowid.')
 
