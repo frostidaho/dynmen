@@ -12,7 +12,7 @@ You can make the menu non-blocking by setting:
 Please see the repository for more examples:
     https://github.com/frostidaho/dynmen
 """
-from .menu import Menu, MenuError
+from .menu import Menu, MenuError, MenuResult
 del menu
 
 
