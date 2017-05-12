@@ -15,12 +15,20 @@ Please see the repository for more examples:
 from .menu import Menu, MenuError, MenuResult
 del menu
 
-
 def new_dmenu(**kwargs):
+    """Create an instance of dynmen.dmenu.DMenu(**kwargs)
+
+    The keyword arguments set the corresponding attribute
+    on the DMenu instance.
+    """
     from .dmenu import DMenu
     return DMenu(**kwargs)
 
-
 def new_rofi(**kwargs):
+    """Create an instance of dynmen.rofi.Rofi(**kwargs)
+
+    The keyword arguments set the corresponding attribute
+    on the Rofi instance.
+    """
     from .rofi import Rofi
     return Rofi(**kwargs)
