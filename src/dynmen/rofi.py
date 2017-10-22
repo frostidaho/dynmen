@@ -9,8 +9,12 @@ from dynmen.common import TraitMenu, Flag, Option
 class Rofi(TraitMenu):
     _aliases = [('sep', 'entry_sep'), ('p', 'prompt'), ('i', 'case_insensitive')]
     _base_command = ['rofi']
-    _version = 'Version: 1.3.1'
+    _version = 'Version: 1.4.2'
     a = Option('-a', help='List of row indexes to mark active')
+    async_pre_read = Option(
+        '-async-pre-read',
+        help='Read several entries blocking before switching to async mode @@@ 25'
+    )
     auto_select = Flag('-auto-select', help='Enable auto select mode @@@ False (Default)')
     bw = Option('-bw', help='Border width @@@ 1 (Default)')
     case_sensitive = Flag(
@@ -21,15 +25,18 @@ class Rofi(TraitMenu):
     )
     color_active = Option(
         '-color-active',
-        help='Color scheme for active row @@@ argb:00000000, #6699CC , argb:00000000, #6699CC , #1B2B34 (XResources)'
+        help=
+        'Color scheme for active row @@@ argb:00000000, #6699CC , argb:00000000, #6699CC , #1B2B34 (XResources)'
     )
     color_normal = Option(
         '-color-normal',
-        help='Color scheme for normal row @@@ argb:00000000, #D8DEE9 , argb:00000000, #FAC863 , #1B2B34 (XResources)'
+        help=
+        'Color scheme for normal row @@@ argb:00000000, #D8DEE9 , argb:00000000, #FAC863 , #1B2B34 (XResources)'
     )
     color_urgent = Option(
         '-color-urgent',
-        help='Color scheme for urgent row @@@ argb:00000000, #F99157 , argb:00000000, #F99157 , #1B2B34 (XResources)'
+        help=
+        'Color scheme for urgent row @@@ argb:00000000, #F99157 , argb:00000000, #F99157 , #1B2B34 (XResources)'
     )
     color_window = Option(
         '-color-window',
@@ -51,6 +58,9 @@ class Rofi(TraitMenu):
     display_drun = Option(
         '-display-drun', help='The display name of this browser @@@ (unset) (Default)'
     )
+    display_keys = Option(
+        '-display-keys', help='The display name of this browser @@@ (unset) (Default)'
+    )
     display_run = Option(
         '-display-run', help='The display name of this browser @@@ (unset) (Default)'
     )
@@ -66,22 +76,28 @@ class Rofi(TraitMenu):
     )
     dmenu = Flag('-dmenu', default_value=True)
     dpi = Option('-dpi', help='DPI @@@ -1 (Default)')
+    drun_icon_theme = Option(
+        '-drun-icon-theme', help='Theme to use to look for icons @@@ (unset) (Default)'
+    )
+    dump_config = Flag(
+        '-dump-config', help='Dump the current configuration in rasi format and exit.'
+    )
+    dump_theme = Flag(
+        '-dump-theme', help='Dump the current theme in rasi format and exit.'
+    )
     dump_xresources = Flag(
         '-dump-xresources',
         help='Dump the current configuration in Xresources format and exit.'
-    )
-    dump_xresources_theme = Flag(
-        '-dump-xresources-theme',
-        help='Dump the current color scheme in Xresources format and exit.'
     )
     e = Option('-e', help='Show a dialog displaying the passed message and exit.')
     eh = Option('-eh', help='Row height (in chars) @@@ 1 (Default)')
     fake_background = Option(
         '-fake-background',
-        help='Background to use for fake transparency. (background or screenshot) @@@ screenshot (Default)'
+        help=
+        'Background to use for fake transparency. (background or screenshot) @@@ screenshot (Default)'
     )
     fake_transparency = Flag(
-        '-fake-transparency', help='Fake transparency @@@ False (Default)'
+        '-fake-transparency', help='Fake transparency *DEPRECATED* @@@ False (Default)'
     )
     filter = Option('-filter', help='Pre-set filter @@@ (unset) (Default)')
     fixed_num_lines = Flag(
@@ -91,7 +107,9 @@ class Rofi(TraitMenu):
     format = Option('-format', help='Output format string @@@ s')
     fullscreen = Flag('-fullscreen', help='Fullscreen @@@ False (Default)')
     help = Flag('-help', help='This help message.')
-    hide_scrollbar = Flag('-hide-scrollbar', help='Hide scroll-bar @@@ False (Default)')
+    hide_scrollbar = Flag(
+        '-hide-scrollbar', help='Hide scroll-bar *DEPRECATED* @@@ False (Default)'
+    )
     i = Flag('-i', help='Set filter to be case insensitive')
     input = Option('-input', help='Read input from file instead from standard input.')
     kb_accept_alt = Option(
@@ -159,7 +177,7 @@ class Rofi(TraitMenu):
     )
     kb_mode_previous = Option(
         '-kb-mode-previous',
-        help='Switch to the previous mode. @@@ Shift+Left,Control+Shift+Tab (Default)'
+        help='Switch to the previous mode. @@@ Shift+Left,Control+ISO_Left_Tab (Default)'
     )
     kb_move_char_back = Option(
         '-kb-move-char-back', help='Move back one char @@@ Left,Control+b (Default)'
@@ -229,11 +247,12 @@ class Rofi(TraitMenu):
     )
     kb_row_tab = Option(
         '-kb-row-tab',
-        help='Go to next row, if one left, accept it, if no left next mode. @@@ Tab (Default)'
+        help=
+        'Go to next row, if one left, accept it, if no left next mode. @@@ Tab (Default)'
     )
     kb_row_up = Option(
         '-kb-row-up',
-        help='Select previous entry @@@ Up,Control+p,Shift+Tab,Shift+ISO_Left_Tab (Default)'
+        help='Select previous entry @@@ Up,Control+p,ISO_Left_Tab (Default)'
     )
     kb_screenshot = Option(
         '-kb-screenshot', help='Take a screenshot of the rofi window @@@ Alt+S (Default)'
@@ -241,20 +260,32 @@ class Rofi(TraitMenu):
     kb_secondary_paste = Option(
         '-kb-secondary-paste', help='Paste clipboard @@@ Control+v,Insert (Default)'
     )
+    kb_select_1 = Option('-kb-select-1', help='Select row 1 @@@ Super+1 (Default)')
+    kb_select_10 = Option('-kb-select-10', help='Select row 10 @@@ Super+0 (Default)')
+    kb_select_2 = Option('-kb-select-2', help='Select row 2 @@@ Super+2 (Default)')
+    kb_select_3 = Option('-kb-select-3', help='Select row 3 @@@ Super+3 (Default)')
+    kb_select_4 = Option('-kb-select-4', help='Select row 4 @@@ Super+4 (Default)')
+    kb_select_5 = Option('-kb-select-5', help='Select row 5 @@@ Super+5 (Default)')
+    kb_select_6 = Option('-kb-select-6', help='Select row 6 @@@ Super+6 (Default)')
+    kb_select_7 = Option('-kb-select-7', help='Select row 7 @@@ Super+7 (Default)')
+    kb_select_8 = Option('-kb-select-8', help='Select row 8 @@@ Super+8 (Default)')
+    kb_select_9 = Option('-kb-select-9', help='Select row 9 @@@ Super+9 (Default)')
     kb_toggle_case_sensitivity = Option(
         '-kb-toggle-case-sensitivity',
         help='Toggle case sensitivity @@@ grave,dead_grave (Default)'
     )
     kb_toggle_sort = Option('-kb-toggle-sort', help='Toggle sort @@@ Alt+grave (Default)')
     l = Option('-l', help='Number of rows to display')
-    lazy_grab = Flag(
-        '-lazy-grab', help="When fail to grab keyboard, don't block but retry later."
-    )
     levenshtein_sort = Flag(
-        '-levenshtein-sort', help='Use levenshtein sorting @@@ False (Default)'
+        '-levenshtein-sort',
+        help='Use levenshtein sorting also for fuzzy matching @@@ False (Default)'
     )
-    line_margin = Option('-line-margin', help='Margin between rows @@@ 2 (Default)')
-    line_padding = Option('-line-padding', help='Padding within rows @@@ 1 (Default)')
+    line_margin = Option(
+        '-line-margin', help='Margin between rows *DEPRECATED* @@@ 2 (Default)'
+    )
+    line_padding = Option(
+        '-line-padding', help='Padding within rows *DEPRECATED* @@@ 1 (Default)'
+    )
     lines = Option('-lines', help='Number of lines @@@ 15 (Default)')
     location = Option('-location', help='Location on screen @@@ 0 (Default)')
     m = Option('-m', help='Monitor id to show on @@@ -5 (Default)')
@@ -266,9 +297,27 @@ class Rofi(TraitMenu):
         '-matching',
         help='Set the matching algorithm. (normal, regex, glob, fuzzy) @@@ normal (Default)'
     )
+    me_accept_custom = Option(
+        '-me-accept-custom',
+        help='Accept hovered row with custom action @@@ Control+MouseD1 (Default)'
+    )
+    me_accept_entry = Option(
+        '-me-accept-entry', help='Accept hovered row @@@ MouseD1 (Default)'
+    )
+    me_select_entry = Option(
+        '-me-select-entry', help='Select hovered row @@@ Mouse1 (Default)'
+    )
     mesg = Option(
         '-mesg', help='Print a small user message under the prompt (uses pango markup)'
     )
+    ml_row_down = Option('-ml-row-down', help='Select next entry @@@ Mouse5 (Default)')
+    ml_row_left = Option(
+        '-ml-row-left', help='Go to the previous column @@@ Mouse6 (Default)'
+    )
+    ml_row_right = Option(
+        '-ml-row-right', help='Go to the next column @@@ Mouse7 (Default)'
+    )
+    ml_row_up = Option('-ml-row-up', help='Select previous entry @@@ Mouse4 (Default)')
     modi = Option('-modi', help='Enabled modi @@@ window,run,ssh (Default)')
     no_auto_select = Flag(
         '-no-auto-select', help='Enable auto select mode @@@ False (Default)'
@@ -286,17 +335,24 @@ class Rofi(TraitMenu):
         '-no-disable-history', help='Disable history in run/ssh @@@ False (Default)'
     )
     no_fake_transparency = Flag(
-        '-no-fake-transparency', help='Fake transparency @@@ False (Default)'
+        '-no-fake-transparency',
+        help='Fake transparency *DEPRECATED* @@@ False (Default)'
     )
     no_fixed_num_lines = Flag(
         '-no-fixed-num-lines', help='Always show number of lines @@@ True (Default)'
     )
     no_fullscreen = Flag('-no-fullscreen', help='Fullscreen @@@ False (Default)')
     no_hide_scrollbar = Flag(
-        '-no-hide-scrollbar', help='Hide scroll-bar @@@ False (Default)'
+        '-no-hide-scrollbar', help='Hide scroll-bar *DEPRECATED* @@@ False (Default)'
+    )
+    no_lazy_grab = Flag(
+        '-no-lazy-grab',
+        help=
+        'Disable lazy grab that, when fail to grab keyboard, does not block but retry later.'
     )
     no_levenshtein_sort = Flag(
-        '-no-levenshtein-sort', help='Use levenshtein sorting @@@ False (Default)'
+        '-no-levenshtein-sort',
+        help='Use levenshtein sorting also for fuzzy matching @@@ False (Default)'
     )
     no_parse_hosts = Flag(
         '-no-parse-hosts', help='Parse hosts file for ssh mode @@@ False (Default)'
@@ -305,6 +361,10 @@ class Rofi(TraitMenu):
         '-no-parse-known-hosts',
         help='Parse known_hosts file for ssh mode @@@ True (Default)'
     )
+    no_plugins = Flag('-no-plugins', help='Disable loading of external plugins.')
+    no_show_icons = Flag(
+        '-no-show-icons', help='Whether to load and show icons @@@ False (Default)'
+    )
     no_show_match = Flag(
         '-no-show-match',
         help='Indicate how it match by underlining it. @@@ True (Default)'
@@ -312,6 +372,7 @@ class Rofi(TraitMenu):
     no_sidebar_mode = Flag(
         '-no-sidebar-mode', help='Enable sidebar-mode @@@ False (Default)'
     )
+    no_sort = Flag('-no-sort', help='Use sorting @@@ False (Default)')
     no_tokenize = Flag('-no-tokenize', help='Tokenize input string @@@ True (Default)')
     normal_window = Flag(
         '-normal-window', help='In dmenu mode, behave as a normal window. (experimental)'
@@ -330,6 +391,9 @@ class Rofi(TraitMenu):
         '-password', help="Do not show what the user inputs. Show '*' instead."
     )
     pid = Option('-pid', help='Pidfile location @@@ /run/user/1001/rofi.pid (Default)')
+    plugin_path = Option(
+        '-plugin-path', help='Directory containing plugins @@@ /usr/lib/rofi (Default)'
+    )
     run_command = Option(
         '-run-command', help='Run command to execute @@@ {cmd} (Default)'
     )
@@ -343,21 +407,27 @@ class Rofi(TraitMenu):
     scroll_method = Option(
         '-scroll-method', help='Scrolling method. (0: Page, 1: Centered) @@@ 0 (Default)'
     )
-    scrollbar_width = Option('-scrollbar-width', help='Scrollbar width @@@ 8 (Default)')
+    scrollbar_width = Option(
+        '-scrollbar-width', help='Scrollbar width *DEPRECATED* @@@ 8 (Default)'
+    )
     select = Option('-select', help='Select the first row that matches')
     selected_row = Option('-selected-row', help='Select row')
     sep = Option('-sep', default_value='\x00')
     separator_style = Option(
         '-separator-style',
-        help='Separator style (none, dash, solid) @@@ solid (XResources)'
+        help='Separator style (none, dash, solid) *DEPRECATED* @@@ solid (XResources)'
     )
     show = Option(
         '-show', help="Show the mode 'mode' and exit. The mode has to be enabled."
+    )
+    show_icons = Flag(
+        '-show-icons', help='Whether to load and show icons @@@ False (Default)'
     )
     show_match = Flag(
         '-show-match', help='Indicate how it match by underlining it. @@@ True (Default)'
     )
     sidebar_mode = Flag('-sidebar-mode', help='Enable sidebar-mode @@@ False (Default)')
+    sort = Flag('-sort', help='Use sorting @@@ False (Default)')
     ssh_client = Option('-ssh-client', help='Ssh client to use @@@ ssh (Default)')
     ssh_command = Option(
         '-ssh-command',
@@ -369,20 +439,27 @@ class Rofi(TraitMenu):
     terminal = Option(
         '-terminal', help='Terminal to use @@@ rofi-sensible-terminal (Default)'
     )
+    theme = Option('-theme', help='New style theme file @@@ (unset) (Default)')
     threads = Option(
         '-threads', help='Threads to use for string matching @@@ 0 (Default)'
     )
     tokenize = Flag('-tokenize', help='Tokenize input string @@@ True (Default)')
     u = Option('-u', help='List of row indexes to mark urgent')
     version = Flag('-version', help='Print the version number and exit.')
+    w = Flag(
+        '-w',
+        help='windowid                            Position over window with X11 windowid.'
+    )
     width = Option('-width', help='Window width @@@ 50 (Default)')
     window_command = Option(
         '-window-command',
-        help='Command executed on accep-entry-custom for window modus @@@ xkill -id {window} (Default)'
+        help=
+        'Command executed on accep-entry-custom for window modus @@@ xkill -id {window} (Default)'
     )
     window_format = Option(
         '-window-format',
-        help='Window Format. w (desktop name), t (title), n (name), r (role), c (class) @@@ {w}   {c}   {t} (Default)'
+        help=
+        'Window Format. w (desktop name), t (title), n (name), r (role), c (class) *DEPRECATED* @@@ {w}    {i}{c}   {t} (Default)'
     )
     xoffset = Option('-xoffset', help='X-offset relative to location @@@ 0 (Default)')
     yoffset = Option('-yoffset', help='Y-offset relative to location @@@ 0 (Default)')
