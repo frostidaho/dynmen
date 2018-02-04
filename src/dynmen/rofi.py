@@ -9,7 +9,7 @@ from dynmen.common import TraitMenu, Flag, Option
 class Rofi(TraitMenu):
     _aliases = [('sep', 'entry_sep'), ('p', 'prompt'), ('i', 'case_insensitive')]
     _base_command = ['rofi']
-    _version = 'Version: 1.4.2'
+    _version = 'Version: 1.5.0-dirty (tags/1.5.0)'
     a = Option('-a', help='List of row indexes to mark active')
     async_pre_read = Option(
         '-async-pre-read',
@@ -43,6 +43,10 @@ class Rofi(TraitMenu):
         help='Color scheme window @@@ argb:ee222222, #FAC863 , #FAC863 (XResources)'
     )
     columns = Option('-columns', help='Number of columns @@@ 1 (Default)')
+    combi_hide_mode_prefix = Flag(
+        '-combi-hide-mode-prefix',
+        help='Hide the prefix mode prefix on the combi view. @@@ False (Default)'
+    )
     combi_modi = Option(
         '-combi-modi',
         help='Set the modi to combine in combi mode @@@ window,run (Default)'
@@ -78,6 +82,11 @@ class Rofi(TraitMenu):
     dpi = Option('-dpi', help='DPI @@@ -1 (Default)')
     drun_icon_theme = Option(
         '-drun-icon-theme', help='Theme to use to look for icons @@@ (unset) (Default)'
+    )
+    drun_match_fields = Option(
+        '-drun-match-fields',
+        help=
+        'Desktop entry fields to match in drun @@@ name,generic,exec,categories (Default)'
     )
     dump_config = Flag(
         '-dump-config', help='Dump the current configuration in rasi format and exit.'
@@ -297,27 +306,34 @@ class Rofi(TraitMenu):
         '-matching',
         help='Set the matching algorithm. (normal, regex, glob, fuzzy) @@@ normal (Default)'
     )
+    max_history_size = Option(
+        '-max-history-size',
+        help=
+        'Max history size (WARNING: can cause slowdowns when set to high). @@@ 25 (Default)'
+    )
     me_accept_custom = Option(
         '-me-accept-custom',
-        help='Accept hovered row with custom action @@@ Control+MouseD1 (Default)'
+        help='Accept hovered row with custom action @@@ Control+MouseDPrimary (Default)'
     )
     me_accept_entry = Option(
-        '-me-accept-entry', help='Accept hovered row @@@ MouseD1 (Default)'
+        '-me-accept-entry', help='Accept hovered row @@@ MouseDPrimary (Default)'
     )
     me_select_entry = Option(
-        '-me-select-entry', help='Select hovered row @@@ Mouse1 (Default)'
+        '-me-select-entry', help='Select hovered row @@@ MousePrimary (Default)'
     )
     mesg = Option(
         '-mesg', help='Print a small user message under the prompt (uses pango markup)'
     )
-    ml_row_down = Option('-ml-row-down', help='Select next entry @@@ Mouse5 (Default)')
+    ml_row_down = Option(
+        '-ml-row-down', help='Select next entry @@@ ScrollDown (Default)'
+    )
     ml_row_left = Option(
-        '-ml-row-left', help='Go to the previous column @@@ Mouse6 (Default)'
+        '-ml-row-left', help='Go to the previous column @@@ ScrollLeft (Default)'
     )
     ml_row_right = Option(
-        '-ml-row-right', help='Go to the next column @@@ Mouse7 (Default)'
+        '-ml-row-right', help='Go to the next column @@@ ScrollRight (Default)'
     )
-    ml_row_up = Option('-ml-row-up', help='Select previous entry @@@ Mouse4 (Default)')
+    ml_row_up = Option('-ml-row-up', help='Select previous entry @@@ ScrollUp (Default)')
     modi = Option('-modi', help='Enabled modi @@@ window,run,ssh (Default)')
     no_auto_select = Flag(
         '-no-auto-select', help='Enable auto select mode @@@ False (Default)'
@@ -327,6 +343,10 @@ class Rofi(TraitMenu):
     )
     no_click_to_exit = Flag(
         '-no-click-to-exit', help='Click outside the window to exit @@@ True (Default)'
+    )
+    no_combi_hide_mode_prefix = Flag(
+        '-no-combi-hide-mode-prefix',
+        help='Hide the prefix mode prefix on the combi view. @@@ False (Default)'
     )
     no_config = Flag('-no-config', help='Do not load configuration, use default values.')
     no_custom = Flag('-no-custom', help="Don't accept custom entry")
@@ -391,9 +411,7 @@ class Rofi(TraitMenu):
         '-password', help="Do not show what the user inputs. Show '*' instead."
     )
     pid = Option('-pid', help='Pidfile location @@@ /run/user/1001/rofi.pid (Default)')
-    plugin_path = Option(
-        '-plugin-path', help='Directory containing plugins @@@ /usr/lib/rofi (Default)'
-    )
+    plugin_path = Flag('-plugin-path', help='Directory used to search for rofi plugins.')
     run_command = Option(
         '-run-command', help='Run command to execute @@@ {cmd} (Default)'
     )
@@ -460,6 +478,10 @@ class Rofi(TraitMenu):
         '-window-format',
         help=
         'Window Format. w (desktop name), t (title), n (name), r (role), c (class) *DEPRECATED* @@@ {w}    {i}{c}   {t} (Default)'
+    )
+    window_match_fields = Option(
+        '-window-match-fields',
+        help='Window fields to match in window mode @@@ all (Default)'
     )
     xoffset = Option('-xoffset', help='X-offset relative to location @@@ 0 (Default)')
     yoffset = Option('-yoffset', help='Y-offset relative to location @@@ 0 (Default)')
