@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Xlib.display import Display
 from Xlib import X
 from Xlib.ext.xtest import fake_input
@@ -5,6 +6,7 @@ from Xlib.error import DisplayConnectionError, XauthError
 import Xlib.XK
 from time import sleep
 import os
+
 
 class xcontrol(object):
     def __init__(self):
@@ -17,14 +19,15 @@ class xcontrol(object):
         self.display = Display(self.display_str)
         display = self.display
 
-        getkey = lambda x: display.keysym_to_keycode(Xlib.XK.string_to_keysym(x))
+        def getkey(x):
+            keysym = Xlib.XK.string_to_keysym(x)
+            return display.keysym_to_keycode(keysym)
         self.getkey = getkey
 
         spacekey = getkey('space')
         self.d_keys = {
             ' ': spacekey,
         }
-
 
     def str_to_keycodes(self, txt):
         d_keys = self.d_keys
@@ -74,6 +77,7 @@ def _find_display():
             yield idx
         idx += 1
 
+
 def start_x_server(build_cmd, max_wait_time=10.0):
     import subprocess as sp
     from time import time
@@ -102,6 +106,7 @@ def start_x_server(build_cmd, max_wait_time=10.0):
             return idx, proc
     raise ValueError("Couldn't start xserver")
 
+
 def _build_xvfb(n_display=1):
     cmd = ['Xvfb']
     display = ':{:d}'.format(n_display)
@@ -114,10 +119,10 @@ def _build_xvfb(n_display=1):
         pass
     return cmd
 
+
 def _build_xephyr(n_display=1):
     cmd = ['Xephyr']
     display = ':{:d}'.format(n_display)
     cmd.append(display)
     cmd.extend(['-screen', '800x600'])
     return cmd
-

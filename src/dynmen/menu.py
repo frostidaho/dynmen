@@ -60,6 +60,7 @@ class CUnicodeNull(tr.CUnicode):
         value = super(CUnicodeNull, self).validate(obj, value)
         return value.replace('\00', '\\0')
 
+
 MenuResult = _namedtuple('MenuResult', 'selected value')
 
 

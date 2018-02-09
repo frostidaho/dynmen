@@ -2,37 +2,47 @@
 from dynmen.cmd import futures
 from data import MenuData
 
+
 def launch(*args, **kwargs):
     future = futures.launch(*args, **kwargs)
     return future.result()
 
+
 def cat_identity(input_fn, stdout):
     out = launch(['cat'], input_fn)
     assert out.stdout == stdout
-    assert out.stderr == None
+    assert out.stderr is None
     assert out.returncode == 0
+
 
 def test_launch_bytes():
     inp = b'sfd8zjzunfzl3'
-    inpfn = lambda: inp
+
+    def inpfn(): return inp
     cat_identity(inpfn, inp)
+
 
 def test_launch_list_of_bytes():
     inp = [b'1', b'2', b'3']
-    inpfn = lambda: b'@'.join(inp)
+
+    def inpfn(): return b'@'.join(inp)
     cat_identity(inpfn, b'@'.join(inp))
+
 
 def test_launch_list_of_bytes2():
     inp = [b'4', b'5', b'6']
     entry_sep = b'\n'
-    inpfn = lambda: entry_sep.join(inp)
+
+    def inpfn(): return entry_sep.join(inp)
     cat_identity(inpfn, entry_sep.join(inp))
+
 
 def test_transform_res():
     md = MenuData()
     lpeople = list(md.people)
     people_txt = '\n'.join(lpeople)
-    inpfn = lambda: people_txt.encode('utf8')
+
+    def inpfn(): return people_txt.encode('utf8')
     cat_identity(inpfn, people_txt.encode('utf8'))
 
     person = lpeople[10]

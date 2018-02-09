@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 try:
     from . import async_py3 as _async
     launch = _async.launch

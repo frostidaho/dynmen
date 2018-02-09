@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pytest
 try:
     import asyncio
@@ -12,10 +13,12 @@ import sys
 import logging
 logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
 
+
 @pytest.fixture(scope='module')
 def menudata():
     from data import MenuData
     return MenuData()
+
 
 def test_simple_dict(menudata):
     d_people = menudata.people
@@ -25,10 +28,12 @@ def test_simple_dict(menudata):
     assert result.selected == person
     assert result.value == d_people[person]
 
+
 def test_cmd_error():
     m = Menu(['grep', r'\('])
     with pytest.raises(MenuError):
         result = m([])
+
 
 def test_init():
     cmd = ['cat']
@@ -44,7 +49,9 @@ def test_init():
     with pytest.raises(TraitError):
         m.command = 'some-string'
 
+
 noval = ('noval',)
+
 
 def run_blocking_mode(menu, entries, exceptions):
     menu.process_mode = 'blocking'
@@ -56,6 +63,7 @@ def run_blocking_mode(menu, entries, exceptions):
         res = menu(entries)
         return res
 
+
 def run_futures_mode(menu, entries, exceptions):
     menu.process_mode = 'futures'
     future = menu(entries)
@@ -65,6 +73,7 @@ def run_futures_mode(menu, entries, exceptions):
         return noval
     else:
         return future.result()
+
 
 def run_async_mode(menu, entries, exceptions):
     menu.process_mode = 'async'
@@ -77,6 +86,7 @@ def run_async_mode(menu, entries, exceptions):
         res = loop.run_until_complete(menu(entries))
         return res
 
+
 def run_all_modes(menu, entries, selected=noval, value=noval, exceptions=None,
                   modes=all_modes):
                   # modes=(run_blocking_mode, run_futures_mode, run_async_mode)):
@@ -86,13 +96,13 @@ def run_all_modes(menu, entries, selected=noval, value=noval, exceptions=None,
         if value != noval:
             assert res.value == value
         return res
-        
+
     modes = [globals()['run_{}_mode'.format(x)] for x in modes]
     for fn in modes:
         res = fn(menu, entries, exceptions)
         if res != noval:
             check_res(res)
-    
+
 
 def test_simple_dict_all(menudata):
     d_people = menudata.people
@@ -105,6 +115,7 @@ def test_simple_dict_all(menudata):
         value=d_people[person],
     )
 
+
 def test_cmd_error_all():
     menu = Menu(['grep', r'\('])
     run_all_modes(
@@ -112,6 +123,7 @@ def test_cmd_error_all():
         [],
         exceptions=MenuError,
     )
+
 
 def test_list_all(menudata):
     lpeople = list(menudata.people)
@@ -123,6 +135,7 @@ def test_list_all(menudata):
         selected=person,
         value=None,
     )
+
 
 def test_generator_all():
     selected = '41'
@@ -141,6 +154,7 @@ def test_generator_all():
             modes=(mode,),
         )
 
+
 def test_string_all():
     entries = '\n'.join('123456789')
     selected = '4'
@@ -152,6 +166,7 @@ def test_string_all():
         value=None,
     )
 
+
 def test_string_all2():
     entries = '\n'.join('123456789')
     menu = Menu(['cat'])
@@ -162,15 +177,18 @@ def test_string_all2():
         value=None,
     )
 
+
 def test_convert_entries_bytes():
     menu = Menu(['cat'])
     entries = b'987654321'
     run_all_modes(menu, entries, selected=entries.decode('utf8'), value=None)
 
+
 def test_entry_sep():
     menu = Menu(['cat'], entry_sep='@')
     entries = list('987654321')
     run_all_modes(menu, entries, selected='@'.join(entries), value=None)
+
 
 def test_entry_sep2():
     menu = Menu(['cat'])
@@ -178,17 +196,20 @@ def test_entry_sep2():
     entries = list('987654321')
     run_all_modes(menu, entries, selected='#'.join(entries), value=None)
 
+
 def test_entry_sep3():
     menu = Menu(['cat'])
     entries = list('987654321')
     res = menu(entries, entry_sep='!')
     assert res.selected == '!'.join(entries)
 
+
 def test_entry_list_bytes():
     menu = Menu(['cat'])
     entries = [b'1', b'2', b'33']
     res = menu(entries, entry_sep='!')
     assert res.selected == b'!'.join(entries).decode('utf8')
+
 
 def test_menu_equality():
     menu = Menu(['cat'])
@@ -200,10 +221,12 @@ def test_menu_equality():
     assert menu != menu2
     assert hash(menu) != hash_menu2
 
+
 def test_menu_repr():
     menu = Menu(['cat'])
     rmenu = repr(menu)
     assert eval(rmenu) == Menu(['cat'])
+
 
 def test_restricted_traits():
     menu = Menu([])
@@ -212,14 +235,14 @@ def test_restricted_traits():
     menu._traits_ignore = [some_key]
     keys1 = set(menu._restricted_traits().keys())
     assert some_key not in keys1
-    
+
+
 def test_on_data(menudata):
     m = Menu([])
     people = menudata.people
     for i, person in enumerate(people):
-        m.command = ["cat - | sed -n '{:d} p'".format(i+1)]
+        m.command = ["cat - | sed -n '{:d} p'".format(i + 1)]
         print(m.command)
         res = m(people, shell=True)
         assert res.selected == person
         assert res.value == people[person]
-

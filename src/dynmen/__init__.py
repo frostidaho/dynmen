@@ -15,6 +15,7 @@ Please see the repository for more examples:
 from .menu import Menu, MenuError, MenuResult
 del menu
 
+
 def new_dmenu(**kwargs):
     """Create an instance of dynmen.dmenu.DMenu(**kwargs)
 
@@ -23,6 +24,7 @@ def new_dmenu(**kwargs):
     """
     from .dmenu import DMenu
     return DMenu(**kwargs)
+
 
 def new_rofi(**kwargs):
     """Create an instance of dynmen.rofi.Rofi(**kwargs)

@@ -34,4 +34,3 @@ class DMenu(TraitMenu):
     sf = Option('-sf', help='defines the selected foreground color.')
     v = Flag('-v', help='prints version information to stdout, then exits.')
     w = Option('-w', help='embed into windowid.')
-

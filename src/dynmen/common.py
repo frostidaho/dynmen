@@ -40,6 +40,7 @@ class TransformedTrait(tr.TraitType):
         self._transform(obj, value)
         return value
 
+
 class Flag(TransformedTrait, tr.Bool):
 
     def __init__(self, flag, default_value=False, **kwargs):
@@ -71,6 +72,7 @@ class Option(TransformedTrait):
     def validate(self, obj, value):
         value = super(Option, self).validate(obj, value)
         return value
+
 
 class IdentityList(TransformedTrait, tr.List):
     def transform(self, obj, value):
@@ -110,6 +112,7 @@ class TraitMenu(_BaseTraits):
 
     def _init_menu(self):
         self._menu = Menu(self.base_command)
+
         def linkit(name):
             try:
                 return link_trait((self, name), (self._menu, name))
@@ -142,7 +145,8 @@ class TraitMenu(_BaseTraits):
 
     def _add_alias(self, source_name, *target_names):
         source = (self, source_name)
-        addlink = lambda x: link_trait(source, (self, x))
+
+        def addlink(x): return link_trait(source, (self, x))
         ignore = self._cmd_ignore_traits
         for name in target_names:
             addlink(name)

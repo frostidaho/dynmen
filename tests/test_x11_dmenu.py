@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import pytest
 fixtures = pytest.importorskip('fixtures')
@@ -13,6 +14,7 @@ from dynmen.menu import Menu
 from dynmen.dmenu import DMenu
 from time import sleep
 
+
 def pytest_generate_tests(metafunc):
     if 'dmenu' in metafunc.fixturenames:
         metafunc.parametrize(
@@ -21,8 +23,10 @@ def pytest_generate_tests(metafunc):
             indirect=True,
         )
 
+
 MAX_WAIT = 3.0
 SPAWN_WAIT = 1.0
+
 
 @pytest.fixture(scope='function')
 def dmenu(request, xctrl):
@@ -31,10 +35,12 @@ def dmenu(request, xctrl):
     elif request.param == 'DMenu':
         return DMenu(process_mode='futures')
 
+
 def assert_future(future, selected, value):
     out = future.result(MAX_WAIT)
     assert out.selected == selected
     assert out.value == value
+
 
 def test_simple(dmenu, xctrl):
     res = dmenu(['a', 'b', 'c'])
@@ -43,19 +49,22 @@ def test_simple(dmenu, xctrl):
     xctrl.hit_enter()
     assert_future(res, 'b', None)
 
+
 def test_simple_dict(dmenu, xctrl):
-    res = dmenu(dict(zip('abc', [1,2,3])))
+    res = dmenu(dict(zip('abc', [1, 2, 3])))
     sleep(SPAWN_WAIT)
     xctrl.type_str('c')
     xctrl.hit_enter()
     assert_future(res, 'c', 3)
 
+
 def test_non_matching_dict(dmenu, xctrl):
-    res = dmenu(dict(zip('abc', [1,2,3])))
+    res = dmenu(dict(zip('abc', [1, 2, 3])))
     sleep(SPAWN_WAIT)
     xctrl.type_str('some other string')
     xctrl.hit_enter()
     assert_future(res, 'some other string', None)
+
 
 def test_case_insensitive_dict(dmenu, xctrl):
     try:

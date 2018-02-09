@@ -25,18 +25,15 @@ class Rofi(TraitMenu):
     )
     color_active = Option(
         '-color-active',
-        help=
-        'Color scheme for active row @@@ argb:00000000, #6699CC , argb:00000000, #6699CC , #1B2B34 (XResources)'
+        help='Color scheme for active row @@@ argb:00000000, #6699CC , argb:00000000, #6699CC , #1B2B34 (XResources)'
     )
     color_normal = Option(
         '-color-normal',
-        help=
-        'Color scheme for normal row @@@ argb:00000000, #D8DEE9 , argb:00000000, #FAC863 , #1B2B34 (XResources)'
+        help='Color scheme for normal row @@@ argb:00000000, #D8DEE9 , argb:00000000, #FAC863 , #1B2B34 (XResources)'
     )
     color_urgent = Option(
         '-color-urgent',
-        help=
-        'Color scheme for urgent row @@@ argb:00000000, #F99157 , argb:00000000, #F99157 , #1B2B34 (XResources)'
+        help='Color scheme for urgent row @@@ argb:00000000, #F99157 , argb:00000000, #F99157 , #1B2B34 (XResources)'
     )
     color_window = Option(
         '-color-window',
@@ -85,9 +82,7 @@ class Rofi(TraitMenu):
     )
     drun_match_fields = Option(
         '-drun-match-fields',
-        help=
-        'Desktop entry fields to match in drun @@@ name,generic,exec,categories (Default)'
-    )
+        help='Desktop entry fields to match in drun @@@ name,generic,exec,categories (Default)')
     dump_config = Flag(
         '-dump-config', help='Dump the current configuration in rasi format and exit.'
     )
@@ -102,8 +97,7 @@ class Rofi(TraitMenu):
     eh = Option('-eh', help='Row height (in chars) @@@ 1 (Default)')
     fake_background = Option(
         '-fake-background',
-        help=
-        'Background to use for fake transparency. (background or screenshot) @@@ screenshot (Default)'
+        help='Background to use for fake transparency. (background or screenshot) @@@ screenshot (Default)'
     )
     fake_transparency = Flag(
         '-fake-transparency', help='Fake transparency *DEPRECATED* @@@ False (Default)'
@@ -256,9 +250,7 @@ class Rofi(TraitMenu):
     )
     kb_row_tab = Option(
         '-kb-row-tab',
-        help=
-        'Go to next row, if one left, accept it, if no left next mode. @@@ Tab (Default)'
-    )
+        help='Go to next row, if one left, accept it, if no left next mode. @@@ Tab (Default)')
     kb_row_up = Option(
         '-kb-row-up',
         help='Select previous entry @@@ Up,Control+p,ISO_Left_Tab (Default)'
@@ -304,13 +296,10 @@ class Rofi(TraitMenu):
     )
     matching = Option(
         '-matching',
-        help='Set the matching algorithm. (normal, regex, glob, fuzzy) @@@ normal (Default)'
-    )
+        help='Set the matching algorithm. (normal, regex, glob, fuzzy) @@@ normal (Default)')
     max_history_size = Option(
         '-max-history-size',
-        help=
-        'Max history size (WARNING: can cause slowdowns when set to high). @@@ 25 (Default)'
-    )
+        help='Max history size (WARNING: can cause slowdowns when set to high). @@@ 25 (Default)')
     me_accept_custom = Option(
         '-me-accept-custom',
         help='Accept hovered row with custom action @@@ Control+MouseDPrimary (Default)'
@@ -367,8 +356,7 @@ class Rofi(TraitMenu):
     )
     no_lazy_grab = Flag(
         '-no-lazy-grab',
-        help=
-        'Disable lazy grab that, when fail to grab keyboard, does not block but retry later.'
+        help='Disable lazy grab that, when fail to grab keyboard, does not block but retry later.'
     )
     no_levenshtein_sort = Flag(
         '-no-levenshtein-sort',
@@ -471,13 +459,11 @@ class Rofi(TraitMenu):
     width = Option('-width', help='Window width @@@ 50 (Default)')
     window_command = Option(
         '-window-command',
-        help=
-        'Command executed on accep-entry-custom for window modus @@@ xkill -id {window} (Default)'
+        help='Command executed on accep-entry-custom for window modus @@@ xkill -id {window} (Default)'
     )
     window_format = Option(
         '-window-format',
-        help=
-        'Window Format. w (desktop name), t (title), n (name), r (role), c (class) *DEPRECATED* @@@ {w}    {i}{c}   {t} (Default)'
+        help='Window Format. w (desktop name), t (title), n (name), r (role), c (class) *DEPRECATED* @@@ {w}    {i}{c}   {t} (Default)'
     )
     window_match_fields = Option(
         '-window-match-fields',
@@ -485,4 +471,3 @@ class Rofi(TraitMenu):
     )
     xoffset = Option('-xoffset', help='X-offset relative to location @@@ 0 (Default)')
     yoffset = Option('-yoffset', help='Y-offset relative to location @@@ 0 (Default)')
-

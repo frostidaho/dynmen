@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 import pytest
 import integration
+
 
 @pytest.fixture(scope='session')
 def xctrl():
