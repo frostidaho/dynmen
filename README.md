@@ -1,4 +1,4 @@
-# Dynmen [![Build Status](https://travis-ci.org/frostidaho/dynmen.svg?branch=develop)](https://travis-ci.org/frostidaho/dynmen) [![Coverage Status](https://coveralls.io/repos/github/frostidaho/dynmen/badge.svg?branch=develop)](https://coveralls.io/github/frostidaho/dynmen?branch=develop)
+# Dynmen [![Build Status](https://travis-ci.org/frostidaho/dynmen.svg?branch=develop)](https://travis-ci.org/frostidaho/dynmen) [![Coverage Status](https://coveralls.io/repos/github/frostidaho/dynmen/badge.svg?branch=develop)](https://coveralls.io/github/frostidaho/dynmen?branch=develop) [![Supported python versions](https://img.shields.io/badge/python-2.7%2C%203.x-blue.svg)](https://pypi.python.org/pypi/dynmen)
 > a python interface to dynamic menus
 
 - [Introduction](#introduction)
@@ -51,6 +51,8 @@ print('Output from fzf:', out)
 Please see the [examples](examples/) folder for more examples. I've also used it in other a number of other projects like [dynmen_scripts](https://github.com/frostidaho/dynmen_scripts) and [python-vpnmenu](https://github.com/frostidaho/python-vpnmenu).
 
 ## Installation
+dynmen is supported on python versions 2.7-3.x
+
 ### Installing from pypi
 ```bash
 pip install --user dynmen
