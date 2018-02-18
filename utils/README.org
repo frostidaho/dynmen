@@ -1,0 +1,11 @@
+#+TITLE: dynmen/utils directory
+
+The utils directory contains scripts for generating
+menu-specific classes which are introspectable and expose all of the
+options available on the menu. Take a look at the Makefile's [[file:../Makefile::generate-options:][generate-options]]
+target to see how they're used. These are not currently intended to be used
+by someone just installing dynmen, as their output is dependent on the 
+consistency and format of the menu's man or help pages.
+
+- [[file:gen_dmenu.py::#!/usr/bin/env%20python][gen_dmenu.py]] :: works by parsing dmenu's man page
+- [[file:gen_rofi.py::#!/usr/bin/env%20python3][gen_rofi.py]] :: works by parsing rofi's help output
