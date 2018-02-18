@@ -1,0 +1,13 @@
+#+TITLE: dynmen/tests
+
+The test suite uses pytest. Run from project root directory using
+
+#+BEGIN_SRC 
+python -m pytest ./tests
+#+END_SRC
+
+or
+
+#+BEGIN_SRC 
+tox
+#+END_SRC
