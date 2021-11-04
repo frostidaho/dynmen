@@ -48,6 +48,7 @@ class Rofi(TraitMenu):
         '-combi-modi',
         help='Set the modi to combine in combi mode @@@ window,run (Default)'
     )
+    config = Option('-config', help='Load an alternative configuration file')
     cycle = Flag('-cycle', help='Cycle through the results list @@@ True (Default)')
     disable_history = Flag(
         '-disable-history', help='Disable history in run/ssh @@@ False (Default)'
@@ -287,7 +288,7 @@ class Rofi(TraitMenu):
     line_padding = Option(
         '-line-padding', help='Padding within rows *DEPRECATED* @@@ 1 (Default)'
     )
-    lines = Option('-lines', help='Number of lines @@@ 15 (Default)')
+    lines = Option('-l', help='Number of lines @@@ 15 (Default)')
     location = Option('-location', help='Location on screen @@@ 0 (Default)')
     m = Option('-m', help='Monitor id to show on @@@ -5 (Default)')
     markup = Flag('-markup', help='Enable pango markup where possible.')
